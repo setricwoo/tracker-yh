@@ -1,10 +1,130 @@
 {
-  "fetch_time": "2026-04-07T00:22:58.241901",
+  "fetch_time": "2026-04-07T22:52:31.233825",
   "date_range": {
-    "from": "2026-03-23T00:22:58.241914",
-    "to": "2026-04-07T00:22:58.241934"
+    "from": "2026-03-23T22:52:31.233833",
+    "to": "2026-04-07T22:52:31.233854"
   },
   "think_tank_entries": [
+    {
+      "id": "32987f45731c",
+      "title": "Your primer on the Hungarian National Assembly elections",
+      "summary": "<p>An electoral defeat for Prime Minister Viktor Orbán could reshape Hungary’s domestic political trajectory and the country’s relations with the rest of Europe.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/content-series/eye-on-europes-elections/your-primer-on-the-hungarian-national-assembly-elections/\">Your primer on the Hungarian National Assembly elections</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/content-series/eye-on-europes-elections/your-primer-on-the-hungarian-national-assembly-elections/",
+      "pub_date": "2026-04-06T21:21:47",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "6a85552c02fa",
+      "title": "Charai for The Jerusalem Post: Trump and the end of Tehran’s illusion",
+      "summary": "<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/charai-for-the-jerusalem-post-trump-and-the-end-of-tehrans-illusion/\">Charai for The Jerusalem Post: Trump and the end of Tehran’s illusion</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/charai-for-the-jerusalem-post-trump-and-the-end-of-tehrans-illusion/",
+      "pub_date": "2026-04-06T20:49:18",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "d36e17d6aaae",
+      "title": "Chhangani and Kumar cited in 2025 ECA report discussing advancement of regional integration in Africa using frontier technologies and innovation",
+      "summary": "<p>Read full report here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/chhangani-and-kumar-cited-in-2025-eca-report-discussing-advancement-of-regional-integration-in-africa-using-frontier-technologies-and-innovation/\">Chhangani and Kumar cited in 2025 ECA report discussing advancement of regional integration in Africa using frontier technologies and innovation</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/chhangani-and-kumar-cited-in-2025-eca-report-discussing-advancement-of-regional-integration-in-africa-using-frontier-technologies-and-innovation/",
+      "pub_date": "2026-04-06T18:58:26",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "ad57dd07cc65",
+      "title": "Lipsky cited in Bloomberg article detailing why the Iran war may impact Trump’s goal of lowering interest rates",
+      "summary": "<p>Read full article here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-cited-in-bloomberg-article-detailing-why-the-iran-war-may-impact-trumps-goal-of-lowering-interest-rates/\">Lipsky cited in Bloomberg article detailing why the Iran war may impact Trump&#8217;s goal of lowering interest rates</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-cited-in-bloomberg-article-detailing-why-the-iran-war-may-impact-trumps-goal-of-lowering-interest-rates/",
+      "pub_date": "2026-04-06T18:58:02",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "7898a84e3584",
+      "title": "Nikoladze joined the Embassy of the Republic of Poland to launch and discuss findings from the organizations’ new report",
+      "summary": "<p>Watch full panel here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/nikoladze-joins-the-embassy-of-the-republic-of-poland-to-launch-and-discuss-findings-from-the-organizations-new-report/\">Nikoladze joined the Embassy of the Republic of Poland to launch and discuss findings from the organizations&#8217; new report</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/nikoladze-joins-the-embassy-of-the-republic-of-poland-to-launch-and-discuss-findings-from-the-organizations-new-report/",
+      "pub_date": "2026-04-06T18:56:15",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "797d950e7780",
+      "title": "Nikoladze joined The Warcast podcast to discuss the complications of the U.S. suspension of Russian and Iranian oil sanctions",
+      "summary": "<p>Listen to full podcast here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/nikoladze-joined-the-warcast-podcast-to-discuss-the-complications-of-the-u-s-suspension-of-russian-and-iranian-oil-sanctions/\">Nikoladze joined The Warcast podcast to discuss the complications of the U.S. suspension of Russian and Iranian oil sanctions</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/nikoladze-joined-the-warcast-podcast-to-discuss-the-complications-of-the-u-s-suspension-of-russian-and-iranian-oil-sanctions/",
+      "pub_date": "2026-04-06T18:55:39",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "e2fd2c06358f",
+      "title": "Washington Post cites GeoEconomics research on China’s cross-border digital currency platform mBridge",
+      "summary": "<p>Read the full article here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/washington-post-cites-geoeconomics-research-on-chinas-cross-border-digital-currency-platform-mbridge/\">Washington Post cites GeoEconomics research on China&#8217;s cross-border digital currency platform mBridge</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/washington-post-cites-geoeconomics-research-on-chinas-cross-border-digital-currency-platform-mbridge/",
+      "pub_date": "2026-04-06T18:50:57",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "7d77d529191e",
+      "title": "Lipsky quoted in Bloomberg article on the timing of Trump’s biggest gambits",
+      "summary": "<p>Read the full article here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-quoted-in-bloomberg-article-on-the-timing-of-trumps-biggest-gambits/\">Lipsky quoted in Bloomberg article on the timing of Trump&#8217;s biggest gambits</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-quoted-in-bloomberg-article-on-the-timing-of-trumps-biggest-gambits/",
+      "pub_date": "2026-04-06T18:49:29",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "46a0ce1bf9d8",
+      "title": "From alignment to action: Building a durable US-Argentina critical minerals partnership",
+      "summary": "<p>For decades, Argentina's mining potential has been widely recognized without translating into reliable supply. That pattern might be breaking, and deeper US–Argentina cooperation could accelerate development while advancing shared economic and strategic priorities.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/in-depth-research-reports/issue-brief/from-alignment-to-action-building-a-durable-us-argentina-critical-minerals-partnership/\">From alignment to action: Building a durable US-Argentina critical minerals partnership</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/in-depth-research-reports/issue-brief/from-alignment-to-action-building-a-durable-us-argentina-critical-minerals-partnership/",
+      "pub_date": "2026-04-06T18:00:00",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "b1e7f489e87b",
+      "title": "Charai for The Jerusalem Strategic Tribune: The Iran War’s First Lesson: American Leadership, Israeli Resolve",
+      "summary": "<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/charai-for-the-jerusalem-strategic-tribune-the-iran-wars-first-lesson-american-leadership-israeli-resolve/\">Charai for The Jerusalem Strategic Tribune: The Iran War’s First Lesson: American Leadership, Israeli Resolve</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/charai-for-the-jerusalem-strategic-tribune-the-iran-wars-first-lesson-american-leadership-israeli-resolve/",
+      "pub_date": "2026-04-06T16:21:45",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
     {
       "id": "2b3c56d77901",
       "title": "Sri Lanka needs a development plan, not just a recovery narrative",
@@ -378,6 +498,18 @@
       "fetch_method": "rss"
     },
     {
+      "id": "a13d7fa141e7",
+      "title": "Lipsky interviewed on CNBC’s segment The China Connection where he explains China-Russia-Iran trade ties",
+      "summary": "<p>Watch full interview here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-interviewed-on-cnbcs-segment-the-china-connection-where-he-explains-china-russia-iran-trade-ties/\">Lipsky interviewed on CNBC&#8217;s segment The China Connection where he explains China-Russia-Iran trade ties</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/lipsky-interviewed-on-cnbcs-segment-the-china-connection-where-he-explains-china-russia-iran-trade-ties/",
+      "pub_date": "2026-03-30T20:22:43",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
       "id": "d1c7937d1d2e",
       "title": "Europe needs a 21st-century containment strategy toward Russia",
       "summary": "<p>Only a policy toward Russia grounded in strength, combined with a refusal to compromise on core principles, can alter the Kremlin’s calculus.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/dispatches/europe-needs-a-21st-century-containment-strategy-toward-russia/\">Europe needs a 21st-century containment strategy toward Russia</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
@@ -491,6 +623,18 @@
       "summary": "<p>Atlantic Council experts identify ten important takeaways from the Iran war so far, covering issues from global energy markets to the Iranian regime.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/dispatches/ten-lessons-from-the-first-month-of-the-iran-war/\">Ten lessons from the first month of the Iran war</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
       "link": "https://www.atlanticcouncil.org/dispatches/ten-lessons-from-the-first-month-of-the-iran-war/",
       "pub_date": "2026-03-27T22:02:18",
+      "source": "Atlantic Council",
+      "source_zh": "大西洋理事会",
+      "source_type": "think_tank",
+      "region": "us",
+      "fetch_method": "rss"
+    },
+    {
+      "id": "b6805b33fdb0",
+      "title": "Donovan and Ezratty cited in an Asia Times article explaining Russia’s and Iran’s drone ties",
+      "summary": "<p>Read full article here</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/insight-impact/in-the-news/donovan-and-ezratty-cited-in-an-asia-times-article-explaining-russias-and-irans-drone-ties/\">Donovan and Ezratty cited in an Asia Times article explaining Russia’s and Iran’s drone ties</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
+      "link": "https://www.atlanticcouncil.org/insight-impact/in-the-news/donovan-and-ezratty-cited-in-an-asia-times-article-explaining-russias-and-irans-drone-ties/",
+      "pub_date": "2026-03-27T20:34:07",
       "source": "Atlantic Council",
       "source_zh": "大西洋理事会",
       "source_type": "think_tank",
@@ -954,51 +1098,15 @@
       "fetch_method": "rss"
     },
     {
-      "id": "a9e1530007ab",
-      "title": "Trump is fighting two wars with Iran. He needs to win both.",
-      "summary": "<p>Nothing could be more short-sighted than leaving a vengeful and still formidable Iranian regime in place.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/content-series/inflection-points/trump-is-fighting-two-wars-with-iran-he-needs-to-win-both/\">Trump is fighting two wars with Iran. He needs to win both.</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
-      "link": "https://www.atlanticcouncil.org/content-series/inflection-points/trump-is-fighting-two-wars-with-iran-he-needs-to-win-both/",
-      "pub_date": "2026-03-23T21:33:00",
-      "source": "Atlantic Council",
-      "source_zh": "大西洋理事会",
+      "id": "97d4b353b5cd",
+      "title": "Hungary’s election and Europe’s struggle with inevitability",
+      "summary": "Hungary’s election on April 12th could unseat Viktor Orban after 16 years in power. Even if Orban does cling on, the improbable run of opposition leader Peter Magyar still holds lessons for Europe’s mainstream",
+      "link": "https://ecfr.eu/article/hungarys-election-and-europes-struggle-with-inevitability/",
+      "pub_date": "2026-04-07T13:40:55",
+      "source": "ECFR",
+      "source_zh": "欧洲外交关系委员会",
       "source_type": "think_tank",
-      "region": "us",
-      "fetch_method": "rss"
-    },
-    {
-      "id": "db88f86d5b99",
-      "title": "The Iran conflict exposes the new cost curve of war",
-      "summary": "<p>The Pentagon must rapidly field innovative, lower-cost technologies alongside its exquisite capabilities, ensuring each is used where it delivers the greatest advantage.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/blogs/menasource/the-iran-conflict-exposes-the-new-cost-curve-of-war/\">The Iran conflict exposes the new cost curve of war</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
-      "link": "https://www.atlanticcouncil.org/blogs/menasource/the-iran-conflict-exposes-the-new-cost-curve-of-war/",
-      "pub_date": "2026-03-23T21:06:41",
-      "source": "Atlantic Council",
-      "source_zh": "大西洋理事会",
-      "source_type": "think_tank",
-      "region": "us",
-      "fetch_method": "rss"
-    },
-    {
-      "id": "71019564726d",
-      "title": "What Romania’s role in the Iran war reveals about its diplomatic positioning",
-      "summary": "<p>Amid transatlantic differences over the Iran war, Romania’s ability to maintain a balance between Washington and its European partners is a valuable strategic contribution to NATO.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/dispatches/what-romanias-role-in-the-iran-war-reveals-about-its-diplomatic-positioning/\">What Romania&#8217;s role in the Iran war reveals about its diplomatic positioning</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
-      "link": "https://www.atlanticcouncil.org/dispatches/what-romanias-role-in-the-iran-war-reveals-about-its-diplomatic-positioning/",
-      "pub_date": "2026-03-23T18:55:38",
-      "source": "Atlantic Council",
-      "source_zh": "大西洋理事会",
-      "source_type": "think_tank",
-      "region": "us",
-      "fetch_method": "rss"
-    },
-    {
-      "id": "73823a0c601c",
-      "title": "The Strait of Hormuz crisis will ripple across plastics and food supply chains, helping Beijing and Moscow, hurting Americans",
-      "summary": "<p>The oil and gas blockade in the Strait of Hormuz will tighten petrochemical and fertilizer markets, with geopolitical and economic implications for the United States.</p>\n<p>The post <a href=\"https://www.atlanticcouncil.org/blogs/energysource/the-strait-of-hormuz-crisis-will-ripple-across-plastics-and-food-supply-chains-helping-beijing-and-moscow-hurting-americans/\">The Strait of Hormuz crisis will ripple across plastics and food supply chains, helping Beijing and Moscow, hurting Americans</a> appeared first on <a href=\"https://www.atlanticcouncil.org\">Atlantic Council</a>.</p>",
-      "link": "https://www.atlanticcouncil.org/blogs/energysource/the-strait-of-hormuz-crisis-will-ripple-across-plastics-and-food-supply-chains-helping-beijing-and-moscow-hurting-americans/",
-      "pub_date": "2026-03-23T15:12:26",
-      "source": "Atlantic Council",
-      "source_zh": "大西洋理事会",
-      "source_type": "think_tank",
-      "region": "us",
+      "region": "eu",
       "fetch_method": "rss"
     },
     {
@@ -1146,25 +1254,13 @@
       "fetch_method": "rss"
     },
     {
-      "id": "c37d3ac62014",
-      "title": "Hormuz hold’em: How to stop the US-Iran crisis in the strait",
-      "summary": "If Trump follows through on his threat to bomb Iran’s energy infrastructure, the Strait of Hormuz is likely to shut down entirely and the catastrophic energy crisis will deepen. Europeans need to push for an urgent and sustainable ceasefire.",
-      "link": "https://ecfr.eu/article/hormuz-holdem-how-to-stop-the-us-iran-crisis-in-the-strait/",
-      "pub_date": "2026-03-23T12:22:18",
-      "source": "ECFR",
-      "source_zh": "欧洲外交关系委员会",
-      "source_type": "think_tank",
-      "region": "eu",
-      "fetch_method": "rss"
-    },
-    {
-      "id": "302d0395ebba",
-      "title": "Lebanon on the brink: Europe must act now if it wants to prevent a refugee wave",
-      "summary": "With over a thousand dead and a million displaced, Lebanon is edging towards state collapse. Europe must go beyond humanitarian aid and throw its full weight behind France’s diplomatic push.",
-      "link": "https://ecfr.eu/article/lebanon-on-the-brink-europe-must-act-now-if-it-wants-to-prevent-a-refugee-wave/",
-      "pub_date": "2026-03-23T11:52:31",
-      "source": "ECFR",
-      "source_zh": "欧洲外交关系委员会",
+      "id": "ba9a34e9702d",
+      "title": "Jake Sullivan on Taiwan, China, and the Age of Strategic Rivalry",
+      "summary": "<span class=\"field field--name-title field--type-string field--label-hidden\">Jake Sullivan on Taiwan, China, and the Age of Strategic Rivalry</span>\n<span class=\"field field--name-uid field--type-entity-reference field--label-hidden\"><span>jnguyen@gmfus.org</span></span>\n<span class=\"field field--name-created field--type-created field--label-hidden\"><time class=\"datetime\" datetime=\"2026-04-06T13:07:37-04:00\" title=\"Monday, April 6, 2026 - 13:07\">Mon, 04/06/2026 - 13:07</time>\n</span>\n1 min read",
+      "link": "https://www.gmfus.org/news/jake-sullivan-taiwan-china-and-age-strategic-rivalry",
+      "pub_date": "2026-04-06T17:07:37",
+      "source": "GMF",
+      "source_zh": "德国马歇尔基金会",
       "source_type": "think_tank",
       "region": "eu",
       "fetch_method": "rss"
@@ -1259,18 +1355,6 @@
       "summary": "<span class=\"field field--name-title field--type-string field--label-hidden\">US Public Opinion and the Midterm Congressional Elections </span>\n<span class=\"field field--name-uid field--type-entity-reference field--label-hidden\"><span>ALavoie@gmfus.org</span></span>\n<span class=\"field field--name-created field--type-created field--label-hidden\"><time class=\"datetime\" datetime=\"2026-04-01T13:56:35-04:00\" title=\"Wednesday, April 1, 2026 - 13:56\">Wed, 04/01/2026 - 13:56</time>\n</span>\n3 min read",
       "link": "https://www.gmfus.org/news/us-public-opinion-and-midterm-congressional-elections",
       "pub_date": "2026-04-01T17:56:35",
-      "source": "GMF",
-      "source_zh": "德国马歇尔基金会",
-      "source_type": "think_tank",
-      "region": "eu",
-      "fetch_method": "rss"
-    },
-    {
-      "id": "49a41c30d8be",
-      "title": "A New Tone in Hungary?",
-      "summary": "<span class=\"field field--name-title field--type-string field--label-hidden\">A New Tone in Hungary?</span>\n<span class=\"field field--name-uid field--type-entity-reference field--label-hidden\"><span>agorski@gmfus.org</span></span>\n<span class=\"field field--name-created field--type-created field--label-hidden\"><time class=\"datetime\" datetime=\"2026-03-31T14:10:14-04:00\" title=\"Tuesday, March 31, 2026 - 14:10\">Tue, 03/31/2026 - 14:10</time>\n</span>\n4 min read",
-      "link": "https://www.gmfus.org/news/new-tone-hungary",
-      "pub_date": "2026-03-31T18:10:14",
       "source": "GMF",
       "source_zh": "德国马歇尔基金会",
       "source_type": "think_tank",
@@ -1411,7 +1495,7 @@
     }
   ],
   "ib_search_results": [],
-  "total_raw_entries": 117,
+  "total_raw_entries": 124,
   "search_summary": {
     "search_tasks": 46,
     "total_results": 0
