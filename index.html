@@ -1,0 +1,2211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中东地缘局势跟踪 - 海峡跟踪</title>
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.8;
+        }
+        
+        /* 浅色导航栏 */
+        .header {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        /* 电脑端：单行布局 */
+        .header-main {
+            display: flex;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 20px;
+        }
+        .header-logo img {
+            height: 30px;
+            width: auto;
+            display: block;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
+            display: flex;
+            gap: 0;
+            margin: 0 auto;
+        }
+        .nav-btn {
+            color: #64748b;
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #991b1b;
+        }
+        .nav-btn.active {
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
+            font-weight: 500;
+        }
+        /* 移动端：双行布局 */
+        @media (max-width: 768px) {
+            .header-main {
+                flex-direction: column;
+                padding: 0;
+            }
+            .header-logo {
+                padding: 10px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+            }
+            .header-logo img {
+                height: 26px;
+            }
+            .header-nav {
+                width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                padding: 0 8px;
+            }
+            .header-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+        
+        .last-update {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .alert-banner {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+        }
+        
+        .alert-banner .icon {
+            font-size: 2rem;
+        }
+        
+        .alert-banner h2 {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        
+        .alert-banner p {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-grid-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .metric-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        
+        .metric-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card.critical {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border-color: #fca5a5;
+        }
+        
+        .metric-card.warning {
+            background: linear-gradient(135deg, #fffbeb 0%, #fde68a 100%);
+            border-color: #fcd34d;
+        }
+        
+        .metric-card.success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%);
+            border-color: #86efac;
+        }
+        
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #991b1b;
+        }
+        
+        .metric-card.critical .value {
+            color: #dc2626;
+        }
+        
+        .metric-card.warning .value {
+            color: #b45309;
+        }
+        
+        .metric-card .label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        /* 新的深色色块样式 */
+        .dark-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 16px;
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+
+        .dark-card .card-title {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-card .main-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dark-card .main-value.red {
+            color: #ef4444;
+        }
+
+        .dark-card .main-value.yellow {
+            color: #fbbf24;
+        }
+
+        .dark-card .main-value.white {
+            color: #fff;
+        }
+
+        .dark-card .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .dark-card .stat-label {
+            color: #94a3b8;
+        }
+
+        .dark-card .stat-value {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .dark-card .stat-value.red {
+            color: #ef4444;
+        }
+
+        .dark-card .stat-value.yellow {
+            color: #fbbf24;
+        }
+
+        .dark-card .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+            padding: 4px 0;
+        }
+
+        .dark-card .category-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dark-card .category-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dark-card .category-dot.red { background: #ef4444; }
+        .dark-card .category-dot.yellow { background: #fbbf24; }
+        .dark-card .category-dot.blue { background: #dc2626; }
+
+        .dark-card .category-value {
+            font-weight: 600;
+        }
+
+        .dark-card .status-badge {
+            display: inline-block;
+            background: #dc2626;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .dark-card .trend-up {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .dark-card .trend-up::before {
+            content: '▲';
+            font-size: 0.6rem;
+        }
+
+        .dark-card .subtitle {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .dark-card .main-text {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .dark-card .description {
+            font-size: 0.7rem;
+            color: #64748b;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .dark-card .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dark-card .tag {
+            background: #334155;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .dark-card .progress-bar-mini {
+            height: 4px;
+            background: #334155;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .dark-card .progress-bar-mini .fill {
+            height: 100%;
+            background: #ef4444;
+            border-radius: 2px;
+        }
+        
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section h3 {
+            color: #991b1b;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.red {
+            background: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220,38,38,0.2);
+        }
+        
+        .status-dot.yellow {
+            background: #f59e0b;
+            box-shadow: 0 0 0 4px rgba(245,158,11,0.2);
+        }
+        
+        .status-dot.green {
+            background: #16a34a;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .vessel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        
+        .vessel-table th {
+            background: #f1f5f9;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .vessel-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+        
+        .vessel-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .badge.danger {
+            background: #fecaca;
+            color: #dc2626;
+        }
+        
+        .badge.warning {
+            background: #fde68a;
+            color: #b45309;
+        }
+        
+        .badge.success {
+            background: #bbf7d0;
+            color: #16a34a;
+        }
+        
+        .badge.info {
+            background: #bfdbfe;
+            color: #991b1b;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #991b1b);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .progress-bar .fill.critical {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+        
+        .progress-bar .fill.warning {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        }
+        
+        .quote-box {
+            background: #f8fafc;
+            border-left: 4px solid #dc2626;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #475569;
+        }
+        
+        .quote-box .source {
+            font-style: normal;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+        
+        .timeline-horizontal {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-horizontal::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item-h {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .timeline-item-h .dot {
+            width: 14px;
+            height: 14px;
+            background: #dc2626;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 1;
+            border: 3px solid #fff;
+        }
+        
+        .timeline-item-h.critical .dot {
+            background: #dc2626;
+        }
+        
+        .timeline-item-h .date {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .timeline-item-h .event {
+            font-size: 0.8rem;
+            color: #334155;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: #64748b;
+            font-size: 0.8rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+        }
+        
+        .data-source {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        /* 地图样式 */
+        .map-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* 图表样式 */
+        .chart-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-section {
+                padding: 12px;
+                margin-left: -8px;
+                margin-right: -8px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+        }
+        
+        .chart-section h3 {
+            color: #991b1b;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .chart-container {
+            height: 350px;
+            position: relative;
+        }
+        
+        .chart-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .chart-stat {
+            text-align: center;
+        }
+        
+        .chart-stat .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #991b1b;
+        }
+        
+        .chart-stat .label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* 简报样式 */
+        .briefing-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .briefing-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .briefing-section h3 {
+            color: #991b1b;
+            font-size: 1.2rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .briefing-update-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .briefing-update-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .briefing-update-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .briefing-update-btn .spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .briefing-update-btn.loading .spinner {
+            display: inline-block;
+        }
+
+        .briefing-update-btn.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .briefing-date {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .briefing-summary {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #78350f;
+            font-weight: 500;
+        }
+
+        .briefing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .briefing-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .briefing-card h4 {
+            color: #334155;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .briefing-card ul {
+            padding-left: 18px;
+            margin: 0;
+        }
+
+        .briefing-card li {
+            color: #475569;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .briefing-card li:last-child {
+            margin-bottom: 0;
+        }
+
+        .briefing-scenario {
+            background: #fff;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #dc2626;
+        }
+
+        .briefing-scenario:last-child {
+            margin-bottom: 0;
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .scenario-name {
+            font-weight: 600;
+            color: #991b1b;
+            font-size: 0.85rem;
+        }
+
+        .scenario-prob {
+            font-size: 0.75rem;
+            color: #64748b;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .scenario-desc {
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        .briefing-news {
+            margin-top: 20px;
+        }
+
+        .briefing-news h4 {
+            color: #334155;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .news-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #475569;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .news-item:hover {
+            background: #eff6ff;
+            color: #991b1b;
+            border-color: #dc2626;
+        }
+
+        .news-item .news-source {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .briefing-loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .briefing-loading .spinner-large {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #dc2626;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        .briefing-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            color: #dc2626;
+            text-align: center;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+            /* 金十数据两列布局改为单列 */
+            .container > div[style*="display: grid; grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .chart-container {
+                height: 250px;
+                padding: 0;
+            }
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .chart-stat .value {
+                font-size: 1.4rem;
+            }
+            .metric-card {
+                padding: 12px;
+            }
+            .metric-card .value {
+                font-size: 1.3rem;
+            }
+            .alert-banner {
+                padding: 12px;
+            }
+            .alert-banner h2 {
+                font-size: 1rem;
+            }
+            .section {
+                padding: 16px;
+            }
+            .vessel-table {
+                font-size: 0.8rem;
+            }
+            .vessel-table th,
+            .vessel-table td {
+                padding: 8px;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .dashboard-grid-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            /* 金十数据部分移动端适配 */
+            #jin10-ship-status-section,
+            #jin10-pressure-section {
+                padding: 12px !important;
+            }
+            #jin10-ship-status-section h3,
+            #jin10-pressure-section h3 {
+                font-size: 0.85rem !important;
+            }
+            #jin10-hormuz-passing {
+                font-size: 1.3rem !important;
+            }
+            #jin10-total-ships {
+                font-size: 1.1rem !important;
+            }
+            #jin10-total-pressure {
+                font-size: 1.2rem !important;
+            }
+            #jin10-pressure-section .grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 4px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] {
+                gap: 4px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] > div {
+                padding: 4px 2px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] span[style*="font-size: 0.9rem"] {
+                font-size: 0.8rem !important;
+            }
+            .metric-card {
+                padding: 16px;
+            }
+            .metric-card .value {
+                font-size: 1.6rem;
+            }
+            .dark-card .main-value {
+                font-size: 1.6rem;
+            }
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            /* iframe和嵌入内容移动端适配 */
+            iframe {
+                width: 100% !important;
+                height: 400px !important;
+            }
+            .iframe-wrap iframe {
+                height: 350px !important;
+            }
+            /* 视频区域移动端适配 */
+            video {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            .alert-banner {
+                padding: 14px 16px;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .alert-banner .icon {
+                font-size: 1.8rem;
+            }
+            .alert-banner h2 {
+                font-size: 1.1rem;
+            }
+            .section {
+                padding: 16px;
+            }
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            .chart-container {
+                height: 280px;
+                padding: 0;
+            }
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .nav-btn {
+            }
+            .header-right {
+                font-size: 0.55rem;
+                padding: 2px 4px;
+            }
+            .container {
+                padding: 12px 10px;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            .dashboard-grid-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .metric-card {
+                padding: 14px;
+            }
+            .metric-card .value {
+                font-size: 1.4rem;
+            }
+            .metric-card .label {
+                font-size: 0.75rem;
+            }
+            .dark-card {
+                padding: 14px;
+            }
+            .dark-card .main-value {
+                font-size: 1.4rem;
+            }
+            .dark-card .card-title {
+                font-size: 0.65rem;
+            }
+            .dark-card .stat-row {
+                font-size: 0.7rem;
+            }
+            .section h3 {
+                font-size: 1rem;
+                padding-bottom: 8px;
+            }
+            .alert-banner {
+                padding: 12px;
+                border-radius: 10px;
+            }
+            .alert-banner h2 {
+                font-size: 1rem;
+            }
+            .alert-banner p {
+                font-size: 0.85rem;
+            }
+            .news-list {
+                max-height: 300px;
+            }
+            .news-item {
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            .dashboard-grid-row {
+                gap: 6px;
+            }
+            /* 金十数据部分小屏幕适配 */
+            #jin10-ship-status-section,
+            #jin10-pressure-section {
+                padding: 8px !important;
+            }
+            #jin10-ship-status-section h3,
+            #jin10-pressure-section h3 {
+                font-size: 0.8rem !important;
+            }
+            #jin10-hormuz-passing {
+                font-size: 1.2rem !important;
+            }
+            #jin10-total-ships {
+                font-size: 1rem !important;
+            }
+            #jin10-sailing,
+            #jin10-anchored {
+                font-size: 0.75rem !important;
+            }
+            #jin10-total-pressure {
+                font-size: 1.1rem !important;
+            }
+            #jin10-pressure-level {
+                font-size: 0.6rem !important;
+                padding: 1px 6px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] {
+                gap: 2px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] > div {
+                padding: 2px 1px !important;
+                border-radius: 3px !important;
+            }
+            #jin10-pressure-section [style*="grid-template-columns: repeat(3, 1fr)"] span[style*="font-size: 0.9rem"] {
+                font-size: 0.75rem !important;
+            }
+            #jin10-pressure-section [style*="font-size: 0.6rem"] {
+                font-size: 0.55rem !important;
+            }
+            .metric-card {
+                padding: 8px 4px;
+                border-radius: 8px;
+            }
+            .metric-card .value {
+                font-size: 1rem;
+            }
+            .metric-card .label {
+                font-size: 0.6rem;
+            }
+            .dark-card {
+                padding: 10px;
+            }
+            .dark-card .main-value {
+                font-size: 1rem;
+            }
+            .dark-card .card-title {
+                font-size: 0.6rem;
+            }
+            .dark-card .stat-row {
+                font-size: 0.65rem;
+            }
+            .section {
+                padding: 10px;
+                border-radius: 10px;
+                margin-bottom: 12px;
+            }
+            .section h3 {
+                font-size: 0.9rem;
+                padding-bottom: 6px;
+                margin-bottom: 10px;
+            }
+            .alert-banner {
+                padding: 10px;
+            }
+            .alert-banner h2 {
+                font-size: 0.9rem;
+            }
+            .alert-banner p {
+                font-size: 0.8rem;
+            }
+            .chart-container {
+                height: 220px;
+                padding: 0;
+            }
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .chart-stat {
+                padding: 6px;
+            }
+            .chart-stat .value {
+                font-size: 1.1rem;
+            }
+            .chart-stat .label {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 统一导航栏 -->
+    <div class="header">
+        <div class="header-main">
+            <div class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </div>
+            <nav class="header-nav" id="navCenter">
+                <a href="index.html" class="nav-btn active">海峡跟踪</a>
+                <a href="data-tracking.html" class="nav-btn">全球市场</a>
+                <a href="war-situation.html" class="nav-btn">战局形势</a>
+                <a href="briefing.html" class="nav-btn">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn">央行表态</a>
+                <a href="eco-track.html" class="nav-btn">经济数据</a>
+                <a href="research.html" class="nav-btn">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
+                <a href="oil-chart.html" class="nav-btn">原油图谱</a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- 金十数据：船只实时状态统合 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        
+        <!-- 船只实时通行状态 -->
+        <div class="section" id="jin10-ship-status-section" style="margin-bottom: 0; padding: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <h3 style="margin: 0; font-size: 0.9rem;">🚢 船只实时通行状态</h3>
+                <span style="font-size: 0.65rem; color: #94a3b8;">基于AIS数据</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <!-- 左侧：当前通过霍尔木兹海峡 -->
+                <div style="background: linear-gradient(135deg, #fff5eb 0%, #ffe4cc 100%); border-radius: 8px; padding: 6px; text-align: center; border: 1px solid #ffd8bf;">
+                    <div style="font-size: 0.7rem; color: #595959; margin-bottom: 2px;">当前通过海峡</div>
+                    <div style="display: flex; align-items: baseline; justify-content: center; gap: 2px;">
+                        <span id="jin10-hormuz-passing" style="font-size: 1.5rem; font-weight: 700; color: #fa8c16; line-height: 1;">--</span>
+                        <span style="font-size: 0.8rem; color: #595959;">艘</span>
+                    </div>
+                    <div style="font-size: 0.65rem; color: #8c8c8c; margin-top: 4px; text-align: center;">昨日通过：<span id="jin10-yesterday-passed" style="font-weight: 600;">--</span>艘</div>
+                </div>
+                
+                <!-- 右侧：阿曼湾与波斯湾海域内 -->
+                <div style="background: #fafafa; border-radius: 8px; padding: 6px; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.7rem; color: #595959; text-align: center; margin-bottom: 2px;">海域内总数</div>
+                    <div style="text-align: center; margin-bottom: 2px;">
+                        <span id="jin10-total-ships" style="font-size: 1.2rem; font-weight: 700; color: #262626;">--</span>
+                        <span style="font-size: 0.7rem; color: #595959;">艘</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0 4px;">
+                        <div>
+                            <div style="font-size: 0.6rem; color: #1890ff;">
+                                <span style="font-weight: 600;">航行中</span> <span style="font-size: 0.55rem; color: #8c8c8c;">速度≥1节</span>
+                            </div>
+                            <div id="jin10-sailing" style="font-size: 0.85rem; font-weight: 600; color: #1890ff;">--艘</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.6rem; color: #f5222d;">
+                                <span style="font-weight: 600;">锚泊</span> <span style="font-size: 0.55rem; color: #8c8c8c;">速度<1节</span>
+                            </div>
+                            <div id="jin10-anchored" style="font-size: 0.85rem; font-weight: 600; color: #f5222d;">--艘</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- 行业通行压力系数 -->
+        <div class="section" id="jin10-pressure-section" style="margin-bottom: 0; padding: 6px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <h3 style="margin: 0; font-size: 0.9rem;">🔴 行业通行压力系数</h3>
+                <span style="font-size: 0.65rem; color: #94a3b8;">金十数据</span>
+            </div>
+            
+            <!-- 综合压力系数 -->
+            <div style="background: linear-gradient(135deg, #fff2f0 0%, #ffccc7 100%); border-radius: 8px; padding: 5px; text-align: center; margin-bottom: 3px; border: 1px solid #ffa39e;">
+                <div style="font-size: 0.7rem; color: #595959; margin-bottom: 0;">综合压力系数</div>
+                <div style="display: flex; align-items: baseline; justify-content: center; gap: 2px; margin-top: -2px;">
+                    <span id="jin10-total-pressure" style="font-size: 1.4rem; font-weight: 800; color: #cf1322; line-height: 1;">--</span>
+                    <span style="font-size: 0.8rem; color: #cf1322; font-weight: 600;">%</span>
+                </div>
+                <div id="jin10-pressure-level" style="display: inline-block; margin-top: 0; padding: 1px 8px; background: #cf1322; color: white; border-radius: 20px; font-size: 0.65rem; font-weight: 500;">高风险</div>
+            </div>
+            
+            <!-- 分行业压力系数 -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;">
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">原油</div>
+                    <span id="jin10-oil" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">LNG</div>
+                    <span id="jin10-lng" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">LPG</div>
+                    <span id="jin10-lpg" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">化肥</div>
+                    <span id="jin10-fertilizer" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">铝材</div>
+                    <span id="jin10-aluminum" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+                <div style="background: #fff; border-radius: 4px; padding: 2px 1px; text-align: center; border: 1px solid #f0f0f0;">
+                    <div style="font-size: 0.6rem; color: #8c8c8c; line-height: 1;">甲醇</div>
+                    <span id="jin10-methanol" style="font-size: 0.9rem; font-weight: 700; color: #262626;">--</span><span style="font-size: 0.6rem; color: #8c8c8c;">%</span>
+                </div>
+            </div>
+        </div>
+        
+        </div><!-- 结束 grid 容器 -->
+
+        <!-- 每日通行量折线图（历史CSV数据） -->
+        <div class="chart-section">
+            <h3>📊 霍尔木兹海峡每日通行量</h3>
+            <div class="chart-container">
+                <canvas id="trafficChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 48小时延时视频（本地生成） -->
+        <div class="section" id="timelapse-section" style="margin-top: 16px;">
+            <h3>🎬 48小时航运延时</h3>
+
+            <div style="background: #0f172a; border-radius: 12px; overflow: hidden;">
+                <video id="timelapse-video"
+                       src="strait_timelapse_jin10.mp4"
+                       style="width: 100%; height: auto; display: block;"
+                       controls
+                       loop
+                       preload="metadata">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+
+
+        </div>
+
+        <!-- 金十视频错误处理已移至 loadJin10Video 函数内 -->
+
+        <!-- 金十数据：24h航运回溯（隐藏） -->
+        <div class="section" id="jin10-snapshot-section" style="display: none;">
+            <h3>📸 24h航运回溯 <span style="font-size: 0.8rem; color: #64748b; font-weight: normal;">数据来源：金十数据</span></h3>
+            
+            <div id="jin10-snapshots-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <!-- 动态加载金十图片 -->
+            </div>
+            
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 12px; text-align: center;">
+                图片直接来自金十数据实时监控页面 | 
+                <a href="https://qihuo.jin10.com/topic/strait_of_hormuz.html" target="_blank">查看原始页面 →</a>
+            </p>
+        </div>
+
+        <!-- 供应链跟踪 -->
+        <div class="section" id="supply-chain-section" style="padding: 0; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; font-size: 1rem; color: white;">🔗 供应链跟踪</h3>
+                <span style="font-size: 0.75rem; opacity: 0.8;" id="supplyUpdateTime">更新: --</span>
+            </div>
+            <div style="border-bottom: 1px solid #e2e8f0; background: #f8fafc; padding: 0 16px;">
+                <button class="supply-tab active" onclick="switchSupplyTab('energy')">⚡ 能源基础设施损毁</button>
+                <button class="supply-tab" onclick="switchSupplyTab('chain')">🏭 产业链影响</button>
+            </div>
+            <div class="supply-tab-content active" id="tab-energy" style="padding: 16px;">
+                <div class="table-responsive">
+                    <table class="supply-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>国家/地区</th>
+                                <th>设施名称</th>
+                                <th>设施类型</th>
+                                <th>所属企业</th>
+                                <th>事件描述</th>
+                                <th>当前状态</th>
+                                <th>影响评估</th>
+                                <th>信息来源</th>
+                            </tr>
+                        </thead>
+                        <tbody id="energyBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="supply-tab-content" id="tab-chain" style="padding: 16px;">
+                <div class="table-responsive">
+                    <table class="supply-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>国家/地区</th>
+                                <th>企业/机构</th>
+                                <th>行业/产品</th>
+                                <th>事件描述</th>
+                                <th>影响传导链</th>
+                                <th>停产/减产规模</th>
+                                <th>对中国影响</th>
+                                <th>恢复预期</th>
+                                <th>信息来源</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chainBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <style>
+            .supply-tab {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: none;
+                background: none;
+                font-size: 0.85rem;
+                color: #64748b;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s;
+            }
+            .supply-tab:hover { color: #1e3a5f; background: #f1f5f9; }
+            .supply-tab.active { color: #1e3a5f; border-bottom-color: #1e3a5f; background: #fff; }
+            .supply-tab-content { display: none; }
+            .supply-tab-content.active { display: block; }
+            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .supply-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+            .supply-table th {
+                background: #f1f5f9; padding: 10px 8px; text-align: left;
+                font-weight: 600; color: #334155; white-space: nowrap;
+                border-bottom: 2px solid #e2e8f0;
+            }
+            .supply-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
+            .supply-table tr:hover { background: #fafbfc; }
+            .supply-table .facility-name { font-weight: 500; color: #1e3a5f; }
+            .supply-table .event-desc { max-width: 450px; color: #475569; }
+            .status-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 500; }
+            .status-severe { background: #fee2e2; color: #991b1b; }
+            .status-damaged { background: #fef3c7; color: #92400e; }
+            .status-recovered { background: #dcfce7; color: #166534; }
+            .status-ongoing { background: #fee2e2; color: #991b1b; }
+            .status-unknown { background: #f1f5f9; color: #64748b; }
+            @media (max-width: 768px) {
+                .supply-table th, .supply-table td { padding: 8px 6px; font-size: 0.7rem; }
+                .supply-table .event-desc { max-width: 3000px; }
+                .supply-tab { padding: 8px 12px; font-size: 0.75rem; }
+            }
+            </style>
+
+            <script>
+            let supplyData = null;
+
+            function switchSupplyTab(tabName) {
+                document.querySelectorAll('.supply-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.supply-tab-content').forEach(c => c.classList.remove('active'));
+                event.target.classList.add('active');
+                document.getElementById('tab-' + tabName).classList.add('active');
+            }
+
+            function getStatusClass(status) {
+                if (!status) return 'status-unknown';
+                const s = status.toLowerCase();
+                if (s.includes('\u6467\u6bc1') || s.includes('\u4e25\u91cd') || s.includes('\u5927\u706b')) return 'status-severe';
+                if (s.includes('\u53d7\u635f') || s.includes('\u964d\u8d1f') || s.includes('\u51cf\u4ea7') || s.includes('\u505c\u4ea7') || s.includes('\u5173\u95ed')) return 'status-damaged';
+                if (s.includes('\u6062\u590d') || s.includes('\u6b63\u5e38')) return 'status-recovered';
+                if (s.includes('\u6301\u7eed') || s.includes('\u5c01\u9501') || s.includes('\u9ad8\u5371')) return 'status-ongoing';
+                return 'status-unknown';
+            }
+
+            function renderEnergyTable(items) {
+                const tbody = document.getElementById('energyBody');
+                if (!items || !items.length) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:40px;">暂无数据</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = items.map(item => `<tr>
+                    <td data-label="日期">${item.date}</td>
+                    <td data-label="国家/地区">${item.region}</td>
+                    <td data-label="设施名称" class="facility-name">${item.facility}</td>
+                    <td data-label="设施类型">${item.type}</td>
+                    <td data-label="所属企业">${item.owner}</td>
+                    <td data-label="事件描述" class="event-desc">${item.event}</td>
+                    <td data-label="当前状态"><span class="status-tag ${getStatusClass(item.status)}">${item.status}</span></td>
+                    <td data-label="影响评估">${item.impact}</td>
+                    <td data-label="信息来源">${item.source}</td>
+                </tr>`).join('');
+            }
+
+            function renderChainTable(items) {
+                const tbody = document.getElementById('chainBody');
+                if (!items || !items.length) {
+                    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:40px;">暂无数据</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = items.map(item => `<tr>
+                    <td data-label="日期">${item.date}</td>
+                    <td data-label="国家/地区">${item.region}</td>
+                    <td data-label="企业/机构">${item.company}</td>
+                    <td data-label="行业/产品">${item.industry}</td>
+                    <td data-label="事件描述" class="event-desc">${item.event}</td>
+                    <td data-label="影响传导链">${item.transmission}</td>
+                    <td data-label="停产/减产规模">${item.scale}</td>
+                    <td data-label="对中国影响">${item.chinaImpact}</td>
+                    <td data-label="恢复预期">${item.recovery}</td>
+                    <td data-label="信息来源">${item.source}</td>
+                </tr>`).join('');
+            }
+
+            async function loadSupplyData() {
+                try {
+                    const resp = await fetch('data/supply-chain.json?t=' + Date.now());
+                    if (!resp.ok) throw new Error('no data');
+                    supplyData = await resp.json();
+                    renderEnergyTable(supplyData.energy || []);
+                    renderChainTable(supplyData.chain || []);
+                    const timeEl = document.getElementById('supplyUpdateTime');
+                    if (supplyData.fetchTime) {
+                        timeEl.textContent = '\u66f4\u65b0: ' + supplyData.fetchTime.replace('T',' ').substring(0,16);
+                    }
+                } catch(e) {
+                    console.error('Failed to load supply chain data:', e);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', loadSupplyData);
+            </script>
+        </div>
+    </div>
+    <script>
+        // ==================== 实时航运跟踪地图 ====================
+        
+        // ==================== 霍尔木兹海峡每日通行量折线图 ====================
+        // 数据来源: 船视宝 (微信小程序)
+        const CSV_HISTORY_DATA = [
+            {date: '2025/12/1', ships: 135, dwt: 11558286},
+            {date: '2025/12/2', ships: 123, dwt: 10402209},
+            {date: '2025/12/3', ships: 113, dwt: 9435913},
+            {date: '2025/12/4', ships: 107, dwt: 10554296},
+            {date: '2025/12/5', ships: 106, dwt: 10296811},
+            {date: '2025/12/6', ships: 115, dwt: 8292144},
+            {date: '2025/12/7', ships: 102, dwt: 8960154},
+            {date: '2025/12/8', ships: 115, dwt: 10008028},
+            {date: '2025/12/9', ships: 119, dwt: 9726181},
+            {date: '2025/12/10', ships: 124, dwt: 11344244},
+            {date: '2025/12/11', ships: 120, dwt: 9822063},
+            {date: '2025/12/12', ships: 104, dwt: 10157907},
+            {date: '2025/12/13', ships: 106, dwt: 7442842},
+            {date: '2025/12/14', ships: 120, dwt: 11470664},
+            {date: '2025/12/15', ships: 118, dwt: 11244548},
+            {date: '2025/12/16', ships: 132, dwt: 10256996},
+            {date: '2025/12/17', ships: 106, dwt: 8200605},
+            {date: '2025/12/18', ships: 119, dwt: 10563144},
+            {date: '2025/12/19', ships: 111, dwt: 10160313},
+            {date: '2025/12/20', ships: 83, dwt: 5616783},
+            {date: '2025/12/21', ships: 110, dwt: 9213079},
+            {date: '2025/12/22', ships: 123, dwt: 10878696},
+            {date: '2025/12/23', ships: 133, dwt: 11991209},
+            {date: '2025/12/24', ships: 131, dwt: 11939781},
+            {date: '2025/12/25', ships: 126, dwt: 8987471},
+            {date: '2025/12/26', ships: 150, dwt: 13306726},
+            {date: '2025/12/27', ships: 122, dwt: 10856869},
+            {date: '2025/12/28', ships: 126, dwt: 10728307},
+            {date: '2025/12/29', ships: 115, dwt: 9492721},
+            {date: '2025/12/30', ships: 117, dwt: 8079737},
+            {date: '2025/12/31', ships: 128, dwt: 11668136},
+            {date: '2026/1/1', ships: 129, dwt: 10411144},
+            {date: '2026/1/2', ships: 117, dwt: 9325763},
+            {date: '2026/1/3', ships: 110, dwt: 10467090},
+            {date: '2026/1/4', ships: 113, dwt: 10288752},
+            {date: '2026/1/5', ships: 108, dwt: 9985754},
+            {date: '2026/1/6', ships: 117, dwt: 8752502},
+            {date: '2026/1/7', ships: 136, dwt: 10547083},
+            {date: '2026/1/8', ships: 117, dwt: 10207488},
+            {date: '2026/1/9', ships: 119, dwt: 10148733},
+            {date: '2026/1/10', ships: 146, dwt: 11116298},
+            {date: '2026/1/11', ships: 125, dwt: 10340184},
+            {date: '2026/1/12', ships: 123, dwt: 11736821},
+            {date: '2026/1/13', ships: 124, dwt: 11222368},
+            {date: '2026/1/14', ships: 108, dwt: 8867289},
+            {date: '2026/1/15', ships: 138, dwt: 11960020},
+            {date: '2026/1/16', ships: 109, dwt: 9456548},
+            {date: '2026/1/17', ships: 111, dwt: 9341919},
+            {date: '2026/1/18', ships: 99, dwt: 8586526},
+            {date: '2026/1/19', ships: 109, dwt: 7790687},
+            {date: '2026/1/20', ships: 134, dwt: 13080277},
+            {date: '2026/1/21', ships: 126, dwt: 11937538},
+            {date: '2026/1/22', ships: 95, dwt: 9253411},
+            {date: '2026/1/23', ships: 120, dwt: 10650154},
+            {date: '2026/1/24', ships: 120, dwt: 10040683},
+            {date: '2026/1/25', ships: 120, dwt: 11146988},
+            {date: '2026/1/26', ships: 127, dwt: 11496536},
+            {date: '2026/1/27', ships: 105, dwt: 7569678},
+            {date: '2026/1/28', ships: 115, dwt: 9669494},
+            {date: '2026/1/29', ships: 126, dwt: 10928715},
+            {date: '2026/1/30', ships: 130, dwt: 10062300},
+            {date: '2026/1/31', ships: 141, dwt: 14889851},
+            {date: '2026/2/1', ships: 108, dwt: 9183428},
+            {date: '2026/2/2', ships: 99, dwt: 7396184},
+            {date: '2026/2/3', ships: 150, dwt: 13282191},
+            {date: '2026/2/4', ships: 102, dwt: 8192027},
+            {date: '2026/2/5', ships: 123, dwt: 10366084},
+            {date: '2026/2/6', ships: 131, dwt: 10636981},
+            {date: '2026/2/7', ships: 121, dwt: 10123047},
+            {date: '2026/2/8', ships: 111, dwt: 9116394},
+            {date: '2026/2/9', ships: 126, dwt: 10335984},
+            {date: '2026/2/10', ships: 112, dwt: 9868496},
+            {date: '2026/2/11', ships: 125, dwt: 9254580},
+            {date: '2026/2/12', ships: 143, dwt: 11506484},
+            {date: '2026/2/13', ships: 124, dwt: 11871806},
+            {date: '2026/2/14', ships: 131, dwt: 11667478},
+            {date: '2026/2/15', ships: 122, dwt: 10115320},
+            {date: '2026/2/16', ships: 122, dwt: 10924942},
+            {date: '2026/2/17', ships: 128, dwt: 11160161},
+            {date: '2026/2/18', ships: 143, dwt: 12399008},
+            {date: '2026/2/19', ships: 122, dwt: 10291562},
+            {date: '2026/2/20', ships: 119, dwt: 10785349},
+            {date: '2026/2/21', ships: 107, dwt: 8912239},
+            {date: '2026/2/22', ships: 143, dwt: 12396830},
+            {date: '2026/2/23', ships: 126, dwt: 10709343},
+            {date: '2026/2/24', ships: 121, dwt: 9842294},
+            {date: '2026/2/25', ships: 123, dwt: 11369130},
+            {date: '2026/2/26', ships: 146, dwt: 12205643},
+            {date: '2026/2/27', ships: 127, dwt: 10413792},
+            {date: '2026/2/28', ships: 120, dwt: 11083025},
+            {date: '2026/3/1', ships: 45, dwt: 2679707},
+            {date: '2026/3/2', ships: 5, dwt: 161107},
+            {date: '2026/3/3', ships: 5, dwt: 203149},
+            {date: '2026/3/4', ships: 5, dwt: 146212},
+            {date: '2026/3/5', ships: 12, dwt: 310296},
+            {date: '2026/3/6', ships: 6, dwt: 87868},
+            {date: '2026/3/7', ships: 8, dwt: 328203},
+            {date: '2026/3/8', ships: 3, dwt: 110800},
+            {date: '2026/3/9', ships: 2, dwt: 118500},
+            {date: '2026/3/10', ships: 5, dwt: 272200},
+            {date: '2026/3/11', ships: 8, dwt: 986800},
+            {date: '2026/3/12', ships: 4, dwt: 174400},
+            {date: '2026/3/13', ships: 2, dwt: 57900},
+            {date: '2026/3/14', ships: 6, dwt: 230700},
+            {date: '2026/3/15', ships: 7, dwt: 908500},
+            {date: '2026/3/16', ships: 7, dwt: 261700},
+            {date: '2026/3/17', ships: 4, dwt: 107800},
+            {date: '2026/3/18', ships: 4, dwt: 63500},
+            {date: '2026/3/19', ships: 2, dwt: 152300},
+            {date: '2026/3/20', ships: 2, dwt: 154500},
+            {date: '2026/3/21', ships: 1, dwt: 14800},
+            {date: '2026/3/22', ships: 5, dwt: 280800},
+            {date: '2026/3/23', ships: 7, dwt: 351800},
+            {date: '2026/3/24', ships: 3, dwt: 92700},
+            {date: '2026/3/25', ships: 4, dwt: 146700},
+            {date: '2026/3/26', ships: 6, dwt: 340900},
+            {date: '2026/3/27', ships: 2, dwt: 135600},
+            {date: '2026/3/28', ships: 10, dwt: 589600},
+            {date: '2026/3/29', ships: 8, dwt: 698300},
+            {date: '2026/3/30', ships: 7, dwt: 522100},
+            {date: '2026/3/31', ships: 8, dwt: 378600},
+            {date: '2026/4/1', ships: 10, dwt: 382900},
+            {date: '2026/4/2', ships: 10, dwt: 887200}
+        ];
+
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+
+        // 历史数据来自CSV文件（自动更新）
+        // 原始数据来自船视宝 - 2025年12月1日至2026年3月8日）
+        const realData = CSV_HISTORY_DATA;
+
+        const labels = realData.map(d => {
+            // 支持多种日期格式: 2026-03-26 或 2026/3/26
+            const dateStr = d.date;
+            let parts;
+            if (dateStr.includes('-')) {
+                parts = dateStr.split('-');
+            } else if (dateStr.includes('/')) {
+                parts = dateStr.split('/');
+            } else {
+                return dateStr; // 无法解析，返回原值
+            }
+            // 格式: 年/月/日 或 年-月-日，返回 月/日
+            if (parts.length >= 3) {
+                return `${parseInt(parts[1])}/${parseInt(parts[2])}`;
+            }
+            return dateStr;
+        });
+        const shipsData = realData.map(d => d.ships);
+        const dwtData = realData.map(d => (d.dwt / 10000).toFixed(1)); // 万吨
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '通行艘次',
+                        data: shipsData,
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: window.innerWidth < 768 ? 0 : 3,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        yAxisID: 'y',
+                        tension: 0.3
+                    },
+                    {
+                        label: '载重吨 (万吨)',
+                        data: dwtData,
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: window.innerWidth < 768 ? 0 : 3,
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: window.innerWidth < 768 ? {left: 0, right: 0, top: 5, bottom: 0} : {left: 10, right: 10, top: 10, bottom: 10}
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                const idx = context[0].dataIndex;
+                                return realData[idx].date;
+                            },
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y;
+                            }
+                        }
+                    },
+                    // annotation插件需要单独引入，暂时注释
+                    /*
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: days - 6.5,
+                                xMax: days - 6.5,
+                                borderColor: 'rgba(220, 38, 38, 0.5)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    content: '3月2日 海峡关闭',
+                                    enabled: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    }
+                    */
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: window.innerWidth < 768 ? 6 : 15,
+                            font: {
+                                size: window.innerWidth < 768 ? 8 : 10
+                            }
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            maxTicksLimit: window.innerWidth < 768 ? 4 : 8,
+                            font: {
+                                size: window.innerWidth < 768 ? 8 : 11
+                            },
+                            callback: function(value) {
+                                return window.innerWidth < 768 ? value : value + ' 艘';
+                            }
+                        },
+                        title: {
+                            display: window.innerWidth >= 768,
+                            text: '艘次',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            maxTicksLimit: window.innerWidth < 768 ? 5 : 8,
+                            font: {
+                                size: window.innerWidth < 768 ? 9 : 11
+                            },
+                            callback: function(value) {
+                                return window.innerWidth < 768 ? value : value + ' 万吨';
+                            }
+                        },
+                        title: {
+                            display: window.innerWidth >= 768,
+                            text: '万吨',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+        
+        // ==================== 加载金十数据 ====================
+        // 金十数据入口 (脚本会自动在此插入嵌入数据)
+        
+        async function loadJin10Data() {
+            // 如果已经有嵌入数据，直接使用
+            if (typeof JIN10_STRAIT_DATA !== 'undefined') {
+                console.log('使用嵌入的金十数据');
+                fillJin10Data(JIN10_STRAIT_DATA);
+                return;
+            }
+            
+            // 否则尝试从JSON文件加载
+            try {
+                const response = await fetch('jin10_strait_data.json?t=' + Date.now());
+                if (!response.ok) {
+                    console.log('金十数据暂未加载');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                // ========== 1. 船只实时通行状态 ==========
+                const shipStatusSection = document.getElementById('jin10-ship-status-section');
+                if (shipStatusSection) {
+                    shipStatusSection.style.display = 'block';
+                    
+                    // 当前通过霍尔木兹海峡
+                    if (data.ship_counts && data.ship_counts.hormuz_passing !== undefined) {
+                        document.getElementById('jin10-hormuz-passing').textContent = 
+                            data.ship_counts.hormuz_passing;
+                    } else if (data.ship_counts && data.ship_counts.hormuz) {
+                        // 如果没有单独的在航数据，使用总数
+                        document.getElementById('jin10-hormuz-passing').textContent = 
+                            data.ship_counts.hormuz;
+                    }
+                    
+                    // 海域内总船舶数
+                    if (data.ship_counts?.total_in_area > 0) {
+                        document.getElementById('jin10-total-ships').textContent = 
+                            data.ship_counts.total_in_area.toLocaleString();
+                    } else if (data.ship_counts?.calculated_total > 0) {
+                        document.getElementById('jin10-total-ships').textContent = 
+                            data.ship_counts.calculated_total.toLocaleString();
+                    }
+                    
+                    // 航行中 vs 锚泊/停靠
+                    if (data.ship_counts) {
+                        if (data.ship_counts.sailing !== undefined) {
+                            document.getElementById('jin10-sailing').textContent = 
+                                data.ship_counts.sailing.toLocaleString() + '艘';
+                        }
+                        if (data.ship_counts.anchored !== undefined) {
+                            document.getElementById('jin10-anchored').textContent = 
+                                data.ship_counts.anchored.toLocaleString() + '艘';
+                        }
+                    }
+                    
+                    // 更新时间
+                    if (data.updated) {
+                        const updateTimeEl = document.getElementById('jin10-ship-update-time');
+                        if (updateTimeEl) {
+                            updateTimeEl.textContent = data.updated.slice(0, 16).replace('T', ' ');
+                        }
+                    }
+                }
+                
+                // ========== 2. 行业通行压力系数 ==========
+                const pressureSection = document.getElementById('jin10-pressure-section');
+                if (pressureSection) {
+                    pressureSection.style.display = 'block';
+                    
+                    // 更新综合通行压力系数
+                    if (data.industry_pressure && data.industry_pressure.total) {
+                        const totalPressure = data.industry_pressure.total;
+                        document.getElementById('jin10-total-pressure').textContent = totalPressure;
+                        
+                        // 更新压力等级标签
+                        const levelEl = document.getElementById('jin10-pressure-level');
+                        if (levelEl) {
+                            if (totalPressure >= 95) {
+                                levelEl.textContent = '极高风险';
+                                levelEl.style.background = '#cf1322';
+                            } else if (totalPressure >= 80) {
+                                levelEl.textContent = '高风险';
+                                levelEl.style.background = '#cf1322';
+                            } else if (totalPressure >= 60) {
+                                levelEl.textContent = '中等风险';
+                                levelEl.style.background = '#fa8c16';
+                            } else {
+                                levelEl.textContent = '低风险';
+                                levelEl.style.background = '#52c41a';
+                            }
+                        }
+                    }
+                    
+                    // 更新各品类数据及进度条
+                    const categoryMap = {
+                        'oil': 'jin10-oil',
+                        'lng': 'jin10-lng',
+                        'lpg': 'jin10-lpg',
+                        'fertilizer': 'jin10-fertilizer',
+                        'aluminum': 'jin10-aluminum',
+                        'methanol': 'jin10-methanol'
+                    };
+                    
+                    for (const [key, elementId] of Object.entries(categoryMap)) {
+                        if (data.industry_pressure[key]) {
+                            const value = data.industry_pressure[key].value;
+                            
+                            // 更新数字
+                            const el = document.getElementById(elementId);
+                            if (el) {
+                                el.textContent = value;
+                            }
+                            
+                            // 更新进度条
+                            const barEl = document.getElementById(elementId + '-bar');
+                            if (barEl) {
+                                barEl.style.width = value + '%';
+                            }
+                        }
+                    }
+                    
+                    // 更新时间
+                    if (data.updated) {
+                        const updateTimeEl = document.getElementById('jin10-update-time');
+                        if (updateTimeEl) {
+                            updateTimeEl.textContent = data.updated.slice(0, 16).replace('T', ' ');
+                        }
+                    }
+                }
+                
+                // ========== 3. 实时快照 ==========
+                const snapshotSection = document.getElementById('jin10-snapshot-section');
+                if (snapshotSection && data.snapshots && data.snapshots.length > 0) {
+                    snapshotSection.style.display = 'block';
+                    
+                    const container = document.getElementById('jin10-snapshots-container');
+                    if (container) {
+                        container.innerHTML = data.snapshots.slice(0, 4).map((snap, index) => `
+                            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #fff;">
+                                <img src="${snap.url}" 
+                                     style="width: 100%; height: 200px; object-fit: cover; display: block;"
+                                     alt="${snap.alt || '金十实时快照'}"
+                                     onerror="this.parentElement.innerHTML='<div style=\'padding: 40px; text-align: center; color: #94a3b8;\'>图片加载失败</div>'">
+                                <div style="padding: 8px 12px; background: #f8fafc; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between;">
+                                    <span>${snap.alt || '实时快照'}</span>
+                                    <span>#${index + 1}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+                
+                console.log('金十数据加载成功');
+                
+            } catch (error) {
+                console.log('金十数据加载失败:', error);
+            }
+        }
+        
+        // 金十数据已通过下方嵌入脚本自动加载
+        // 设置CSV更新时间（当前日期）
+        const csvUpdateTimeEl = document.getElementById('csv-update-time');
+        if (csvUpdateTimeEl) {
+            csvUpdateTimeEl.textContent = 
+                new Date().toLocaleString('zh-CN', {month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
+        }
+    </script>
+
+<!-- 金十数据嵌入 (更新于 2026-03-25 22:07:52) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-26 23:24:23) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-26 23:30:33) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-26 23:33:57) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-26 23:42:13) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-27 11:13:50) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-27 12:18:23) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-27 12:21:58) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-27 12:23:30) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-27 13:29:08) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-28 13:45:05) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-28 20:41:50) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-28 20:51:26) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-28 21:04:11) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-29 21:54:47) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-29 23:57:43) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-30 13:17:17) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-30 23:34:38) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 09:10:07) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 16:48:03) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 21:15:04) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 21:44:57) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 22:30:43) -->
+<!-- 金十数据嵌入 (自动更新于 2026-03-31 23:05:30) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 01:01:03) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 03:05:03) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 04:45:48) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 06:37:31) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 10:46:11) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 13:57:11) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 14:12:30) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 14:17:23) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 15:27:29) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-01 16:30:54) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-02 10:10:18) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-02 14:06:30) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-03 09:46:21) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-03 09:48:02) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-03 09:49:10) -->
+<!-- 金十数据嵌入 (自动更新于 2026-04-03 12:03:56) -->
+<script id="jin10-embedded-data">
+const JIN10_STRAIT_DATA = {
+  "updated": "2026-04-03T12:03:01",
+  "source": "金十数据",
+  "url": "https://qihuo.jin10.com/topic/strait_of_hormuz.html",
+  "industry_pressure": {
+    "total": 98.33,
+    "methanol": {
+      "name": "甲醇",
+      "value": 99
+    },
+    "oil": {
+      "name": "原油及成品油",
+      "value": 99
+    },
+    "lpg": {
+      "name": "液化石油气/LPG",
+      "value": 99
+    },
+    "lng": {
+      "name": "液化天然气/LNG",
+      "value": 99
+    },
+    "fertilizer": {
+      "name": "化肥",
+      "value": 99
+    },
+    "aluminum": {
+      "name": "铝材",
+      "value": 95.3
+    }
+  },
+  "ship_counts": {
+    "yesterday_passed": 10,
+    "hormuz_passing": 1,
+    "sailing": 708,
+    "anchored": 2088,
+    "total_in_area": 2796,
+    "calculated_total": 2796
+  },
+  "snapshot_url": "https://oimg.jin10.com/news/26/04/HyNDQO6XiMkkryHCSrdgrr.png"
+};
+
+// 页面加载时自动填充数据
+document.addEventListener('DOMContentLoaded', function() {
+    fillJin10Data(JIN10_STRAIT_DATA);
+});
+
+function fillJin10Data(data) {
+    if (!data) return;
+    
+    // ========== 1. 船只实时通行状态 ==========
+    const shipStatusSection = document.getElementById('jin10-ship-status-section');
+    if (shipStatusSection) {
+        shipStatusSection.style.display = 'block';
+        
+        // 当前通过霍尔木兹海峡
+        if (data.ship_counts) {
+            if (data.ship_counts.hormuz_passing !== undefined) {
+                document.getElementById('jin10-hormuz-passing').textContent = data.ship_counts.hormuz_passing;
+            } else if (data.ship_counts.hormuz) {
+                document.getElementById('jin10-hormuz-passing').textContent = data.ship_counts.hormuz;
+            }
+            
+            // 海域内总船舶数
+            if (data.ship_counts.total_in_area > 0) {
+                document.getElementById('jin10-total-ships').textContent = data.ship_counts.total_in_area.toLocaleString();
+            } else if (data.ship_counts.calculated_total > 0) {
+                document.getElementById('jin10-total-ships').textContent = data.ship_counts.calculated_total.toLocaleString();
+            }
+            
+            // 航行中 vs 锚泊/停靠
+            if (data.ship_counts.sailing !== undefined) {
+                document.getElementById('jin10-sailing').textContent = data.ship_counts.sailing.toLocaleString() + '艘';
+            }
+            if (data.ship_counts.anchored !== undefined) {
+                document.getElementById('jin10-anchored').textContent = data.ship_counts.anchored.toLocaleString() + '艘';
+            }
+            
+            // 昨日通过海峡数据（来自CSV历史数据）
+            if (data.ship_counts.yesterday_passed !== undefined) {
+                const yesterdayEl = document.getElementById('jin10-yesterday-passed');
+                if (yesterdayEl) {
+                    yesterdayEl.textContent = data.ship_counts.yesterday_passed;
+                }
+            }
+        }
+        
+        // 更新时间
+        if (data.updated) {
+            const updateTimeEl = document.getElementById('jin10-ship-update-time');
+            if (updateTimeEl) {
+                updateTimeEl.textContent = data.updated.slice(0, 16).replace('T', ' ');
+            }
+        }
+    }
+    
+    // ========== 2. 行业通行压力系数 ==========
+    const pressureSection = document.getElementById('jin10-pressure-section');
+    if (pressureSection && data.industry_pressure) {
+        pressureSection.style.display = 'block';
+        
+        // 更新综合通行压力系数
+        if (data.industry_pressure.total) {
+            const totalPressure = data.industry_pressure.total;
+            document.getElementById('jin10-total-pressure').textContent = totalPressure;
+            
+            // 更新压力等级标签
+            const levelEl = document.getElementById('jin10-pressure-level');
+            if (levelEl) {
+                if (totalPressure >= 95) {
+                    levelEl.textContent = '极高风险';
+                    levelEl.style.background = '#cf1322';
+                } else if (totalPressure >= 80) {
+                    levelEl.textContent = '高风险';
+                    levelEl.style.background = '#cf1322';
+                } else if (totalPressure >= 60) {
+                    levelEl.textContent = '中等风险';
+                    levelEl.style.background = '#fa8c16';
+                } else {
+                    levelEl.textContent = '低风险';
+                    levelEl.style.background = '#52c41a';
+                }
+            }
+        }
+        
+        // 更新各品类数据
+        const categoryMap = {
+            'oil': 'jin10-oil',
+            'lng': 'jin10-lng',
+            'lpg': 'jin10-lpg',
+            'fertilizer': 'jin10-fertilizer',
+            'aluminum': 'jin10-aluminum',
+            'methanol': 'jin10-methanol'
+        };
+        
+        for (const [key, elementId] of Object.entries(categoryMap)) {
+            if (data.industry_pressure[key]) {
+                const value = data.industry_pressure[key].value;
+                const el = document.getElementById(elementId);
+                if (el) el.textContent = value;
+                
+                // 更新进度条
+                const barEl = document.getElementById(elementId + '-bar');
+                if (barEl) barEl.style.width = value + '%';
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

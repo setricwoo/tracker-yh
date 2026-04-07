@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【银华基金】中东地缘局势跟踪 - 原油图谱</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* 浅色导航栏 */
+        .header {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-main {
+            display: flex;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 20px;
+        }
+        .header-logo img {
+            height: 30px;
+            width: auto;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
+            display: flex;
+            gap: 0;
+            margin: 0 auto;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .header-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-btn {
+            color: #64748b;
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #991b1b;
+        }
+        .nav-btn.active {
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .header-main {
+                flex-direction: column;
+                padding: 0;
+            }
+            .header-logo {
+                padding: 10px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                position: static;
+            }
+            .header-logo img { height: 26px; }
+            .header-nav { width: 100%; padding: 0 8px; }
+            .nav-btn { padding: 10px 12px; font-size: 0.8rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-btn { padding: 8px 10px; font-size: 0.75rem; }
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 110px);
+        }
+        
+        #map {
+            flex: 1;
+            background: #fff;
+        }
+        
+        .sidebar {
+            width: 380px;
+            background: #fff;
+            border-left: 1px solid #e2e8f0;
+            padding: 12px;
+            overflow-y: auto;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 10px 8px;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+        }
+        .stat-box h4 {
+            font-size: 0.65rem;
+            color: #dc2626;
+            margin-bottom: 4px;
+        }
+        .stat-box .number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #991b1b;
+        }
+        .stat-box .unit {
+            font-size: 0.65rem;
+            color: #64748b;
+        }
+        
+        .legend-section {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .legend-section h3 {
+            font-size: 0.8rem;
+            color: #991b1b;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .country-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .country-card:hover {
+            border-color: #dc2626;
+            box-shadow: 0 2px 8px rgba(220,38,38,0.15);
+        }
+        
+        .alert-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .alert-box.critical {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-color: #dc2626;
+        }
+        .alert-box h4 {
+            font-size: 0.75rem;
+            color: #92400e;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .alert-box.critical h4 {
+            color: #dc2626;
+        }
+        .alert-box p {
+            font-size: 0.75rem;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .toggle-bar {
+            margin-top: 8px;
+            gap: 8px;
+        }
+        .toggle-btn {
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .filter-btn {
+            padding: 5px 10px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #fff;
+        }
+        
+        /* 关键CSS：去除divIcon的默认边框和背景 */
+        .leaflet-div-icon {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .header-main { flex-wrap: wrap; padding: 4px 8px; gap: 4px; position: relative; }
+            .header-left { position: relative; left: auto; width: 100%; text-align: left; order: 1; }
+
+            .header-center-wrapper { 
+                order: 2; 
+                width: 100%; 
+                display: flex; 
+                align-items: center; 
+                position: relative;
+                margin-top: 2px;
+            }
+            .header-center { 
+                flex: 1;
+                justify-content: flex-start; 
+                gap: 4px; 
+                flex-wrap: nowrap; 
+                overflow-x: auto; 
+                -webkit-overflow-scrolling: touch; 
+                scrollbar-width: none; 
+                position: relative; 
+                padding: 0 4px; 
+            }
+            .header-center::-webkit-scrollbar { display: none; }
+            .nav-btn { padding: 4px 8px; font-size: 0.7rem; white-space: nowrap; flex: 0 0 auto; text-align: center; }
+            .header-right { display: none; }
+            /* 移动端滚动箭头 */
+            .nav-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 28px;
+                background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+                color: rgba(255,255,255,0.7);
+                font-size: 12px;
+                cursor: pointer;
+                flex-shrink: 0;
+                z-index: 10;
+            }
+            .nav-arrow.hidden { display: none; }
+            .container {
+                flex-direction: column;
+                height: auto;
+                padding: 8px;
+            }
+            #map {
+                height: 55vh;
+                min-height: 320px;
+                border-radius: 8px;
+            }
+            .sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+                max-height: none;
+                padding: 12px;
+            }
+            .stat-box {
+                padding: 10px 6px;
+            }
+            .stat-box .number {
+                font-size: 1.1rem;
+            }
+            .storage-control {
+                transform: scale(0.85);
+                transform-origin: left center;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            /* 移动端：简化图例面板为一行 */
+            .map-legend-panel {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                max-width: none;
+                width: 100%;
+                padding: 6px 8px;
+                margin-top: 6px;
+                border-radius: 6px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.6rem;
+            }
+            .map-legend-panel h4 {
+                display: none; /* 移动端隐藏"图例"标题 */
+            }
+            .map-legend-panel .legend-row {
+                display: inline-flex;
+                margin: 0;
+                font-size: 0.6rem;
+                white-space: nowrap;
+                align-items: center;
+                gap: 3px;
+            }
+            .map-legend-panel .legend-symbol {
+                width: 12px;
+                height: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .map-legend-panel .legend-note {
+                display: none; /* 移动端隐藏详细说明 */
+            }
+            .map-legend-panel .legend-circle {
+                width: 10px !important;
+                height: 10px !important;
+            }
+            .map-legend-panel .legend-line {
+                width: 12px !important;
+                height: 2px !important;
+            }
+            /* 移动端：简化侧边栏内容 */
+            .sidebar .legend-section:nth-child(1),
+            .sidebar .legend-section:nth-child(2),
+            .sidebar .legend-section:nth-child(3),
+            .sidebar .legend-section:nth-child(4) {
+                display: none; /* 隐藏详细统计数据 */
+            }
+            .sidebar .legend-section:nth-child(5) {
+                margin-bottom: 8px;
+            }
+            .sidebar .legend-section h3 {
+                font-size: 0.85rem;
+            }
+            .filter-bar {
+                margin-top: 8px;
+                gap: 4px;
+            }
+            .filter-btn {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .nav-arrow { display: none !important; }
+            .header-center-wrapper { display: contents; }
+        }
+        @media (max-width: 480px) {
+            .header-main { padding: 6px 8px; gap: 6px; }
+            .header-center { gap: 4px; }
+            .nav-btn { padding: 5px 8px; font-size: 0.7rem; min-width: 70px; max-width: 100px; }
+            .header-right { display: none; }
+            .stat-box .number {
+                font-size: 1rem;
+            }
+            .stat-box h4, .stat-box .unit {
+                font-size: 0.6rem;
+            }
+            .legend-section h3 {
+                font-size: 0.75rem;
+            }
+            .country-card {
+                padding: 8px;
+            }
+            .filter-btn {
+                font-size: 0.65rem;
+                padding: 4px 8px;
+            }
+            .alert-box h4 {
+                font-size: 0.7rem;
+            }
+            .alert-box p {
+                font-size: 0.7rem;
+            }
+            .storage-modal {
+                align-items: flex-start;
+                padding-top: 40px;
+            }
+            .storage-modal-content {
+                width: 94%;
+                padding: 16px;
+                margin: 0 auto;
+                max-height: 80vh;
+                border-radius: 12px;
+            }
+            .storage-header h2 {
+                font-size: 1rem;
+            }
+            .storage-header {
+                gap: 8px;
+                margin-bottom: 12px;
+                padding-bottom: 12px;
+            }
+            .storage-header span {
+                font-size: 1.5rem;
+            }
+            .close-modal-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            #map {
+                height: 40vh;
+                min-height: 280px;
+            }
+            .sidebar {
+                max-height: 45vh;
+                overflow-y: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-main { padding: 6px 8px; }
+            .nav-btn { padding: 3px 6px; font-size: 0.7rem; }
+            .header-right { font-size: 0.6rem; }
+            .container {
+                padding: 6px;
+            }
+            .storage-modal {
+                padding-top: 20px;
+            }
+            .storage-modal-content {
+                width: 96%;
+                padding: 12px;
+                max-height: 85vh;
+                border-radius: 10px;
+            }
+            .storage-header h2 {
+                font-size: 0.9rem;
+            }
+            #map {
+                height: 55vh;
+                min-height: 280px;
+                border-radius: 6px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+            }
+            .stat-box {
+                padding: 6px 2px;
+                border-radius: 6px;
+            }
+            .stat-box .number {
+                font-size: 0.85rem;
+            }
+            .stat-box h4, .stat-box .unit {
+                font-size: 0.55rem;
+            }
+            .sidebar {
+                padding: 10px;
+                max-height: 50vh;
+            }
+            .legend-section h3 {
+                font-size: 0.8rem;
+            }
+            .filter-btn {
+                font-size: 0.6rem;
+                padding: 3px 6px;
+            }
+            .toggle-bar {
+                gap: 6px !important;
+            }
+            .toggle-btn {
+                font-size: 0.6rem !important;
+                padding: 4px 8px !important;
+            }
+            /* 地图上的按钮移动端适配 */
+            .map-toggle-buttons {
+                gap: 3px !important;
+                flex-direction: row !important;
+            }
+            .map-toggle-buttons button {
+                padding: 5px 8px !important;
+                font-size: 0.75rem !important;
+                border-radius: 6px !important;
+            }
+            .leaflet-top.leaflet-right {
+                top: 5px !important;
+                right: 5px !important;
+            }
+            .leaflet-control {
+                margin: 0 !important;
+            }
+            /* 移动端隐藏地图上的2025年出口概况控件 */
+            .leaflet-bottom.leaflet-left .leaflet-control {
+                display: none !important;
+            }
+            /* 移动端显示侧边栏的出口概况 */
+            .mobile-export-summary {
+                display: block !important;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid #e2e8f0;
+            }
+            .mobile-export-summary h3 {
+                font-size: 0.85rem;
+                margin-bottom: 8px;
+            }
+        }
+        
+        /* 储油设施弹窗样式 */
+        .storage-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .storage-modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 420px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        
+        .storage-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .storage-header h2 {
+            font-size: 1.3rem;
+            color: #991b1b;
+            margin: 0;
+        }
+        
+        .storage-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .days-cover-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .days-cover-box.critical {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+        }
+        
+        .days-cover-box.good {
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+        }
+        
+        .days-cover-box .days-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #b45309;
+            line-height: 1;
+        }
+        
+        .days-cover-box.critical .days-number {
+            color: #dc2626;
+        }
+        
+        .days-cover-box.good .days-number {
+            color: #16a34a;
+        }
+        
+        .days-cover-box .days-label {
+            font-size: 0.9rem;
+            color: #78716c;
+            margin-top: 8px;
+        }
+        
+        .storage-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .storage-stat {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .storage-stat .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #991b1b;
+        }
+        
+        .storage-stat .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        
+        .storage-facilities {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .storage-facilities h4 {
+            font-size: 0.9rem;
+            color: #991b1b;
+            margin-bottom: 12px;
+        }
+        
+        .facility-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            font-size: 0.85rem;
+        }
+        
+        .facility-item:last-child {
+            border-bottom: none;
+        }
+        
+        .facility-name {
+            color: #475569;
+        }
+        
+        .facility-capacity {
+            color: #991b1b;
+            font-weight: 600;
+        }
+        
+        .storage-note {
+            background: #eff6ff;
+            border-left: 4px solid #dc2626;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #991b1b;
+            line-height: 1.6;
+        }
+        
+        .close-modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background 0.2s;
+        }
+        
+        .close-modal-btn:hover {
+            background: #b91c1c;
+        }
+        
+        /* 储油控件样式 */
+        .storage-control {
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 1000;
+            position: relative;
+        }
+        
+        .country-marker {
+            z-index: 1000 !important;
+        }
+        
+        .country-marker .leaflet-marker-icon {
+            z-index: 1000 !important;
+        }
+        
+        .storage-control:hover {
+            transform: scale(1.05);
+        }
+        
+        .last-update {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* 左侧地图图例 */
+        .map-legend-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 14px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+            max-width: 240px;
+        }
+        
+        .map-legend-panel h4 {
+            font-size: 0.8rem;
+            color: #991b1b;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.7rem;
+            color: #475569;
+        }
+        
+        .legend-symbol {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .legend-circle {
+            border-radius: 50%;
+            border: 2px solid;
+        }
+        
+        .legend-line {
+            height: 2px;
+            width: 24px;
+            border-radius: 2px;
+        }
+        
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .legend-note {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+            font-size: 0.65rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+        
+        .legend-note strong {
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <!-- 统一导航栏 -->
+    <div class="header">
+        <div class="header-main">
+            <div class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </div>
+            <nav class="header-nav" id="navCenter">
+                <a href="index.html" class="nav-btn">海峡跟踪</a>
+                <a href="data-tracking.html" class="nav-btn">全球市场</a>
+                <a href="war-situation.html" class="nav-btn">战局形势</a>
+                <a href="briefing.html" class="nav-btn">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn">央行表态</a>
+                <a href="eco-track.html" class="nav-btn">经济数据</a>
+                <a href="research.html" class="nav-btn">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
+                <a href="oil-chart.html" class="nav-btn active">原油图谱</a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div id="map"></div>
+        
+        <div class="sidebar">
+            <div class="legend-section">
+                <h3>📊 海湾地区重要性 (2025)</h3>
+                <div style="font-size: 0.85rem; color: #475569; line-height: 1.7; margin-bottom: 12px;">
+                    <p style="margin-bottom: 10px;">中东海湾地区是全球最重要的石油供应地，拥有全球约<strong>55%</strong>的石油储量和<strong>35%</strong>的天然气储量。</p>
+                    <div style="background: #eff6ff; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span>霍尔木兹海峡石油流量占比</span>
+                            <span style="font-weight: 700; color: #991b1b;">~20%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span>霍尔木兹海峡通行量</span>
+                            <span style="font-weight: 700; color: #991b1b;">~2100万桶/日</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>全球LNG贸易占比</span>
+                            <span style="font-weight: 700; color: #991b1b;">~20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="legend-section">
+                <h3>🛢️ 8国储量与产能 (2025)</h3>
+                <div style="font-size: 0.8rem; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇸🇦 沙特阿拉伯</span>
+                        <span style="font-weight: 600;">储量2670亿桶 | 产能1200万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇮🇷 伊朗</span>
+                        <span style="font-weight: 600;">储量2090亿桶 | 产能350万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇮🇶 伊拉克</span>
+                        <span style="font-weight: 600;">储量1450亿桶 | 产能450万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇰🇼 科威特</span>
+                        <span style="font-weight: 600;">储量1020亿桶 | 产能300万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇦🇪 阿联酋</span>
+                        <span style="font-weight: 600;">储量980亿桶 | 产能500万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇶🇦 卡塔尔</span>
+                        <span style="font-weight: 600;">储量250亿桶 | 产能73万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e2e8f0;">
+                        <span>🇴🇲 阿曼</span>
+                        <span style="font-weight: 600;">储量54亿桶 | 产能110万桶/日</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                        <span>🇧🇭 巴林</span>
+                        <span style="font-weight: 600;">储量2亿桶 | 产能21万桶/日</span>
+                    </div>
+                </div>
+                <div class="data-source" style="font-size: 0.7rem; color: #94a3b8; font-style: italic;">数据来源：OPEC、BP Statistical Review 2024</div>
+            </div>
+            
+            <div class="legend-section">
+                <h3>📈 产量与出口 (2025)</h3>
+                <table style="width: 100%; font-size: 0.75rem; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f1f5f9;">
+                            <th style="padding: 6px; text-align: left; border-bottom: 1px solid #e2e8f0;">国家</th>
+                            <th style="padding: 6px; text-align: center; border-bottom: 1px solid #e2e8f0;">产量</th>
+                            <th style="padding: 6px; text-align: center; border-bottom: 1px solid #e2e8f0;">出口</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇸🇦 沙特</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">900</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">748</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇮🇶 伊拉克</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">420</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">340</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇦🇪 阿联酋</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">340</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">280</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇮🇷 伊朗</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">330</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">180</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇰🇼 科威特</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">250</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">200</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇴🇲 阿曼</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">100</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">77</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">🇶🇦 卡塔尔</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">73</td>
+                            <td style="padding: 6px; text-align: center; border-bottom: 1px solid #f1f5f9;">73</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px;">🇧🇭 巴林</td>
+                            <td style="padding: 6px; text-align: center;">19</td>
+                            <td style="padding: 6px; text-align: center;">15</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 8px; text-align: right;">单位：万桶/日</div>
+            </div>
+            
+            <div class="legend-section">
+                <h3>🔄 替代出口路线 (2025)</h3>
+                <div style="font-size: 0.8rem;">
+                    <div style="margin-bottom: 12px; padding: 10px; background: #f0fdf4; border-radius: 8px; border-left: 3px solid #22c55e;">
+                        <div style="font-weight: 600; color: #166534; margin-bottom: 4px;">沙特东西管道 (Petroline)</div>
+                        <div style="color: #15803d; font-size: 0.75rem;">能力: 700万桶/日 | 实际: ~200万桶/日</div>
+                        <div style="color: #64748b; font-size: 0.7rem; margin-top: 4px;">绕过霍尔木兹至红海延布港</div>
+                    </div>
+                    <div style="margin-bottom: 12px; padding: 10px; background: #f0fdf4; border-radius: 8px; border-left: 3px solid #22c55e;">
+                        <div style="font-weight: 600; color: #166534; margin-bottom: 4px;">阿联酋ADCOP管道</div>
+                        <div style="color: #15803d; font-size: 0.75rem;">能力: 180万桶/日 | 实际: ~110万桶/日</div>
+                        <div style="color: #64748b; font-size: 0.7rem; margin-top: 4px;">绕过霍尔木兹至富查伊拉港</div>
+                    </div>
+                    <div style="margin-bottom: 12px; padding: 10px; background: #f1f5f9; border-radius: 8px; border-left: 3px solid #94a3b8;">
+                        <div style="font-weight: 600; color: #475569; margin-bottom: 4px;">伊朗Goreh-Jask管道</div>
+                        <div style="color: #64748b; font-size: 0.75rem;">能力: 100万桶/日 | 实际: ~5万桶/日</div>
+                        <div style="color: #64748b; font-size: 0.7rem; margin-top: 4px;">绕过霍尔木兹至阿曼湾贾斯克港</div>
+                    </div>
+                    <div style="padding: 10px; background: #fef2f2; border-radius: 8px; border-left: 3px solid #ef4444;">
+                        <div style="font-weight: 600; color: #991b1b; margin-bottom: 4px;">伊拉克-土耳其ITP管道</div>
+                        <div style="color: #b91c1c; font-size: 0.75rem;">能力: 150万桶/日 | 状态: 停运</div>
+                        <div style="color: #64748b; font-size: 0.7rem; margin-top: 4px;">自2023年3月起停运</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.7rem; color: #64748b; margin-top: 12px; padding: 8px; background: #f8fafc; border-radius: 6px;">
+                    <strong>合计替代能力:</strong> 约1130万桶/日 | <strong>实际使用:</strong> 约315万桶/日
+                </div>
+            </div>
+            
+            <div class="legend-section">
+                <h3>📊 各国原油动态</h3>
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 10px;">
+                    点击地图图标查看最新动态详情
+                </div>
+                <div id="country-list"></div>
+            </div>
+            
+            <!-- 移动端专用：2025年出口概况（地图上的控件在移动端隐藏，这里显示） -->
+            <div class="mobile-export-summary" style="display: none;">
+                <h3>📊 2025年出口概况</h3>
+                <div style="font-size: 0.8rem; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="margin-bottom: 6px; color: #475569;">🇸🇦 沙特: 7.48 = 霍尔木兹5.5 + 绕过1.98</div>
+                    <div style="margin-bottom: 6px; color: #475569;">🇮🇶 伊拉克: 3.4 (全部经霍尔木兹)</div>
+                    <div style="margin-bottom: 6px; color: #475569;">🇦🇪 阿联酋: 2.8 = 霍尔木兹1.7 + 绕过1.1</div>
+                    <div style="color: #64748b; font-size: 0.72rem; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0;">
+                        <strong>线条:</strong> 流量越大越粗<br>
+                        红色=经霍尔木兹 | 绿色=绕过
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const map = L.map('map').setView([27, 50], 5);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // 8个主要产油国（按比例设置radius）- 添加储油数据
+        const countries = [
+            { 
+                name: "沙特阿拉伯", nameEn: "Saudi Arabia", center: [23.0, 44.0], labelPos: [23.0, 44.0], 
+                capacity: 12.0, actual: 9.0, exports: 7.48, hormuzExports: 5.5, bypassExports: 1.98, 
+                color: "#dc2626", flag: "🇸🇦", radius: 100,
+                storage: {
+                    capacity: 1200,
+                    production: 900,
+                    exports: 748,
+                    daysCover: 36,
+                    daysMax: 60,
+                    onshore: 320,
+                    floating: 25,
+                    total: 345,
+                    facilities: [
+                        { name: "Ras Tanura储油区", capacity: "180百万桶" },
+                        { name: "Juaymah储油终端", capacity: "80百万桶" },
+                        { name: "Yanbu储油设施", capacity: "45百万桶" },
+                        { name: "浮动储存(VLCC)", capacity: "25百万桶" }
+                    ],
+                    note: "中东最大储油能力，可通过管道分流延长至60天。2026年3月霍尔木兹危机中储存压力相对可控。",
+                    status: "good",
+                    updates: [
+                        { date: "2026-04-03", title: "中国油轮大量使用沙特红海出口设施绕开霍尔木兹海峡", content: "4月3日南华早报报道，越来越多前往中国的油轮正在使用沙特阿拉伯的红海出口设施，以绕开被封锁的霍尔木兹海峡。沙特阿美继续通过延布港重新规划运输路线，红海航线成为对亚洲出口的关键替代通道" },
+                        { date: "2026-04-02", title: "海湾国家探索新管道基础设施以绕开霍尔木兹海峡", content: "4月2日阿拉比亚电视台报道，海湾国家正在探索新的管道基础设施，以在地区紧张局势持续影响石油出口的情况下绕开霍尔木兹海峡。拉斯塔努拉炼油厂和终端继续作为沙特石油出口的焦点" },
+                        { date: "2026-04-02", title: "沙特警告油价可能飙升至每桶180美元", content: "4月2日华尔街日报报道，沙特阿拉伯警告称，如果中东冲突引发的能源冲击持续到4月以后，油价可能飙升至每桶180美元。这一危机源于2026年3月伊朗对海湾能源基础设施的袭击" },
+                        { date: "2026-04-01", title: "沙特阿美大幅上调4月LPG官方售价，丙烷涨205美元/吨", content: "4月1日路透社报道，沙特阿美大幅上调4月份液化石油气(LPG)官方售价：丙烷上涨205美元/吨至750美元/吨，丁烷上涨260美元/吨至800美元/吨，涨幅达38-80%。这是霍尔木兹危机以来最大幅度涨价" },
+                        { date: "2026-04-01", title: "沙特阿美4月连续第二个月削减对亚洲石油供应", content: "4月1日路透社报道，沙特阿美已连续第二个月削减对亚洲买家的原油供应。由于霍尔木兹海峡持续封锁导致出口受阻，阿美仅能从红海延布港供应阿拉伯轻质原油给长期合同客户。亚洲主要买家中国、印度的进口量预计将进一步下降" },
+                        { date: "2026-03-29", title: "沙特军队保持全面戒备，防御伊朗持续袭击", content: "3月29日沙特国防部表示，军队保持全面戒备状态，防空系统24小时运作。过去一周沙特拦截了超过200架伊朗无人机和数十枚弹道导弹，成功保护了Ras Tanura、Yanbu等关键能源设施" },
+                        { date: "2026-03-28", title: "沙特通过红海延布港出口创纪录", content: "3月28日数据显示，沙特每日通过红海延布港出口的石油装载量已超400万桶，目标是每天500万桶（战前出口量的70%）。东西管道满负荷运行，成为绕开霍尔木兹海峡的生命线" },
+                        { date: "2026-03-19", title: "沙特Samref炼油厂遭伊朗无人机袭击起火", content: "3月19日沙特国防部确认，伊朗无人机袭击了位于延布的Samref炼油厂（沙特阿美与埃克森美孚合资），无人机碎片坠落引发火灾。该炼油厂日产能40万桶，已被列入伊朗报复目标清单" },
+                        { date: "2026-03-07", title: "沙特防空系统拦截16架针对Shaybah油田的无人机", content: "3月7日沙特国防部报告，防空系统在Empty Quarter拦截了16架针对Shaybah油田的伊朗无人机，分四波来袭。Shaybah油田是沙特最重要的'超巨型'油田之一，日产原油85万桶" },
+                        { date: "2026-03-02", title: "沙特Ras Tanura炼油厂遭袭后关闭，布伦特原油飙升10%", content: "3月2日沙特阿美关闭Ras Tanura炼油厂（日产能55万桶），此前伊朗无人机袭击导致设施起火。该炼油厂是中东最大炼油厂之一，也是全球最大石油出口港。布伦特原油期货应声飙升约10%" },
+                        { date: "2026-03-30", title: "霍尔木兹海峡封锁持续 沙特石油出口降至历史低位", content: "3月30日最新数据显示，受霍尔木兹海峡持续封锁影响，沙特石油出口量已降至每日约400万桶，较正常水平下降超过60%。沙特阿美正加速通过东西管道向红海延布港转移原油，但该管道运力有限，无法完全弥补海峡封锁造成的损失" },
+                        { date: "2026-03-29", title: "美以袭击伊朗战争持续一个月 全球能源版图受冲击", content: "3月29日，美以伊冲突已持续一个月，呈现出长期化与扩大化趋势。伊朗石油部长致信联合国秘书长，直指美以袭击'等同于对伊朗能源安全与经济发动全面战争'。霍尔木兹海峡作为全球最重要的能源咽喉，其通行实际上已陷入停滞" },
+                        { date: "2026-03-28", title: "霍尔木兹海峡封锁持续 全球供应链面临系统性休克", content: "3月28日，霍尔木兹海峡封锁危机已进入第四周，布伦特原油价格一度逼近每桶120美元。伊朗伊斯兰革命卫队于3月27日再次发出警告，声称霍尔木兹海峡现在关闭，任何船舶试图穿越航道将面临严厉措施。当天有三艘不同国籍的集装箱船被迫掉头折返" },
+                        { date: "2026-03-26", title: "伊朗袭击沙特炼油厂后续：国际油价大幅上涨", content: "3月26日多家外媒报道，伊朗对沙特阿美炼油厂发动打击，该厂日加工约55万桶石油，被视为全球能源关键枢纽。此举导致国际油价大幅上涨，布伦特原油突破115美元/桶" },
+                        { date: "2026-03-24", title: "沙特延布SAMREF炼油厂遭无人机袭击，导弹被拦截", content: "3月19日沙特东部省、利雅得和延布继续遭受伊朗无人机袭击。沙特当局报告拦截了多波无人机袭击，红海沿岸延布的SAMREF炼油厂被一架无人机击中，同时沙特军队拦截了一枚瞄准延布港口的弹道导弹" },
+                        { date: "2026-03-23", title: "全球最大财险公司安达保险或将承保霍尔木兹海峡航运保险", content: "3月23日新浪财经报道，全球最大财险公司安达保险(Chubb)作为DFC 200亿美元航运保险计划的首席承保方，可能为霍尔木兹海峡航运重启提供关键保险支撑，为海峡通航带来一线希望" },
+                        { date: "2026-03-22", title: "从海运保险看霍尔木兹海峡封锁：国际保险市场启动'软封锁'", content: "3月22日华西证券报告显示，国际主流海事保险体系对波斯湾/霍尔木兹海峡启动'集体撤保+拒保'，保险费率从战前0.25%飙升至5%，从保险精算层面构成对海峡的'软封锁'" },
+                        { date: "2026-03-21", title: "特朗普称美国将不再守卫霍尔木兹海峡", content: "3月21日北京日报报道，特朗普称美国将不再承担霍尔木兹海峡守卫责任，应由使用国家承担。国际海事组织秘书长表示军事协助'既非长久之计，也不是可持续的解决之道'" },
+                        { date: "2026-03-20", title: "沙特Ras Tanura炼油厂在袭击后恢复运营", content: "3月20日IndexBox报道，沙特Ras Tanura炼油厂在3月无人机袭击后已恢复运营。该炼油厂日处理能力55万桶，是沙特最大炼油厂，约占全国炼油产能的16%" },
+                        { date: "2026-03-19", title: "沙特Samref炼油厂遭伊朗无人机袭击，无人机碎片坠落引发火灾", content: "3月19日沙特国防部确认，伊朗无人机袭击了沙特Samref炼油厂（沙特阿美与埃克森美孚合资），一架无人机在炼油厂坠毁引发火灾。这是伊朗对海湾国家能源设施大规模袭击的一部分，沙特军方表示正在评估损失程度" },
+                        { date: "2026-03-19", title: "沙特击落伊朗弹道导弹和无人机，防御东部省油田", content: "3月18日沙特国防部报告击落一枚针对Prince Sultan空军基地的弹道导弹和两架针对利雅得外交区的无人机。伊朗革命卫队此前发出撤离警告，称将在数小时内打击沙特Samref炼油厂和Jubail石化综合体。沙特军方表示防空系统保持高度戒备，全力保护东部省关键能源设施" },
+                        { date: "2026-03-18", title: "伊朗警告将打击沙特能源设施，油价突破110美元", content: "3月18日伊朗南帕尔斯和Asaluyeh石油设施遭袭后，德黑兰警告将打击沙特、阿联酋和卡塔尔的能源设施。沙特Ras Tanura炼油厂（55万桶/日）已暂停运营。布伦特原油飙升6%至近110美元/桶，创四年来新高。卡塔尔称袭击为以色列所为，全球能源安全面临严重威胁" },
+                        { date: "2026-03-18", title: "沙特阿美重启拉斯塔努拉炼油厂", content: "3月18日沙特阿美重启了此前因无人机袭击而关闭的拉斯塔努拉炼油厂。该炼油厂日处理能力55万桶，是沙特最大炼油厂，约占全国炼油产能的16%。沙特同时与盟友协调应对伊朗持续袭击" },
+                        { date: "2026-03-17", title: "沙特24小时内拦截近100架伊朗无人机创单日纪录", content: "沙特国防部3月17日表示，过去24小时内拦截近100架伊朗无人机，为冲突爆发以来单日最大规模袭击。被拦截无人机针对沙特各地能源设施和军事目标，包括拉斯塔努拉炼油厂和东部省油田" },
+                        { date: "2026-03-15", title: "美以袭击已致伊朗202名儿童死亡，沙特谴责", content: "伊朗卫生部3月15日表示，美以袭击已造成202名儿童和223名妇女死亡。沙特外交部同日谴责伊朗持续袭击海湾国家，称伊朗'继续基于毫无根据的指控发起攻击'" },
+                        { date: "2026-03-15", title: "特朗普呼吁多国派遣军舰在霍尔木兹海峡护航", content: "特朗普发文呼吁法国、日本、韩国、英国派遣军舰在霍尔木兹海峡护航。法国表示准备开展'纯粹防御性'任务护送船舶，日韩英亦作出回应" },
+                        { date: "2026-03-14", title: "沙特阿美警告全球石油市场面临灾难性后果", content: "沙特阿美警告如果霍尔木兹海峡持续被封锁，全球石油市场将面临灾难性后果。公司正全力通过东西管道向红海延布港增运油品，以绕开海峡封锁" },
+                        { date: "2026-03-13", title: "东西管道成绕过海峡关键通道", content: "沙特东西管道（Petroline）总设计运力约700万桶/日，预计将在未来几天内满负荷运行，成为绕开霍尔木兹海峡的关键替代通道" },
+                        { date: "2026-03-13", title: "IEA大幅下调供应增长预期", content: "IEA将3月全球石油供应预期从增长240万桶/日下调至110万桶/日，称中东战争造成史上最大石油供应中断。估计3月全球石油供应将每日锐减800万桶" },
+                        { date: "2026-03-12", title: "沙特阿美CEO称史上最大危机", content: "沙特阿美CEO纳赛尔表示这是中东油气产业'史上最大危机'，约1.8亿桶石油供应已中断。公司正通过东西管道向红海延布港运送更多油品，已开始向亚太客户提供从延布港装载原油的选择" },
+                        { date: "2026-03-11", title: "海湾四国被迫减产670万桶/日", content: "沙特日产量减少200-250万桶，连同伊拉克、阿联酋、科威特四国已将合计日产量削减多达670万桶，减幅约占四国总产能的三分之一" },
+                        { date: "2026-03-11", title: "谢拜油田遭无人机袭击", content: "沙特东南部谢拜油田（日产原油85万桶）上空响起防空警报，两架伊朗制造的见证者-136无人机从也门方向来袭，沙特皇家空军成功拦截" },
+                        { date: "2026-03-11", title: "中东停产潮扩大", content: "沙特阿拉伯日产量减少200万至250万桶，连同伊拉克、阿联酋、科威特四国已将合计日产量削减多达670万桶，减幅约占四国总产能的三分之一" },
+                        { date: "2026-03-11", title: "沙特探索东西管道增运", content: "沙特阿美正在探索通过东西输油管道向红海港口延布港运送更多油品，已开始向亚太客户提供从延布港装载原油的选择" },
+                        { date: "2026-03-10", title: "特朗普称战争将很快结束", content: "特朗普释放战争接近尾声信号，油价从近120美元回落至约91-92美元/桶，但强调'不是本周'结束" },
+                        { date: "2026-03-10", title: "红海出口创历史纪录", content: "沙特正将原油出口切换至红海航线，3月前七天从红海沿岸延布和Al Muajjiz码头装载的超级油轮数量已创历史纪录，以绕开被封锁的霍尔木兹海峡" },
+                        { date: "2026-03-10", title: "油轮改道好望角", content: "超级油轮纷纷改道好望角，航程增加约3000海里，单艘油轮的燃油成本、时间成本大幅上升" },
+                        { date: "2026-03-10", title: "VLCC运价创历史新高", content: "受船舶短缺和航行风险影响，超级油轮(VLCC)将中东原油运往中国的日租金已达约48.1万美元，创历史峰值" },
+                        { date: "2026-03-09", title: "谢拜油田遭袭", content: "沙特东南部谢拜油田（日产原油85万桶）上空响起防空警报，两架伊朗制造的见证者-136无人机从也门方向来袭，沙特皇家空军成功拦截" },
+                        { date: "2026-03-09", title: "拉斯塔努拉储罐已满", content: "沙特阿美拉斯塔努拉炼厂的储存设施已被快速填满：六个原油储罐中有四个已满" },
+                        { date: "2026-03-08", title: "拉斯塔努拉炼油厂关闭", content: "沙特最大炼油厂拉斯塔努拉（日处理能力55万桶）因3月2日及4日遭无人机袭击继续关闭" },
+                        { date: "2026-03-06", title: "沙特谴责伊朗袭击", content: "沙特外交部发表声明谴责伊朗持续袭击，称伊朗'继续基于毫无根据、不实的指控发起攻击'" },
+                        { date: "2026-03-03", title: "油价反应", content: "布伦特原油突破85美元/桶，WTI涨至76美元/桶以上，创14个月新高" },
+                        { date: "2026-03-02", title: "海峡封锁", content: "伊朗伊斯兰革命卫队宣布击毁任何试图通过霍尔木兹海峡的船只，沙特启动应急预案" }
+                    ]
+                }
+            },
+            { 
+                name: "阿联酋", nameEn: "UAE", center: [22.8, 54.5], labelPos: [22.8, 54.5], 
+                capacity: 5.0, actual: 3.4, exports: 2.8, hormuzExports: 1.7, bypassExports: 1.1, 
+                color: "#10b981", flag: "🇦🇪", radius: 65,
+                storage: {
+                    capacity: 500,
+                    production: 340,
+                    exports: 280,
+                    daysCover: 28,
+                    daysMax: 35,
+                    onshore: 85,
+                    floating: 12,
+                    total: 97,
+                    facilities: [
+                        { name: "Fujairah储油终端", capacity: "42百万桶" },
+                        { name: "Jebel Ali储油区", capacity: "28百万桶" },
+                        { name: "Ruwais储油设施", capacity: "15百万桶" },
+                        { name: "浮动储存", capacity: "12百万桶" }
+                    ],
+                    note: "Fujairah是中东最大商业储油枢纽之一，大量为全球贸易商储存。ADCOP管道提供绕过霍尔木兹的灵活性。",
+                    status: "good",
+                    updates: [
+                        { date: "2026-04-03", title: "阿联酋支持联合国安理会授权使用武力保护霍尔木兹航运", content: "4月3日路透社报道，阿联酋正在积极游说支持联合国安理会4月2日投票的决议，该决议授权使用'一切必要手段'保护霍尔木兹海峡及周边航运。阿联酋愿派遣资产确保国际航运安全" },
+                        { date: "2026-04-02", title: "阿联酋4月燃油价格飙升33.3%，创史上最大单月涨幅", content: "4月2日经济时报报道，阿联酋4月份燃油价格飙升高达33.3%，创该国历史上最大单月涨幅。Super 98汽油达到每升3.39迪拉姆，柴油涨幅最大。全球原油价格逼近每桶115美元" },
+                        { date: "2026-04-01", title: "阿联酋拦截35架无人机和5枚弹道导弹，伊朗攻击持续", content: "4月1日阿联酋国防部报告，成功拦截了35架无人机和5枚弹道导弹。这是伊朗对海湾国家持续攻击的一部分，伊朗已向阿联酋发射的导弹和无人机数量超过任何其他国家，包括以色列" },
+                        { date: "2026-03-29", title: "阿联酋Habshan天然气设施重启评估中，ADNOC启动应急预案", content: "3月29日阿联酋ADNOC表示，Habshan天然气处理设施（日处理能力61亿标准立方英尺）在3月19日遭袭后仍处于关闭状态，正在进行全面安全评估。ADNOC已启动应急预案，确保国内天然气供应" },
+                        { date: "2026-03-19", title: "阿联酋Habshan天然气设施和Bab油田遭导弹碎片击中，设施关闭", content: "3月19日阿联酋当局报告，Habshan天然气设施和Bab油田因拦截导弹的碎片坠落而受损，已关闭相关设施。Habshan是世界最大天然气处理设施之一，由ADNOC运营。阿联酋表示无人员伤亡" },
+                        { date: "2026-03-28", title: "阿联酋通过ADCOP管道日出口原油110万桶，创历史纪录", content: "3月28日阿联酋ADNOC宣布，通过绕过霍尔木兹海峡的ADCOP管道，日出口原油达110万桶，创该管道历史最高纪录。阿联酋正全力利用绕海峡通道维持石油出口" },
+                        { date: "2026-03-24", title: "阿联酋与英国、卡塔尔讨论霍尔木兹海峡航运安全合作", content: "3月22日路透社报道，阿联酋正与英国、卡塔尔等国讨论霍尔木兹海峡航运安全合作方案，探索在保险和护航方面建立多边机制，以应对持续的海峡封锁危机" },
+                        { date: "2026-03-23", title: "海湾各国多个能源设施遇袭，阿联酋Habshan和巴布油田成目标", content: "3月21日财联社梳理报道，阿联酋Habshan天然气厂和巴布油田成为伊朗袭击目标，已暂时关闭。Ruwais炼油厂（世界第四大单点炼油厂）此前已因无人机袭击附近区域预防性关闭" },
+                        { date: "2026-03-22", title: "阿联酋ADNOC启动战略石油储备释放计划", content: "3月22日阿联酋国家通讯社报道，ADNOC宣布启动战略石油储备释放计划，向国际市场额外供应每日30万桶原油，以缓解全球供应紧张局势。储备释放将通过阿联酋海外仓储设施执行" },
+                        { date: "2026-03-21", title: "阿联酋能源部长：海峡封锁或持续至2026年二季度末", content: "3月21日彭博社报道，阿联酋能源部长表示霍尔木兹海峡封锁可能持续至2026年第二季度末，海湾国家正加速建设绕海峡的替代出口基础设施" },
+                        { date: "2026-03-20", title: "道达尔能源停止阿联酋近海生产，影响全球产量15%", content: "3月22日Kansas Reflector报道，法国道达尔能源公司停止阿联酋近海的部分石油和天然气生产，预计影响其全球油气总产量的15%" },
+                        { date: "2026-03-19", title: "阿联酋Habshan气田和Bab油田遭伊朗导弹袭击", content: "3月19日伊朗对阿联酋Habshan天然气设施和Bab油田发动导弹袭击。阿联酋当局表示导弹被拦截，但因坠落碎片导致天然气设施被迫关闭。阿联酋国防部还宣布应对了多波袭击，包括一波7枚弹道导弹和15架无人机" },
+                        { date: "2026-03-18", title: "阿联酋Al Hosn气田收到伊朗撤离警告，ADNOC管理海上产量", content: "3月18日伊朗革命卫队向阿联酋Al Hosn气田发出撤离警告，称将在数小时内发动打击。ADNOC表示正在积极管理海上产出水平以保持运营灵活性。此前澳大利亚在阿联酋的Al Minhad空军基地遭袭，造成小火灾但无伤亡。阿联酋继续通过ADCOP管道绕过霍尔木兹海峡出口石油" },
+                        { date: "2026-03-17", title: "阿联酋富查伊拉油区再遭无人机袭击引发大火", content: "3月17日，伊朗无人机再次袭击阿联酋富查伊拉关键石油贸易枢纽，引发巨大火灾。这是该地点数日內第二次遭袭。与此同时，阿布扎比导弹碎片坠落导致1人死亡，伊朗对海湾国家的攻击持续升级" },
+                        { date: "2026-03-16", title: "英国首相斯塔默拒绝向霍尔木兹海峡派遣军舰", content: "据英国《每日电讯报》3月16日报道，英国首相斯塔默拒绝了美国总统特朗普要求英国派遣军舰前往霍尔木兹海峡护航的请求。法国、德国、日本等国也对直接军事介入持谨慎态度" },
+                        { date: "2026-03-16", title: "日本面临是否派舰护航霍尔木兹海峡难题", content: "据《日本经济新闻》3月15日报道，美国希望日本派舰'护航'霍尔木兹海峡，日本国内法律依据存在难题。日本首相高市早苗将于3月19日访问美国，届时美方很可能向日方提出这一要求" },
+                        { date: "2026-03-15", title: "美以袭击已破坏超150家医疗机构", content: "据伊朗方面消息，美以空袭已导致伊朗境内至少153家医疗机构受损，其中综合卫生服务中心受损数量最多，达56个。当地医科大学也遭到袭击" },
+                        { date: "2026-03-14", title: "富查伊拉港遭无人机袭击部分作业暂停", content: "阿联酋富查伊拉港周六上午遭遇无人机袭击并发生火灾，部分石油装载作业被迫暂停。该港口是阿联酋少数仍在维持出口运营的终端之一" },
+                        { date: "2026-03-13", title: "阿布扎比鲁韦斯炼油厂暂时关闭", content: "阿联酋阿布扎比鲁韦斯炼油厂遇袭后，阿布扎比国家石油公司(ADNOC)已暂时关闭这座日处理能力约92.2万桶的炼油厂。阿联酋通过绕过霍尔木兹海峡的运输渠道努力确保市场供应" },
+                        { date: "2026-03-13", title: "花旗集团关闭阿联酋分支机构", content: "美国花旗集团宣布将于3月12日至14日关闭其在阿联酋的分支机构，并通知员工撤离，出于安全和运营风险的预防性考虑" },
+                        { date: "2026-03-13", title: "道达尔能源停止部分生产", content: "法国道达尔能源公司停止卡塔尔、伊拉克和阿联酋近海的部分石油和天然气生产，预计影响其全球油气总产量的15%，但经阿联酋富查伊拉港出口的陆上石油产量未受影响" },
+                        { date: "2026-03-13", title: "阿联酋与俄罗斯讨论能源合作", content: "阿联酋与俄罗斯就石油出口合作进行探讨，寻求通过红海路线增加石油出口以弥补霍尔木兹封锁损失" },
+                        { date: "2026-03-11", title: "总统罕见强硬表态", content: "阿联酋总统穆罕默德称伊朗是'敌人'，警告'我们不是容易对付的猎物'，这是其极其罕见的公开言论" },
+                        { date: "2026-03-11", title: "日产量减少50-80万桶", content: "阿联酋启用绕过霍尔木兹海峡的出口通道及国际储油设施保障供应，ADNOC表示正在管理海上产量、维持陆上作业" },
+                        { date: "2026-03-11", title: "阿联酋削减产量", content: "阿联酋日产量减少50万至80万桶，启用绕过霍尔木兹海峡的出口通道及国际储油设施保障供应" },
+                        { date: "2026-03-10", title: "ADNOC管理海上产量", content: "阿布扎比国家石油公司(ADNOC)表示正在管理海上产量、维持陆上作业，并利用替代出口通道和海外储存能力维持供应" },
+                        { date: "2026-03-09", title: "港口拦截", content: "富查伊拉石油工业区成功拦截无人机，但碎片坠落造成火灾，仓储运营商暂停运营并限制员工进出" },
+                        { date: "2026-03-08", title: "管道满负荷", content: "ADCOP管道输送能力150-180万桶/日，当前出口约110万桶/日，已接近上限" },
+                        { date: "2026-03-06", title: "出口占比", content: "2025年经霍尔木兹出口占比约67%，ADCOP管道绕过海峡占约33%" },
+                        { date: "2026-03-03", title: "港口遇袭", content: "富查伊拉港储油设施遭伊朗无人机袭击，中东最大商业储油枢纽受损，燃油供应商宣布遭遇不可抗力" },
+                        { date: "2026-03-02", title: "迪拜机场遇袭", content: "迪拜国际机场遭到无人机袭击，朱美拉棕榈岛上的费尔蒙酒店被击中起火" }
+                    ]
+                }
+            },
+            { 
+                name: "伊拉克", nameEn: "Iraq", center: [33.2, 43.5], labelPos: [33.2, 43.5], 
+                capacity: 4.5, actual: 4.2, exports: 3.4, hormuzExports: 3.4, bypassExports: 0, 
+                color: "#8b5cf6", flag: "🇮🇶", radius: 62,
+                storage: {
+                    capacity: 450,
+                    production: 420,
+                    exports: 340,
+                    daysCover: 6,
+                    daysMax: 10,
+                    onshore: 18,
+                    floating: 5,
+                    total: 23,
+                    facilities: [
+                        { name: "Basra储油终端", capacity: "12百万桶" },
+                        { name: "Khor Al-Zubair", capacity: "4百万桶" },
+                        { name: "其他小型设施", capacity: "2百万桶" },
+                        { name: "浮动储存", capacity: "5百万桶" }
+                    ],
+                    note: "⚠️ 中东最低储存天数！油田直接管道输往港口，几乎无缓冲能力。2026年3月已率先减产50%。ITP管道停运加剧危机。",
+                    status: "critical",
+                    updates: [
+                        { date: "2026-04-02", title: "伊拉克支持联合国安理会决议，愿参与海峡航运保护行动", content: "4月2日伊拉克外交部表示支持联合国安理会4月2日投票通过的决议，该决议授权使用'一切必要手段'保护霍尔木兹海峡及周边航运。伊拉克作为严重依赖海峡出口的国家，对重新开放海峡有迫切需求" },
+                        { date: "2026-04-01", title: "伊拉克埃尔比勒Castrol石油公司仓库遭无人机袭击起火", content: "4月1日伊拉克北部埃尔比勒市附近的Castrol石油公司储存仓库遭三架无人机袭击，伊拉克防空系统拦截了第四架无人机。袭击引发大火，仓库严重受损但无人员伤亡。这是针对英国能源基础设施的袭击" },
+                        { date: "2026-04-01", title: "伊拉克埃尔比勒石油设施遭无人机袭击", content: "4月1日，伊拉克北部埃尔比勒一处石油设施遭无人机袭击，造成设施损坏。此次袭击发生在地区紧张局势持续升级之际，是霍尔木兹海峡封锁冲突延续到伊拉克内陆的标志性事件" },
+                        { date: "2026-03-25", title: "伊拉克南部产量骤降至90万桶/日，寻求库尔德管道替代出口", content: "3月20日伊拉克石油部长宣布，南部巴士拉省产量已从330万桶/日骤降至90万桶/日，总产量降至140万桶/日。伊拉克正加速谈判，希望通过库尔德地区的伊拉克-土耳其管道恢复出口" },
+                        { date: "2026-03-18", title: "伊拉克恢复通过库尔德管道向土耳其出口原油", content: "3月18日在美国斡旋下，伊拉克联邦政府与库尔德地区政府达成协议，恢复通过伊拉克-土耳其管道向杰伊汉港出口原油。首批约20万桶/日原油已开始流动，为霍尔木兹封锁提供替代出路" },
+                        { date: "2026-03-30", title: "伊拉克要求外国石油公司进一步削减油田产量", content: "3月29日伊拉克石油部要求英国石油公司将鲁迈拉油田日产量从45万桶降至35万桶，要求意大利埃尼公司将祖拜尔油田日产量从33万桶削减至26万桶。伊拉克南部主要油田产量较战前已暴跌80%" },
+                        { date: "2026-03-29", title: "伊拉克经土耳其管道出口增至每日30万桶", content: "3月29日伊拉克宣布已通过土耳其杰伊汉港的替代出口路径将日出口量增至30万桶，较此前的25万桶有所提升。伊朗外长表示'允许友好国家（船只）通行霍尔木兹海峡'，包括伊拉克" },
+                        { date: "2026-03-28", title: "伊拉克计划通过土耳其管道日增出口15万桶原油", content: "3月28日伊拉克石油部表示，正与土耳其协商扩大通过杰伊汉港的出口能力，计划在未来两周内将北部出口从目前的25万桶/日增至40万桶/日，以缓解南部油田停产压力" },
+                        { date: "2026-03-26", title: "伊拉克南部主要油田产量暴跌八成", content: "3月26日路透社报道，由于霍尔木兹海峡陷入事实性封锁状态，伊拉克无法通过该海峡出口原油，仓储空间告急，因此不得不减产石油，该国南部主要油田的产量暴跌八成。伊拉克正努力打通北部管线，每天仅能出口25万桶，相当于战前全国总出口量的7%" },
+                        { date: "2026-03-24", title: "伊拉克战时减产达360万桶/日，仅保留国内供应和北部出口", content: "3月24日Iraq Oil Report报道，由于伊朗战争影响，伊拉克已削减超过360万桶/日的原油产量，仅保留约100万桶/日供国内炼油厂使用和25万桶/日通过北部管道系统向土耳其出口。伊拉克官员表示，如果霍尔木兹海峡重新开放，这些减产可以轻易逆转" },
+                        { date: "2026-03-23", title: "伊拉克对外国运营油田宣布不可抗力，Majnoon油田遭袭", content: "3月23日MEED报道，伊拉克宣布对所有由外国石油公司开发的油田实施不可抗力。此前，Majnoon油田的基础设施遭到两架无人机袭击，一架击中通讯塔，另一架击中美国KBR公司办公室。外国工人已撤离，目前只有伊拉克员工在现场工作" },
+                        { date: "2026-03-22", title: "伊拉克请求国际援助修复受损能源基础设施", content: "3月22日伊拉克石油部表示，已向国际能源机构和友好国家请求技术和资金援助，以修复受损的南部油田和出口终端设施，预计修复工作需要6-12个月" },
+                        { date: "2026-03-21", title: "伊拉克南部油田停产范围扩大至Rumaila和西Qurna", content: "3月21日伊拉克石油部确认，南部Rumaila和西Qurna-2等大型油田已被迫完全停产，巴士拉储存设施已达极限，无法接收更多原油" },
+                        { date: "2026-03-20", title: "伊拉克计划将日产量从440万桶增至550万桶", content: "3月20日相关报道显示，伊拉克2025年全国石油产量增加约12万桶/日，计划将日产量从440万桶增至550万桶（2025年底）" },
+                        { date: "2026-03-18", title: "伊拉克与库尔德达成协议，通过土耳其管道出口25万桶/日", content: "3月18日伊拉克政府与库尔德自治区达成协议，将通过土耳其Ceyhan港出口25万桶/日的原油。此前伊朗对伊拉克的天然气供应已中断，伊朗将天然气转用于国内。伊拉克南部油田产量已降至130万桶/日（原430万桶/日），降幅达70%" },
+                        { date: "2026-03-18", title: "伊拉克石油出口终端继续关闭，南部油田持续遭袭", content: "3月18日伊拉克表示，巴士拉港石油终端在上周遭袭后仍然关闭。尽管商业港口继续运营，但石油出口持续受阻。马吉努等南部油田继续面临无人机袭击威胁，伊拉克石油产量已削减约290万桶/日" },
+                        { date: "2026-03-17", title: "伊拉克马吉努油田四天内遭两次无人机袭击", content: "3月17日，伊拉克石油部发言人表示，南部马吉努油田在四天內遭遇第二次无人机袭击。该油田是伊拉克规模最大的油田之一。与此同时，巴士拉港油轮遇袭事件导致港口作业持续中断" },
+                        { date: "2026-03-16", title: "伊拉克寻求通过库尔德管道恢复对土耳其出口", content: "伊拉克石油部3月16日表示，准备通过库尔德地区的管道向土耳其出口至多30万桶/日的原油，前提是库尔德地区允许巴格达使用该路线。目前库尔德地区因贸易禁运问题与巴格达存在分歧" },
+                        { date: "2026-03-16", title: "摩根大通：中东原油日均减产量或超400万桶", content: "摩根大通估计，如果霍尔木兹海峡继续受限，截至3月15日中东地区原油日均减产量可能超过400万桶。中东产油国储存能力仅能支撑25天，此后将被迫全面停产" },
+                        { date: "2026-03-15", title: "伊朗外长：欢迎任何能公正结束战争的地区倡议", content: "伊朗外交部长阿拉格齐3月15日表示，伊朗欢迎任何能够公正结束战争的地区倡议。伊朗准备与地区国家共同成立一个调查委员会，对受到袭击的目标展开调查" },
+                        { date: "2026-03-12", title: "巴士拉港附近油轮爆炸港口暂停作业", content: "伊拉克南部巴士拉港附近一艘油轮发生大爆炸，导致2艘油轮受损，31人成功获救。伊拉克规模最大的马吉努油田也遭到无人机攻击" },
+                        { date: "2026-03-13", title: "两艘油轮在伊拉克水域遇袭", content: "两艘油轮在伊拉克水域遭到袭击，引发大火。伊拉克暂停所有石油港口作业，能源设施安全形势严峻" },
+                        { date: "2026-03-13", title: "道达尔能源停止伊拉克近海生产", content: "法国道达尔能源公司宣布停止伊拉克近海的部分石油和天然气生产，预计影响其全球油气总产量的15%" },
+                        { date: "2026-03-13", title: "民众抵制游行与最高领袖宣传", content: "伊拉克仁渡电视台完全停播，取而代之的是对伊朗最高领袖的宣传画面，民众抵制情绪弥低" },
+                        { date: "2026-03-12", title: "请求库尔德协助输送原油至土耳其", content: "伊拉克因出口渠道不足开始关闭部分原油产量，此前已停止从半自治的库尔德地区向土耳其杰伊汉港出口原油，现请求库尔德地区政府协助将原油输送至土耳其" },
+                        { date: "2026-03-11", title: "日产量骤降290万桶", content: "伊拉克日产量削减约290万桶，南部三大主力油田产量暴跌75%，从400万桶/日降至100万桶/日左右" },
+                        { date: "2026-03-09", title: "南部油田产量暴跌70%", content: "南部三大主力油田产量从430万桶/日骤降至130万桶/日，减产量达300万桶/日" },
+                        { date: "2026-03-11", title: "巴士拉储存达极限", content: "巴士拉石油公司(BOC)官员表示：'原油储存已达极限，大幅减产后的剩余产量将用于供应国内炼油厂。这是伊拉克20多年来面临的最严重运营威胁'" },
+                        { date: "2026-03-10", title: "美企撤离", content: "3月7日巴士拉美企设施遭无人机袭击后，哈利伯顿、KBR、斯伦贝谢等三家美国油服公司开始将外籍员工从伊拉克油田撤往科威特" },
+                        { date: "2026-03-09", title: "产量崩盘", content: "南部三大主力油田产量暴跌70%，从430万桶/日骤降至130万桶/日，减产量达300万桶/日" },
+                        { date: "2026-03-08", title: "油田关停", content: "北部基尔库克地区油田已暂停生产，日产量22万桶，以防范美以伊冲突升级" },
+                        { date: "2026-03-06", title: "储油告急", content: "巴士拉终端备用储存仅剩600万桶，不及两天出口量，成为海峡动荡中第一个倒下的多米诺骨牌" },
+                        { date: "2026-03-05", title: "鲁迈拉油田全面停产", content: "伊拉克最大油田鲁迈拉（日产140万桶）及西古尔纳2号项目已全面停产，周二已有约120万桶/日产能关停" },
+                        { date: "2026-03-04", title: "多油田削减", content: "鲁迈拉油田减产70万桶/日，西库尔纳2号削减45万桶/日，迈桑油田削减32.5万桶/日" }
+                    ]
+                }
+            },
+            { 
+                name: "伊朗", nameEn: "Iran", center: [32.5, 53.5], labelPos: [32.5, 53.5], 
+                capacity: 3.5, actual: 3.3, exports: 1.8, hormuzExports: 1.75, bypassExports: 0.05, 
+                color: "#f59e0b", flag: "🇮🇷", radius: 55,
+                storage: {
+                    capacity: 350,
+                    production: 330,
+                    exports: 180,
+                    daysCover: 12,
+                    daysMax: 18,
+                    onshore: 35,
+                    floating: 8,
+                    total: 43,
+                    facilities: [
+                        { name: "Kharg Island储油", capacity: "28百万桶" },
+                        { name: "Jask储油终端", capacity: "5百万桶" },
+                        { name: "Bandar Abbas", capacity: "2百万桶" },
+                        { name: "浮动储存", capacity: "8百万桶" }
+                    ],
+                    note: "受制裁影响储油设施老化，出口受限导致储存经常饱和。Goreh-Jask管道(30万桶/日)提供有限绕过能力。",
+                    status: "warning",
+                    updates: [
+                        { date: "2026-04-03", title: "伊朗议会通过霍尔木兹海峡管理法案，声称对海峡拥有主权", content: "4月3日伊朗议会国家安全委员会通过'霍尔木兹海峡管理方案'法案，声称伊朗对海峡国际航道拥有主权。伊朗官员表示将在战后继续利用海峡作为战略筹码，确保政权生存" },
+                        { date: "2026-04-02", title: "伊朗攻击卡塔尔油轮AQUA 1，连续第二天袭击民用船只", content: "4月2日伊朗攻击了悬挂巴拿马国旗的AQUA 1油轮，该油轮由卡塔尔国有能源公司租赁。这是伊朗连续第二天对民用船只发动攻击，显示伊朗在讨论海峡筹码的同时继续干扰航运" },
+                        { date: "2026-04-01", title: "以色列打击伊朗约15个武器生产设施，包括导弹研发综合体", content: "4月1日以色列国防军表示，打击了德黑兰约15个武器生产设施，包括负责先进弹道导弹研发的国防和武装部队后勤部(MODAFL)综合体。MODAFL负责伊朗导弹和核武器项目的研发，受美国制裁" },
+                        { date: "2026-04-01", title: "以色列打击德黑兰Tofigh Daru制药厂，该厂供应化学武器材料", content: "4月1日以色列国防军打击了德黑兰省的Tofigh Daru研发设施。该公司向伊朗政权供应化学材料，是国防创新与研究组织(SPND)芬太尼类化合物的主要供应商。SPND负责先进军事相关研究" },
+                        { date: "2026-04-01", title: "特朗普将伊朗重新开放海峡的截止日期延长至4月6日", content: "4月1日，特朗普总统宣布延长对伊朗能源设施（包括发电厂和石油设施）实施打击的暂停期限至4月6日，等待伊朗重新开放霍尔木兹海峡。若伊朗不在新截止日期前 comply，美国威胁将打击哈尔克岛等主要石油出口枢纽" },
+                        { date: "2026-03-30", title: "以色列海法炼油厂再次遭伊朗导弹袭击，未造成危险物质泄漏", content: "3月30日以色列北部城市海法的巴赞炼油厂综合设施遭伊朗导弹袭击并起火。以色列环境保护部表示未造成任何危险物质泄漏风险。该炼油厂此前在3月19日和3月8日也曾遭袭，是伊朗对以色列能源设施持续打击的一部分" },
+                        { date: "2026-03-24", title: "霍尔木兹海峡通航量暴跌95%，商船几乎完全停止通行", content: "3月24日市场服务机构数据显示，自美以伊冲突爆发以来，霍尔木兹海峡航运严重受阻。3月以来商船通过海峡的次数较冲突前下降了95%，约150艘油轮在公海抛锚滞留，全球能源运输'命门'几乎完全中断" },
+                        { date: "2026-03-21", title: "伊朗导弹袭击以色列海法炼油厂，回应以方袭击伊能源设施", content: "3月8日伊朗伊斯兰革命卫队使用Kheibar Shekan固体燃料弹道导弹袭击以色列海法Bazan集团炼油厂。伊朗官员称此举回应以色列对伊朗石油储存设施的袭击。该炼油厂是以色列最大炼油厂，与印度有合作关系" },
+                        { date: "2026-03-19", title: "以色列袭击伊朗South Pars气田，伊朗威胁打击海湾能源设施", content: "3月18日以色列无人机袭击伊朗South Pars气田（与卡塔尔共享的世界最大天然气田）和Asaluyeh天然气处理厂，损坏四座处理平台。伊朗随后发出警告，将打击沙特、阿联酋和卡塔尔的五处关键能源设施作为报复" },
+                        { date: "2026-03-19", title: "伊朗石油部长致信联合国：美以袭击等于对伊朗发动全面战争", content: "3月19日伊朗石油部长致信联合国秘书长，谴责美以袭击伊朗能源基础设施，称这'等同于对伊朗能源安全与经济发动全面战争'。伊朗要求国际社会谴责这种'国家恐怖主义'行为" },
+                        { date: "2026-03-28", title: "伊朗称已准备好与美国进行间接谈判", content: "3月28日伊朗外长表示，伊朗已准备好与美国进行间接谈判，以结束当前冲突。但伊朗革命卫队同时警告，若美国继续威胁轰炸伊朗能源设施，将考虑完全关闭霍尔木兹海峡" },
+                        { date: "2026-03-26", title: "伊朗能源设施遭袭后，德黑兰宣布进入紧急状态", content: "3月24日美以袭击伊朗中部伊斯法罕和西南部霍拉姆沙赫尔的两处能源基础设施后，德黑兰宣布进入紧急状态。位于伊斯法罕的天然气公司大楼和天然气减压站遭袭击，部分设施和周边住宅受损" },
+                        { date: "2026-03-24", title: "伊朗威胁'完全关闭'霍尔木兹海峡以回应美国发电站威胁", content: "3月23日CBS News报道，伊朗军方称若美国攻击其发电厂，将完全关闭霍尔木兹海峡直至设施重建。此前伊朗革命卫队威胁要关闭所有石油和天然气出口，以回应特朗普威胁轰炸伊朗石油基础设施" },
+                        { date: "2026-03-23", title: "伊朗被曝向部分油轮收取200万美元过境费", content: "3月23日Fox News报道，伊朗议员称已开始向部分通过海峡的船只收取200万美元过境费，此举被视为伊朗试图在封锁中寻求经济利益" },
+                        { date: "2026-03-22", title: "谁可以通过霍尔木兹海峡？2026年封锁规则解析", content: "3月22日The Global Angle报道，尽管媒体报道完全封锁，但仍有少数国家的船只通过霍尔木兹海峡。据估计，自封锁开始以来中国约有40-50艘船只通过（利用BRICS联盟关系），印度有8-12艘（依靠独立海军护航），'影子船队'约20-30艘（无保险、无追踪）" },
+                        { date: "2026-03-21", title: "伊朗武装部队称正在霍尔木兹海峡采取'重大行动'", content: "3月21日新浪财经报道，伊朗武装部队发言人表示正在霍尔木兹海峡采取重大行动，具体细节不明。此前伊朗外长表示海峡实际开放，仅对'伊朗的敌人'关闭" },
+                        { date: "2026-03-20", title: "22国联合声明谴责伊朗袭击商船行为", content: "3月21日Naval News报道，6国联合声明谴责伊朗，表示愿参与确保海峡安全通行。美国正组建'霍尔木兹联盟'但多方遇冷，迄今没有一个国家承诺派军舰前往" },
+                        { date: "2026-03-19", title: "以色列称击毙伊朗情报部长哈提卜，已杀三名高官", content: "3月19日以色列国防部长卡茨称，伊朗情报部长伊斯梅尔·哈提卜在夜间空袭中被击毙，这是两天内被杀的第三名伊朗高级官员。此前阿里·拉里贾尼（最高国家安全委员会秘书）和巴斯基民兵负责人索莱马尼已被击杀。伊朗向以色列发射多弹头导弹报复，造成特拉维夫附近2人死亡" },
+                        { date: "2026-03-19", title: "以色列袭击伊朗南帕尔斯气田，特朗普威胁大规模报复", content: "3月18日以色列袭击伊朗南帕尔斯天然气田，这是伊朗与卡塔尔共享的世界最大天然气田。特朗普在社交媒体上证实以色列'单独行动'，但警告伊朗若继续袭击卡塔尔能源设施，美国将'以伊朗从未见过的力量大规模炸毁整个南帕尔斯气田'。伊朗随后对海湾国家能源设施发动大规模报复袭击" },
+                        { date: "2026-03-18", title: "伊朗南帕尔斯气田遭袭，警告打击海湾三国能源设施", content: "3月18日伊朗南帕尔斯和Asaluyeh石化设施遭袭，德黑兰警告将打击沙特、阿联酋和卡塔尔的能源设施。伊朗革命卫队向沙特Samref炼油厂和Jubail石化、阿联酋Al Hosn气田、卡塔尔Mesaieed和Ras Laffan发出撤离令。卡塔尔称此为以色列袭击，全球LNG供应20%已中断" },
+                        { date: "2026-03-18", title: "伊朗革命卫队高级指挥官礼萨伊遭暗杀身亡", content: "3月18日伊朗方面确认，伊朗革命卫队高级指挥官礼萨伊少将遭美以空袭身亡。他是伊朗提出结束战争两大条件（收回损失、美军撤离）的关键人物。同日伊朗向沙特、伊拉克、阿联酋发动新一轮导弹和无人机袭击" },
+                        { date: "2026-03-17", title: "美军称已摧毁伊朗90%军事目标，哈尔克岛遭重创", content: "美军中央司令部3月17日表示，过去16天已执行超过6000架次作战任务，摧毁超过100艘伊朗海军舰艇和90个哈尔克岛军事目标。该岛是伊朗石油出口关键枢纽，处理90%的出口量。特朗普威胁称可能再炸哈尔克岛'只是为了开心'" },
+                        { date: "2026-03-16", title: "伊朗革命卫队宣布将'追杀'以色列总理内塔尼亚胡", content: "伊朗伊斯兰革命卫队3月15日发表声明称，将把以色列总理内塔尼亚胡作为打击目标，称其为'杀害儿童的罪犯'。同日伊朗提出结束战争两大条件：伊朗收回所有损失、美国离开波斯湾" },
+                        { date: "2026-03-15", title: "美以袭击已致伊朗202名儿童和223名妇女死亡", content: "伊朗卫生部3月15日表示，美以袭击已造成至少202名儿童和223名妇女死亡，其中包括3名孕妇，遇难儿童中有12名年龄在5岁以下" },
+                        { date: "2026-03-14", title: "美军空袭伊朗石油出口枢纽哈尔克岛", content: "特朗普宣布轰炸伊朗哈尔克岛上每一个军事目标，威胁若伊朗继续阻止船只通过霍尔木兹海峡将攻击该岛石油基础设施。哈尔克岛是伊朗石油出口关键枢纽，处理90%的出口量" },
+                        { date: "2026-03-14", title: "伊朗考虑用人民币交易石油通行海峡", content: "CNN援引伊朗高级官员称，伊朗正在考虑允许有限数量的油轮通过霍尔木兹海峡，前提是其石油货物以人民币进行交易" },
+                        { date: "2026-03-14", title: "伊朗新领袖强硬声明继续封锁", content: "伊朗新任最高领袖穆杰塔巴·哈梅内伊3月12日发表首份声明，宣布伊朗将继续采取包括封锁霍尔木兹海峡在内的战略手段，并在必要时开辟'新的战线'，誓言要把石油极限战进行到底" },
+                        { date: "2026-03-13", title: "以色列空袭伊朗能源基础设施", content: "以色列空袭伊朗南部布什尔省两家炼油厂，南帕尔斯炼油厂第14期项目一套装置遭袭起火，法杰尔·贾姆炼油厂也遭到袭击。这是自两伊战争以来首次有伊朗境内炼油厂遇袭" },
+                        { date: "2026-03-13", title: "伊朗议长称绝不寻求停火", content: "伊朗议长卡利巴夫再次强调'绝不寻求停火'，称美以侵略是历史性错误，伊朗将继续抵抗直至第一滴血" },
+                        { date: "2026-03-12", title: "称完全有能力封锁海峡", content: "伊朗哈塔姆·安比亚中央司令部发言人严厉警告，称伊朗完全有能力封锁霍尔木兹海峡，'绝不允许哪怕一升石油在有利于美国及其盟友的情况下通过'" },
+                        { date: "2026-03-11", title: "仅允许中国籍船舶通过", content: "伊朗表示将仅允许中国籍船舶通过霍尔木兹海峡，以感谢北京自中东战争爆发以来对德黑兰的立场。3月11日中国籍散货船'Sino Ocean'号完成过境" },
+                        { date: "2026-03-11", title: "议长表示绝不寻求停火", content: "伊朗议会议长卡利巴夫表示'我们决不寻求停火'，必须给侵略者迎头痛击，让其吸取教训" },
+                        { date: "2026-03-11", title: "特朗普：可能有条件谈判", content: "特朗普称伊朗领导人非常想谈判，'这是有可能的，取决于什么条件'，但同时称已发起'最高强度'打击" },
+                        { date: "2026-03-10", title: "联合国警告环境风险", content: "联合国秘书长发言人警告中东石油设施遭袭可能造成'严重环境后果'，影响饮用水、空气和食品安全" },
+                        { date: "2026-03-10", title: "新领袖强硬表态", content: "伊朗新最高领袖穆杰塔巴·哈梅内伊上任后强调'抵抗到底'，伊朗议会发言人表示'绝不寻求停火'" },
+                        { date: "2026-03-10", title: "袭击以色列海法炼油厂", content: "伊朗伊斯兰革命卫队发射导弹对以色列北部海法炼油厂实施打击，导弹已命中该设施" },
+                        { date: "2026-03-10", title: "封锁条件", content: "伊朗革命卫队宣称，若海湾国家驱逐美以大使，可获'无限制通行'，试图分化美以与海湾联盟" },
+                        { date: "2026-03-09", title: "南帕尔斯遇袭", content: "全球最大天然气田南帕尔斯遇袭，1个海上平台停产，日损失天然气产量1200万立方米" },
+                        { date: "2026-03-08", title: "石油设施遭袭", content: "以色列扩大打击目标至伊朗石油基础设施，德黑兰南部的沙赫尔雷伊炼油厂、沙赫兰储油库等多处设施发生严重火灾" },
+                        { date: "2026-03-07", title: "首次袭击伊朗能源设施", content: "以色列首次袭击伊朗能源基础设施，德黑兰以北沙赫兰储油库和南部布什尔省两家炼油厂遭袭，部分设施爆炸起火" },
+                        { date: "2026-03-06", title: "航运禁令", content: "伊朗新规定：战争期间霍尔木兹海峡通行规则由伊朗掌控，美以欧国家船只严禁通行" },
+                        { date: "2026-03-02", title: "海峡封锁", content: "伊朗伊斯兰革命卫队宣布击毁任何试图通过霍尔木兹海峡的船只" }
+                    ]
+                }
+            },
+            { 
+                name: "科威特", nameEn: "Kuwait", center: [29.3, 47.8], labelPos: [29.3, 47.8], 
+                capacity: 3.0, actual: 2.5, exports: 2.0, hormuzExports: 2.0, bypassExports: 0, 
+                color: "#ef4444", flag: "🇰🇼", radius: 50,
+                storage: {
+                    capacity: 300,
+                    production: 200,
+                    exports: 160,
+                    daysCover: 14,
+                    daysMax: 21,
+                    onshore: 32,
+                    floating: 4,
+                    total: 36,
+                    facilities: [
+                        { name: "Mina Ahmadi储油", capacity: "22百万桶" },
+                        { name: "Mina Abdulla", capacity: "8百万桶" },
+                        { name: "Shuaiba", capacity: "2百万桶" },
+                        { name: "浮动储存", capacity: "4百万桶" }
+                    ],
+                    note: "2026年3月霍尔木兹危机中已开始减产。严重依赖霍尔木兹，无替代出口管道。储油快速接近满载。",
+                    status: "warning",
+                    updates: [
+                        { date: "2026-04-02", title: "科威特国际机场燃料罐遭伊朗无人机袭击，造成严重损坏", content: "4月2日科威特媒体和武装部队报告，一架伊朗无人机击中了科威特国际机场的燃料储存罐，造成严重损坏但无人员伤亡。同日科威特在其领空探测到3枚伊朗巡航导弹和15架无人机" },
+                        { date: "2026-04-01", title: "科威特Mina Al-Ahmadi炼油厂再次遭袭，10名士兵在导弹无人机袭击中受伤", content: "4月1日科威特国防部报告，Mina Al-Ahmadi炼油厂再次遭到伊朗无人机和导弹袭击，消防员正在与大火搏斗。这是该炼油厂自3月19日以来第四次遭到袭击。维基百科记录显示科威特有10名士兵在导弹和无人机袭击中受伤" },
+                        { date: "2026-03-31", title: "科威特油轮Al-Salmi在迪拜港口遭伊朗无人机袭击起火", content: "3月31日，科威特籍超大型原油运输船Al-Salmi在迪拜港口锚地遭伊朗无人机袭击，船体起火。迪拜当局迅速扑灭火灾，24名船员全部安全。该油轮为满载状态，此次袭击加剧了地区海上能源运输的安全风险" },
+                        { date: "2026-03-19", title: "科威特两座炼油厂遭伊朗无人机袭击起火，KPC宣布部分停产", content: "3月19日科威特石油公司(KPC)报告，Mina al-Ahmadi炼油厂（日产能34.6万桶）和Mina Abdullah炼油厂（日产能45.4万桶）遭伊朗无人机袭击，两个运营单元起火。KPC宣布部分停产，成品油出口受限" },
+                        { date: "2026-03-06", title: "科威特宣布因储油饱和将停产，海峡封锁导致无法出口", content: "3月6日科威特宣布因原油储存设施即将饱和，将被迫停产。由于霍尔木兹海峡封锁，科威特无法出口原油，储罐预计在两周内填满。这是海湾国家首次因储存能力限制而宣布停产" },
+                        { date: "2026-03-25", title: "科威特国际机场燃料储存罐遭无人机袭击引发火灾", content: "3月25日Al-Monitor报道，一架无人机袭击了科威特国际机场的燃料储存罐，引发火灾。社交媒体上可见浓烟和火光。这是科威特民用基础设施首次成为直接袭击目标" },
+                        { date: "2026-03-24", title: "科威特Mina Al-Ahmadi炼油厂连续两天遭袭后部分产能恢复", content: "3月24日科威特石油公司表示，Mina Al-Ahmadi炼油厂在3月19-20日连续两天遭袭后，部分生产单元已恢复运行，但仍处于不可抗力状态，出口量大幅减少" },
+                        { date: "2026-03-23", title: "科威特启动与沙特的东西管道联合使用谈判", content: "3月23日科威特能源部表示，正与沙特谈判联合使用Petroline东西管道，以寻找绕开霍尔木兹海峡的替代出口路线。若达成协议，科威特每日可通过管道出口约50万桶原油" },
+                        { date: "2026-03-22", title: "科威特石油出口创历史新低，仅维持国内炼厂供应", content: "3月22日路透社报道，科威特原油出口已降至每日不足10万桶，创历史新低。目前产量主要供应国内炼厂，出口几乎停滞。国际买家已转向美国、巴西等替代来源" },
+                        { date: "2026-03-21", title: "科威特延长国内炼厂减产期限至4月底", content: "3月21日科威特石油公司宣布，因原油供应紧张和出口受阻，国内炼厂将继续执行减产计划至4月底，汽油和柴油出口已暂停" },
+                        { date: "2026-03-20", title: "科威特Mina Al Ahmadi炼油厂遭袭后起火", content: "3月19日财联社报道，科威特最大炼油厂之一Mina Al Ahmadi遭无人机袭击起火。科威特是中东和非洲最大的LNG进口国，计划2025年10月将石油产量提高至255.9万桶/日" },
+                        { date: "2026-03-19", title: "科威特Mina Al-Ahmadi和Mina Abdullah炼油厂遭伊朗无人机袭击", content: "3月19日伊朗对科威特Mina Al-Ahmadi和Mina Abdullah两座炼油厂发动无人机袭击。科威特通讯社证实，科威特石油公司确认这两座中东最大的炼油厂之一遭到袭击。沙特外交大臣费萨尔称'耐心不是无限的'，警告伊朗的持续袭击已彻底摧毁地区信任" },
+                        { date: "2026-03-19", title: "海湾石油出口暴跌超60%，科威特持续减产", content: "3月18日数据显示，中东海湾石油出口较2月下降超60%，从2513万桶/日降至971万桶/日。科威特继续执行减产和不可抗力，原油出口几乎停滞。浮动储存已超过5000万桶（战前约1000万桶）。主要航运保险公司已取消海湾地区战争险承保" },
+                        { date: "2026-03-18", title: "科威特持续遭受伊朗导弹和无人机袭击", content: "3月18日科威特国防部报告持续遭受伊朗导弹和无人机袭击，防空系统保持高度戒备。科威特石油公司继续执行紧急气田封存程序，原油产量已减少约50万桶/日。美国驻科威特大使馆继续暂停运作" },
+                        { date: "2026-03-17", title: "科威特和卡塔尔报告更多伊朗无人机和导弹袭击", content: "3月17日，科威特和卡塔尔报告遭受更多伊朗无人机和导弹袭击。与此同时，伊朗对沙特阿拉伯、阿联酋等海湾国家的攻击持续，沙特国防部称24小时内拦截近100架伊朗无人机，为单日最大规模袭击" },
+                        { date: "2026-03-16", title: "美以伊战争进入第16天，战事进入'决定性阶段'", content: "截至3月16日，美以与伊朗的军事冲突已进入第16天。伊朗革命卫队宣布发起'真实承诺-4'行动第51波攻势，向沙特苏丹王子空军基地发射多枚导弹" },
+                        { date: "2026-03-15", title: "科威特启动紧急气田封存程序", content: "科威特石油公司启动紧急气田封存程序，确保在存储能力耗尽时能够安全关闭气田而不造成永久损失。美国宣布暂停驻科威特大使馆运作" },
+                        { date: "2026-03-13", title: "多家能源企业停减产影响科威特", content: "受美以伊战事威胁霍尔木兹海峡船只通行安全、运输原油和成品油的船只匮乏等因素影响，科威特国家石油公司运营正遭遇'不可抗力'，已开始削减原油产量和炼油加工量" },
+                        { date: "2026-03-13", title: "花旗集团关闭分支机构", content: "美国花旗集团宣布关闭在科威特的分支机构，员工撤离，这是继阿联酋之后又一海湾国家受到金融机构撤离影响" },
+                        { date: "2026-03-13", title: "科威特启动紧急气田封存", content: "科威特石油公司启动紧急气田封存程序，确保在存储能力耗尽时能够安全关闭气田而不造成永久损失" },
+                        { date: "2026-03-11", title: "日产量减少约50万桶", content: "科威特石油公司宣布对石油和炼油产品销售实施不可抗力，按照欧佩克组织公布3月产能上限，减产规模已经达到生产上限的约20%" },
+                        { date: "2026-03-10", title: "美国暂停大使馆运作", content: "3月9日，美国宣布暂停驻科威特大使馆运作。3月8日科威特受到7枚导弹和5架无人机袭击" },
+                        { date: "2026-03-08", title: "机场燃料设施遭袭", content: "科威特国际机场燃料储存设施遭无人机袭击，拦截弹片损坏部分民用基础设施，社会保障机构大楼发生猛烈火灾" },
+                        { date: "2026-03-09", title: "阿迪里基地遭袭", content: "伊朗伊斯兰革命卫队宣布使用无人机和巡航导弹袭击科威特境内的阿迪里直升机基地" },
+                        { date: "2026-03-08", title: "预防性削减", content: "科威特正式宣布对原油生产和提炼实施预防性削减，进入不可抗力状态" },
+                        { date: "2026-03-07", title: "宣布减产", content: "科威特石油公司表示在'伊朗威胁霍尔木兹海峡船只安全通行'后，正在降低油田和炼油厂产量" },
+                        { date: "2026-03-07", title: "加入不可抗力行列", content: "3月7日科威特石油公司(KPC)正式宣布不可抗力，成为继卡塔尔之后第二个宣布不可抗力的大型中东能源出口国" },
+                        { date: "2026-03-05", title: "设施遇袭", content: "米纳艾哈迈迪炼油厂遭伊朗导弹袭击，科威特成为伊朗攻击目标" }
+                    ]
+                }
+            },
+            { 
+                name: "阿曼", nameEn: "Oman", center: [21.5, 55.8], labelPos: [21.5, 55.8], 
+                capacity: 1.1, actual: 1.0, exports: 0.77, hormuzExports: 0, bypassExports: 0.77, 
+                color: "#06b6d4", flag: "🇴🇲", radius: 30,
+                storage: {
+                    capacity: 110,
+                    production: 100,
+                    exports: 77,
+                    daysCover: 20,
+                    daysMax: 25,
+                    onshore: 18,
+                    floating: 2,
+                    total: 20,
+                    facilities: [
+                        { name: "Mina Al Fahal", capacity: "12百万桶" },
+                        { name: "Duqm储油区", capacity: "4百万桶" },
+                        { name: "Fahal浮式终端", capacity: "2百万桶" }
+                    ],
+                    note: "唯一完全绕过霍尔木兹的主要产油国(直接出阿曼湾)。Duqm新港提供额外缓冲。储存压力相对较小。",
+                    status: "normal",
+                    updates: [
+                        { date: "2026-03-29", title: "阿曼杜库姆港成为替代出口通道，吞吐量增加40%", content: "3月29日阿曼港务局报告，杜库姆港(Duqm)作为绕过霍尔木兹海峡的替代出口通道，过去两周吞吐量增加40%。多艘油轮改道至杜库姆港装载原油，再通过陆路运输至港口出口" },
+                        { date: "2026-03-24", title: "阿曼原油出口量创历史新高，成为封锁期间最大受益者", content: "3月24日阿曼石油部数据显示，由于完全绕过霍尔木兹海峡的独特优势，阿曼3月原油出口量创历史新高，达到每日120万桶，较2月增长40%。亚洲买家纷纷转向阿曼原油替代海湾供应" },
+                        { date: "2026-03-23", title: "阿曼与印度签署紧急石油供应协议", content: "3月23日阿曼与印度签署紧急石油供应协议，承诺在霍尔木兹封锁期间优先向印度供应原油。印度每日从阿曼进口原油量将从15万桶增至35万桶，帮助印度应对伊朗供应中断" },
+                        { date: "2026-03-22", title: "阿曼Duqm港全面扩建计划启动，投资50亿美元", content: "3月22日阿曼宣布启动Duqm港全面扩建计划，投资50亿美元建设新的储油设施和装卸码头，预计2027年完工后该港石油处理能力将提升至每日200万桶，成为区域能源贸易枢纽" },
+                        { date: "2026-03-21", title: "阿曼向亚洲买家提供优惠定价以抢占市场份额", content: "3月21日阿曼石油开发公司(PDO)宣布向亚洲主要买家提供优惠定价，阿曼原油较布伦特基准折扣扩大至每桶5美元，以抢占因霍尔木兹封锁而空出的市场份额" },
+                        { date: "2026-03-20", title: "阿曼作为唯一完全绕过霍尔木兹的主要产油国维持出口", content: "3月18日相关报道，阿曼通过法哈尔港和杜库姆港直接出阿曼湾，完全绕过霍尔木兹海峡，是封锁期间唯一不受影响的主要产油国" },
+                        { date: "2026-03-19", title: "霍尔木兹通行量降至正常3%，VLCC运费创历史新高", content: "3月18日霍尔木兹海峡通行量仅3艘次/14.5万DWT（正常约120艘次），不足正常3%。VLCC日租金突破42万美元创历史新高，较前一周上涨94%。约750-1000艘商船滞留海湾。阿曼作为唯一完全绕过霍尔木兹的主要产油国，通过法哈尔港和杜库姆港维持出口" },
+                        { date: "2026-03-18", title: "阿曼杜库姆港和塞拉莱港成为绕过霍尔木兹的关键替代路线", content: "3月18日随着霍尔木兹海峡持续封锁，阿曼杜库姆港和塞拉莱港作为替代出口路线的重要性持续增加。尽管塞拉莱港储油设施3月12日遭袭，阿曼仍是唯一完全绕过霍尔木兹的主要产油国，通过法哈尔港和杜库姆港直接出阿曼湾维持出口" },
+                        { date: "2026-03-17", title: "伊朗无人机袭击阿曼塞拉莱港储油设施", content: "3月12日，伊朗无人机袭击了阿曼塞拉莱港的储油设施。塞拉莱港位于阿曼南部海岸，已成为油轮寻求避开霍尔木兹海峡的重要替代枢纽，此次袭击引发对伊朗将冲突扩展至替代出口路线的担忧" },
+                        { date: "2026-03-16", title: "巴西谷物出口商警告粮食运输受影响", content: "巴西全国谷物出口商协会(ANEC)表示，霍尔木兹海峡冲突可能影响经由该海峡运输的粮食贸易，增加航运成本并加大运输风险" },
+                        { date: "2026-03-15", title: "杜库姆港成为区域能源贸易重要通道", content: "阿曼杜库姆港全面恢复运营，成为封锁期间首个恢复正常的主要港口。国际海事组织称约2万名海员被困海湾地区" },
+                        { date: "2026-03-13", title: "阿曼主要石油出口码头疏散船只", content: "阿曼主要石油出口码头疏散船只，两艘油轮在伊拉克水域遭到袭击后，阿曼米纳法哈勒港也加强安全防范措施" },
+                        { date: "2026-03-13", title: "阿曼港口全面恢复运营", content: "阿曼宣布杜库姆港全面恢复运营，成为封锁期间首个恢复正常的主要港口，为区域能源贸易提供重要通道" },
+                        { date: "2026-03-11", title: "约2万名海员被困", content: "国际海事组织报告称约2万名海员被困海湾地区，面临巨大安全风险。3月7日海峡发生船只遭袭事件，导致4名海员丧生、3人重伤" },
+                        { date: "2026-03-10", title: "两港暂停运营", content: "当地时间3月3日，阿曼杜库姆港与塞拉莱港两大核心港口遭遇无人机密集袭击，杜库姆港燃料储罐群遭多架无人机精准瞄准，其中一座储罐被直接击中" },
+                        { date: "2026-03-09", title: "港口遇袭", content: "杜库姆商业港口燃料储存设施遭无人机袭击，一个储罐受损" },
+                        { date: "2026-03-11", title: "港口运营受限", content: "巴林港口暂停作业，卡塔尔、阿曼部分港口存在一定作业限制，航运公司密集宣布不可抗力" },
+                        { date: "2026-03-09", title: "正常出口", content: "法哈尔港和杜库姆港直接出阿曼湾，完全绕过霍尔木兹海峡，是唯一不受封锁影响的主要产油国" },
+                        { date: "2026-03-06", title: "转运方案", content: "行业建议将货物转运至沙特西部红海港口，再通过陆路连接海湾市场" },
+                        { date: "2026-03-03", title: "港口遇袭", content: "杜库姆商业港口燃料储存设施遭无人机袭击，一个储罐受损" }
+                    ]
+                }
+            },
+            { 
+                name: "卡塔尔", nameEn: "Qatar", center: [25.3, 51.2], labelPos: [25.3, 51.2], 
+                capacity: 0.73, actual: 0.73, exports: 0.73, hormuzExports: 0.73, bypassExports: 0, 
+                color: "#8b5cf6", flag: "🇶🇦", radius: 24,
+                storage: {
+                    capacity: 73,
+                    production: 0,
+                    exports: 0,
+                    daysCover: 18,
+                    daysMax: 25,
+                    onshore: 12,
+                    floating: 2,
+                    total: 14,
+                    facilities: [
+                        { name: "Ras Laffan储油", capacity: "8百万桶" },
+                        { name: "Mesaieed", capacity: "3百万桶" },
+                        { name: "浮动储存", capacity: "2百万桶" }
+                    ],
+                    note: "主要为LNG出口国，原油储存有限。2026年3月霍尔木兹危机中LNG出口完全停止。",
+                    status: "critical",
+                    updates: [
+                        { date: "2026-03-29", title: "卡塔尔Ras Laffan天然气设施修复需3-5年，损失超260亿美元", content: "3月29日卡塔尔能源公司评估，Ras Laffan工业城遭伊朗导弹袭击造成的损坏修复需要3-5年时间，修复费用预估260亿美元。17%的LNG产能受损，可能导致每年数百亿美元收入损失" },
+                        { date: "2026-03-19", title: "卡塔尔Ras Laffan遭伊朗导弹袭击，Shell的Pearl GTL设施受损", content: "3月19日伊朗对卡塔尔Ras Laffan工业城发动导弹袭击，造成'广泛破坏'。卡塔尔能源公司证实多个LNG设施被击中起火，Shell运营的Pearl气转液设施受损。这是卡塔尔自3月2日停产以来首次遭遇直接军事打击" },
+                        { date: "2026-03-19", title: "卡塔尔驱逐伊朗军事外交官，强烈谴责袭击", content: "3月19日卡塔尔外交部下令伊朗军事和安全武官及其 staff 在24小时内离境。卡塔尔强烈谴责伊朗对Ras Laffan的袭击，称这是'对卡塔尔国家安全的直接威胁'，保留采取进一步措施的权利" },
+                        { date: "2026-03-28", title: "约2000艘船只、2万名船员在霍尔木兹海峡被困超26天", content: "3月28日最新报道，约2000艘船只、2万名船员在霍尔木兹海峡内被困超26天，这是历史上从未出现过的场景。沙特阿拉伯每日通过红海延布港出口的石油装载量已超400万桶，目标是每天500万桶（战前出口量的70%）" },
+                        { date: "2026-03-27", title: "霍尔木兹海峡封锁再升级，全球航运面临严峻'选边'困境", content: "3月27日，三艘不同国籍的集装箱船在霍尔木兹海峡掉头折返，包括两艘中国籍集装箱船。伊朗伊斯兰革命卫队发出最新警告：海峡现已关闭，任何试图穿越航道的船舶将面临严厉措施" },
+                        { date: "2026-03-24", title: "伊朗战争航运更新：至少21艘商船被击中，150艘油轮滞留海湾", content: "3月24日United Against Nuclear Iran (UANI)报告，自冲突开始以来，至少有21艘商船在霍尔木兹海峡及周边海域被击中。UANI已识别至少30艘载有伊朗石油的油轮目前在波斯湾活动。美国已将对伊朗重新开放霍尔木兹海峡的截止日期延长五天" },
+                        { date: "2026-03-23", title: "卡塔尔能源遇袭致LNG出口下降17%，年收入损失约200亿美元", content: "3月20日财新网报道，拉斯拉凡LNG设施遭伊朗导弹袭击，设施损坏需3-5年修复，修复费用预估260亿美元。2025年卡塔尔LNG出口约8220万吨，占全球约20%，袭击导致出口能力下降17%" },
+                        { date: "2026-03-22", title: "卡塔尔2026年GDP可能收缩9%，摩根大通下调经济预期", content: "3月20日摩根大通估计，由于Ras Laffan袭击导致的LNG出口损失，卡塔尔2026年GDP可能收缩约9%。袭击使卡塔尔LNG出口产能减少约17-19%，可能导致每年数百亿美元的收入损失" },
+                        { date: "2026-03-21", title: "卡塔尔寻求国际赔偿，计划就Ras Laffan遭袭向国际法院提起诉讼", content: "3月21日卡塔尔外交部和能源部联合声明，将就Ras Laffan工业城遭伊朗导弹袭击事件向国际法院提起诉讼，寻求损害赔偿。卡塔尔表示此次袭击违反国际法，构成对主权国家的侵略行为" },
+                        { date: "2026-03-20", title: "卡塔尔能源CEO：战争若持续将影响全球GDP增长", content: "3月15日卡塔尔能源CEO萨阿德·卡阿比警告，美伊战争可能'拖垮全球经济'，预计所有海湾地区的能源出口国将在数周内被迫停产，推升油价飙升至150美元/桶" },
+                        { date: "2026-03-19", title: "卡塔尔Ras Laffan气田遭伊朗导弹袭击，设施严重受损", content: "3月19日伊朗对卡塔尔Ras Laffan天然气田发动导弹袭击，造成设施严重损坏。卡塔尔能源公司表示，Ras Laffan气转液设施在伊朗袭击中遭受广泛破坏，多个LNG设施遭导弹击中起火。这是卡塔尔自3月2日停产以来首次遭遇直接军事打击，全球LNG供应进一步恶化" },
+                        { date: "2026-03-19", title: "卡塔尔能源设施收到伊朗撤离警告，LNG停产持续", content: "3月18日伊朗革命卫队向卡塔尔Mesaieed石化综合体、Mesaieed控股公司和Ras Laffan炼油厂发出撤离警告。卡塔尔已将此袭击定性为以色列发动。卡塔尔LNG生产占全球20%，自3月2日以来完全停产，若设施受损停产可能延长至5月以后。欧洲气价已飙升45%" },
+                        { date: "2026-03-18", title: "卡塔尔能源部长：LNG生产将持续停产直至冲突完全结束", content: "3月18日卡塔尔能源部长萨阿德·卡阿比表示，Ras Laffan工业城的LNG生产将持续停产直至中东冲突完全结束。即使战争立即结束，恢复正常生产和交付仍需数周至数月时间。Ras Laffan占全球LNG供应约20%，停产已导致欧洲气价飙升45%" },
+                        { date: "2026-03-17", title: "卡塔尔Ras Laffan停产引发全球氦气供应危机", content: "卡塔尔Ras Laffan工业城拥有三座氦气生产设施（Helium 1/2/3），日产氦气17吨。自3月2日停产后，全球氦气供应陷入危机，影响半导体制造（三星、台积电、英特尔）、MRI医疗设备、航空航天等关键行业" },
+                        { date: "2026-03-16", title: "特朗普称'可能还会再炸几次哈尔克岛，只是为了开心'", content: "美国总统特朗普3月14日接受NBC采访时证实美军'几乎完全摧毁'哈尔克岛，但称'我们可能还会再炸几次，只是为了开心'。该言论引发国际社会广泛争议" },
+                        { date: "2026-03-15", title: "卡塔尔能源CEO警告战争将影响全球GDP增长", content: "卡塔尔能源CEO萨阿德·卡阿比警告，美伊战争可能'拖垮全球经济'，预计所有海湾地区的能源出口国将在数周内被迫停产，推升油价飙升至150美元/桶" },
+                        { date: "2026-03-13", title: "道达尔能源停止卡塔尔近海生产", content: "法国道达尔能源公司宣布停止卡塔尔近海的部分石油和天然气生产，预计影响其全球油气总产量的15%" },
+                        { date: "2026-03-12", title: "Ras Laffan工厂断供创2008年纪录", content: "卡塔尔Ras Laffan工厂已连续五天无任何装载船只离港，储罐容量仅约188万立方米，全速生产下4天即可填满。卡塔尔能源CEO警告战争若持续将影响全球GDP增长" },
+                        { date: "2026-03-11", title: "能源完全停产", content: "卡塔尔能源公司因设施遭袭已完全停产LNG，这是史上最重大计划外断供事件之一，重启可能需要数周乃至数月" },
+                        { date: "2026-03-10", title: "大摩：LNG价格或涨至30美元", content: "摩根士丹利警告，卡塔尔LNG停产将消除2026年预期的大部分供应过剩，LNG价格或攀升至每百万英热单位30美元以上" },
+                        { date: "2026-03-10", title: "海峡近乎停滞", content: "霍尔木兹海峡已连续9天'近乎停滞'，商业交通几乎完全停止，日均通行船只从正常的138艘降至个位数" },
+                        { date: "2026-03-08", title: "恢复预期", content: "能源事务大臣卡比警告：即使战争立即结束，恢复供货仍需数周至数月" },
+                        { date: "2026-03-06", title: "全球危机", content: "卡比预测海湾地区所有能源出口国可能在数周内停止油气生产，油价可能飙升至150美元/桶" },
+                        { date: "2026-03-04", title: "下游产品停产扩大", content: "卡塔尔能源3月3日宣布再停尿素、聚合物、甲醇、铝等部分下游产品生产，全球最大LNG生产商全面停摆" },
+                        { date: "2026-03-02", title: "设施遭袭", content: "拉斯拉凡工业城和梅赛伊德工业城设施遭伊朗无人机袭击，LNG及下游产品停产" }
+                    ]
+                }
+            },
+            { 
+                name: "巴林", nameEn: "Bahrain", center: [26.1, 50.5], labelPos: [26.1, 50.5], 
+                capacity: 0.21, actual: 0.19, exports: 0.15, hormuzExports: 0.15, bypassExports: 0, 
+                color: "#f97316", flag: "🇧🇭", radius: 13,
+                storage: {
+                    capacity: 21,
+                    production: 19,
+                    exports: 15,
+                    daysCover: 22,
+                    daysMax: 28,
+                    onshore: 3.5,
+                    floating: 1,
+                    total: 4.5,
+                    facilities: [
+                        { name: "Sitra储油终端", capacity: "2.5百万桶" },
+                        { name: "Bapco设施", capacity: "1百万桶" },
+                        { name: "浮动储存", capacity: "1百万桶" }
+                    ],
+                    note: "产量最小但储油比例相对较高。Sitra炼厂配套储存。2026年3月维持正常出口。",
+                    status: "normal",
+                    updates: [
+                        { date: "2026-03-29", title: "巴林Sitra炼油厂部分恢复运营，仍处不可抗力状态", content: "3月29日巴林石油公司(Bapco)表示，Sitra炼油厂在3月9日遭伊朗袭击后，经过紧急检修，部分生产单元已恢复运营，日处理能力恢复至约15万桶/日，但仍处于不可抗力状态，成品油出口暂停" },
+                        { date: "2026-03-24", title: "巴林与沙特协调铝土矿供应，确保冶炼厂原料来源", content: "3月24日巴林工业部宣布与沙特达成铝土矿紧急供应协议，沙特将通过红海港口向巴林供应冶炼原料，确保巴林铝业(Alba)在霍尔木兹封锁期间维持基本运营。目前Alba已减产35%" },
+                        { date: "2026-03-23", title: "巴林铝业减产扩大至35%，部分生产线完全停产", content: "3月23日巴林铝业公司(Alba)宣布减产幅度已从19%扩大至35%，部分生产线完全停产。供应链危机持续恶化，氧化铝和电力供应均受到影响。Alba是全球最大铝冶炼厂之一，年产量约150万吨" },
+                        { date: "2026-03-22", title: "巴林Sitra炼油厂检修后部分恢复运营", content: "3月22日巴林石油公司(Bapco)表示，Sitra炼油厂在3月9日遭袭后，经过紧急检修，部分生产单元已恢复运营，但仍处于不可抗力状态，成品油出口已暂停" },
+                        { date: "2026-03-21", title: "巴林寻求从沙特进口成品油以满足国内需求", content: "3月21日巴林能源部表示，已与沙特阿美达成协议，从沙特红海港口进口汽油和柴油，通过陆路运输满足巴林国内燃料需求，缓解Sitra炼油厂停产造成的影响" },
+                        { date: "2026-03-20", title: "战争险保费飙升300%，航运巨头暂停海湾航线", content: "3月18日战争险保费已从冲突前0.02%-0.05%飙升至0.5%-1%，涨幅200-300%。马士基、MSC、达飞、赫伯罗特等航运巨头暂停海湾航线或征收1500-4000美元/TEU战争附加费。巴林铝业继续减产19%，全球铝市场供应持续收紧" },
+                        { date: "2026-03-19", title: "巴林铝业继续削减产量，供应链危机持续", content: "3月18日巴林铝业公司(Alba)继续执行减产19%的措施，以应对霍尔木兹海峡持续封锁导致的供应链中断。铝价因中东供应中断而飙升，欧洲和亚洲市场铝溢价已达2022年以来最高水平" },
+                        { date: "2026-03-18", title: "巴林铝业削减19%产量应对供应链中断", content: "巴林铝业公司(Alba)3月15日开始削减19%的铝产量，以应对霍尔木兹海峡封锁导致的供应链中断。该公司是全球最大铝冶炼厂之一，年产量约150万吨，减产决定将导致全球铝市场供应进一步收紧" },
+                        { date: "2026-03-16", title: "伊朗逮捕20名涉以色列间谍", content: "伊朗西阿塞拜疆省检察官办公室3月15日表示，安全部门在乌尔米耶等地成功打击了数个与以色列有关联的间谍雇佣兵网络，共有20名成员已被正式逮捕并关押" },
+                        { date: "2026-03-15", title: "巴林铝业宣布不可抗力暂停发货", content: "巴林铝业公司(Alba)已通知客户，因经霍尔木兹海峡的运输问题，启动供货合同中的不可抗力条款并暂停发货" },
+                        { date: "2026-03-13", title: "巴林锡特拉燃料储油罐遭袭起火", content: "巴林锡特拉燃料储油罐在遭到伊朗无人机袭击后发生火灾，巴林要求关闭产油设施，能源基础设施安全受到严重威胁" },
+                        { date: "2026-03-13", title: "巴林炼油厂部分恢复生产", content: "巴林国家能源集团宣布炼油厂部分设施恢复运作，日处理能力恢复至约15万桶/日" },
+                        { date: "2026-03-11", title: "铝业宣布不可抗力", content: "巴林铝业公司(Alba)已通知客户，因经霍尔木兹海峡的运输问题，启动供货合同中的不可抗力条款并暂停发货" },
+                        { date: "2026-03-10", title: "炼油厂大爆炸", content: "3月5日傍晚，巴林BAPCO炼油厂遭伊朗导弹袭击，厂内发生大爆炸与火灾。该炼油厂日产能约40.5万桶，是巴林唯一的大型炼油厂" },
+                        { date: "2026-03-09", title: "国家能源集团不可抗力", content: "3月9日，巴林国家能源集团(Bapco Energies)发布不可抗力通知，宣布因炼油厂受袭暂停运营，本地市场能源供应仍能得到保障" },
+                        { date: "2026-03-09", title: "炼油厂再遭袭击", content: "3月9日巴林马阿米尔炼油厂储油罐区再次冒出浓烟，伊朗袭击造成大火，暂无人员伤亡" },
+                        { date: "2026-03-08", title: "维持生产", content: "Sitra炼厂及西特拉港正常运营，产量维持19万桶/日" },
+                        { date: "2026-03-05", title: "规模优势", content: "作为海湾地区最小产油国(产能21万桶/日)，储油天数相对充足(22天)，受影响较小" }
+                    ]
+                }
+            }
+        ];
+
+        // 18个主要港口
+        const ports = [
+            { id: "ras-tanura", name: "Ras Tanura", nameCn: "拉斯坦努拉港", country: "沙特阿拉伯", lat: 26.638, lng: 50.172, capacity: 9.0, throughput: 5.5, hormuz: true, desc: "全球最大石油出口港，经霍尔木兹" },
+            { id: "yanbu", name: "Yanbu", nameCn: "延布港", country: "沙特阿拉伯", lat: 23.924, lng: 38.034, capacity: 7.0, throughput: 2.0, hormuz: false, desc: "红海出口港，绕过霍尔木兹" },
+            { id: "jubail", name: "Jubail", nameCn: "朱拜勒港", country: "沙特阿拉伯", lat: 27.004, lng: 49.663, capacity: 1.0, throughput: 0.8, hormuz: true, desc: "工业港，经霍尔木兹" },
+            { id: "kharg", name: "Kharg Island", nameCn: "哈尔克岛港", country: "伊朗", lat: 29.267, lng: 50.317, capacity: 7.0, throughput: 3.0, hormuz: true, desc: "伊朗最大出口港(90%)，经霍尔木兹" },
+            { id: "jask", name: "Jask", nameCn: "贾斯克港", country: "伊朗", lat: 25.633, lng: 57.767, capacity: 1.0, throughput: 0.05, hormuz: false, desc: "Goreh-Jask管道终点，绕过霍尔木兹(几乎未用)" },
+            { id: "assaluyeh", name: "Assaluyeh", nameCn: "阿萨卢耶港", country: "伊朗", lat: 27.483, lng: 52.600, capacity: 1.0, throughput: 0.7, hormuz: true, desc: "南帕斯气田，凝析油出口，经霍尔木兹" },
+            { id: "lavan", name: "Lavan Island", nameCn: "拉万岛港", country: "伊朗", lat: 26.800, lng: 53.300, capacity: 0.6, throughput: 0.3, hormuz: true, desc: "凝析油港，经霍尔木兹" },
+            { id: "sirri", name: "Sirri Island", nameCn: "西里岛港", country: "伊朗", lat: 25.900, lng: 54.533, capacity: 0.5, throughput: 0.2, hormuz: true, desc: "原油港，经霍尔木兹" },
+            { id: "fujairah", name: "Fujairah", nameCn: "富查伊拉港", country: "阿联酋", lat: 25.128, lng: 56.326, capacity: 1.8, throughput: 1.1, hormuz: false, desc: "ADCOP管道终点，绕过霍尔木兹" },
+            { id: "ruwais", name: "Ruwais", nameCn: "鲁韦斯港", country: "阿联酋", lat: 24.125, lng: 52.583, capacity: 1.5, throughput: 0.9, hormuz: true, desc: "炼油中心，部分经霍尔木兹" },
+            { id: "jebel-dhanna", name: "Jebel Dhanna", nameCn: "杰贝勒丹纳港", country: "阿联酋", lat: 24.188, lng: 52.556, capacity: 1.0, throughput: 1.1, hormuz: true, desc: "原油出口港，经霍尔木兹" },
+            { id: "basra", name: "Basra Oil Terminal", nameCn: "巴士拉港", country: "伊拉克", lat: 29.678, lng: 48.819, capacity: 2.4, throughput: 3.3, hormuz: true, desc: "伊拉克主要港(90%)，经霍尔木兹" },
+            { id: "khor-amaya", name: "Khor Al-Amaya", nameCn: "霍尔阿马亚港", country: "伊拉克", lat: 29.742, lng: 48.622, capacity: 1.2, throughput: 0, hormuz: true, desc: "停用中，计划2027重启，经霍尔木兹" },
+            { id: "mina-ahmadi", name: "Mina Al Ahmadi", nameCn: "艾哈迈迪港", country: "科威特", lat: 29.067, lng: 48.133, capacity: 2.0, throughput: 1.4, hormuz: true, desc: "科威特最大港，经霍尔木兹" },
+            { id: "mina-abdulla", name: "Mina Abdulla", nameCn: "阿卜杜拉港", country: "科威特", lat: 28.933, lng: 48.167, capacity: 0.8, throughput: 0.6, hormuz: true, desc: "辅助港，经霍尔木兹" },
+            { id: "mina-fahal", name: "Mina Al Fahal", nameCn: "法哈尔港", country: "阿曼", lat: 23.633, lng: 58.533, capacity: 0.8, throughput: 0.57, hormuz: false, desc: "阿曼主要港，直接出阿曼湾(绕过霍尔木兹)" },
+            { id: "duqm", name: "Duqm", nameCn: "杜库姆港", country: "阿曼", lat: 19.650, lng: 57.700, capacity: 0.5, throughput: 0.2, hormuz: false, desc: "新建港，直接出口(绕过霍尔木兹)" },
+            { id: "ras-laffan", name: "Ras Laffan", nameCn: "拉斯拉凡港", country: "卡塔尔", lat: 25.917, lng: 51.533, capacity: 1.5, throughput: 0.73, hormuz: true, desc: "全球最大LNG港，经霍尔木兹" },
+            { id: "sitra", name: "Sitra", nameCn: "西特拉港", country: "巴林", lat: 26.150, lng: 50.617, capacity: 0.3, throughput: 0.15, hormuz: true, desc: "石油产品港，经霍尔木兹" }
+        ];
+
+        // 出口流向
+        const exportFlows = [
+            { from: [23.0, 44.0], to: [26.638, 50.172], volume: 5.5, type: "hormuz" },
+            { from: [23.0, 44.0], to: [23.924, 38.034], volume: 1.98, type: "bypass" },
+            { from: [23.0, 44.0], to: [27.004, 49.663], volume: 0.8, type: "hormuz" },
+            { from: [33.2, 43.5], to: [29.678, 48.819], volume: 3.3, type: "hormuz" },
+            { from: [22.8, 54.5], to: [25.128, 56.326], volume: 1.1, type: "bypass" },
+            { from: [22.8, 54.5], to: [24.125, 52.583], volume: 0.9, type: "hormuz" },
+            { from: [22.8, 54.5], to: [24.188, 52.556], volume: 0.8, type: "hormuz" },
+            { from: [32.5, 53.5], to: [29.267, 50.317], volume: 3.0, type: "hormuz" },
+            { from: [32.5, 53.5], to: [25.633, 57.767], volume: 0.05, type: "bypass" },
+            { from: [32.5, 53.5], to: [27.483, 52.600], volume: 0.7, type: "hormuz" },
+            { from: [32.5, 53.5], to: [26.800, 53.300], volume: 0.3, type: "hormuz" },
+            { from: [32.5, 53.5], to: [25.900, 54.533], volume: 0.2, type: "hormuz" },
+            { from: [29.3, 47.8], to: [29.067, 48.133], volume: 1.4, type: "hormuz" },
+            { from: [29.3, 47.8], to: [28.933, 48.167], volume: 0.6, type: "hormuz" },
+            { from: [21.5, 55.8], to: [23.633, 58.533], volume: 0.57, type: "bypass" },
+            { from: [21.5, 55.8], to: [19.650, 57.700], volume: 0.2, type: "bypass" },
+            { from: [25.3, 51.2], to: [25.917, 51.533], volume: 0.73, type: "hormuz" },
+            { from: [26.1, 50.5], to: [26.150, 50.617], volume: 0.15, type: "hormuz" }
+        ];
+
+        // 4条替代管道
+        const pipelines = [
+            { name: "沙特东西管道", from: [25.934, 49.688], to: [23.924, 38.034], capacity: 7.0, current: 2.0, color: "#059669", via: [[25.0, 45.0], [24.0, 42.0]] },
+            { name: "阿联酋ADCOP管道", from: [23.6, 53.7], to: [25.128, 56.326], capacity: 1.8, current: 1.1, color: "#059669", via: [[24.5, 55.0]] },
+            { name: "伊朗Goreh-Jask管道", from: [28.0, 52.0], to: [25.633, 57.767], capacity: 1.0, current: 0.05, color: "#6b7280", via: [[27.0, 54.0], [26.0, 56.0]] },
+            { name: "伊拉克-土耳其ITP", from: [35.5, 44.4], to: [36.983, 35.833], capacity: 1.5, current: 0, color: "#9ca3af", via: [[36.0, 42.0]] }
+        ];
+
+        let allLayers = [];
+
+        // 创建SVG三层图形
+        function createNestedCircles(country) {
+            const size = country.radius;
+            const r = size / 2;
+            
+            const actualRatio = Math.min(1, country.actual / country.capacity);
+            const exportRatio = country.actual > 0 ? Math.min(1, country.exports / country.actual) : 0;
+            
+            const actualAngle = actualRatio * 360;
+            const exportAngle = exportRatio * 360;
+            
+            function createSectorPath(cx, cy, r, startAngle, endAngle) {
+                const start = polarToCartesian(cx, cy, r, endAngle);
+                const end = polarToCartesian(cx, cy, r, startAngle);
+                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+                return `M ${cx},${cy} L ${start.x},${start.y} A ${r},${r} 0 ${largeArcFlag},0 ${end.x},${end.y} Z`;
+            }
+            
+            const actualPath = createSectorPath(r, r, r-2, 0, actualAngle);
+            const exportPath = createSectorPath(r, r, (r-2)*0.5, 0, exportAngle);
+            
+            return `
+                <svg width="${size}" height="${size}" style="overflow: visible; display: block;">
+                    <circle cx="${r}" cy="${r}" r="${r-1}" fill="none" stroke="${country.color}" stroke-width="2" opacity="0.35"/>
+                    <path d="${actualPath}" fill="${country.color}" opacity="0.6"/>
+                    <path d="${exportPath}" fill="${country.color}" opacity="0.95"/>
+                    <text x="${r}" y="${r}" text-anchor="middle" dominant-baseline="middle" 
+                          fill="#fff" font-size="${Math.max(10, size/5)}" font-weight="bold" 
+                          style="text-shadow: 0 1px 3px rgba(0,0,0,0.7);">${country.actual}</text>
+                </svg>
+            `;
+        }
+
+        // 创建储油控件
+        function createStorageControl(country) {
+            const storage = country.storage;
+            const hasUpdate = storage.updates && storage.updates.length > 0;
+            
+            const countryName = country.name;
+            return '<div class="storage-control" onclick="event.stopPropagation(); showStorageModal(' + "'" + countryName + "'" + ');" style="display: flex; align-items: center; gap: 8px; pointer-events: auto; cursor: pointer;">' +
+                   '<div style="background: #dc2626; color: white; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.35); border: 2px solid #fff;\">📊</div>' +
+                   '<div style="background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border: 1px solid #dc2626; font-size: 0.8rem; white-space: nowrap;">' +
+                   '<span style="color: #64748b;">最新动态</span>' +
+                   '</div></div>';
+        }
+
+        // 显示储油弹窗
+        function showStorageModal(countryName) {
+            // 阻止事件冒泡
+            if (event) event.stopPropagation();
+            
+            const country = countries.find(c => c.name === countryName);
+            if (!country || !country.storage) return;
+            
+            const s = country.storage;
+            
+            // 生成最新动态HTML
+            const updatesHtml = s.updates && s.updates.length > 0 ? s.updates.map(u => `
+                <div style="background: #f8fafc; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #991b1b; font-size: 0.9rem; flex: 1; margin-right: 8px;">${u.title}</span>
+                        <span style="font-size: 0.7rem; color: #94a3b8; white-space: nowrap; background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">${u.date}</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #475569; line-height: 1.6;">${u.content}</div>
+                </div>
+            `).join('') : '<div style="text-align: center; color: #94a3b8; padding: 30px;">暂无最新动态</div>';
+            
+            const modal = document.createElement('div');
+            modal.className = 'storage-modal';
+            modal.id = 'storage-modal';
+            modal.innerHTML = `
+                <div class="storage-modal-content">
+                    <div class="storage-header">
+                        <span style="font-size: 2rem;">${country.flag}</span>
+                        <div style="flex: 1;">
+                            <h2>${country.name}</h2>
+                            <div style="font-size: 0.8rem; color: #64748b;">${country.nameEn}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 1rem; color: #991b1b; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 8px;">
+                            <span>📢</span> 最新动态
+                        </h4>
+                        ${updatesHtml}
+                    </div>
+                    
+                    <button class="close-modal-btn" onclick="closeStorageModal()">关闭</button>
+                </div>
+            `;
+            
+            modal.onclick = function(e) {
+                if (e.target === modal) closeStorageModal();
+            };
+            
+            document.body.appendChild(modal);
+        }
+
+        // 关闭储油弹窗
+        function closeStorageModal() {
+            const modal = document.getElementById('storage-modal');
+            if (modal) modal.remove();
+            // 关闭所有 marker 的 popup
+            map.closePopup();
+        }
+
+        // 港口和管道图层组
+        let portLayers = [];
+        let pipelineLayers = [];
+        let portsVisible = false;
+        let pipelinesVisible = false;
+
+        // 切换港口显示
+        function togglePorts() {
+            portsVisible = !portsVisible;
+            const btn = document.getElementById('map-toggle-ports-btn');
+            if (portsVisible) {
+                portLayers.forEach(l => l.addTo(map));
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.style.background = '#0369a1';
+                    btn.style.color = '#fff';
+                }
+            } else {
+                portLayers.forEach(l => map.removeLayer(l));
+                if (btn) {
+                    btn.classList.remove('active');
+                    btn.style.background = '#e0f2fe';
+                    btn.style.color = '#0369a1';
+                }
+            }
+        }
+
+        // 切换管道显示
+        function togglePipelines() {
+            pipelinesVisible = !pipelinesVisible;
+            const btn = document.getElementById('map-toggle-pipelines-btn');
+            if (pipelinesVisible) {
+                pipelineLayers.forEach(l => l.addTo(map));
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.style.background = '#7c3aed';
+                    btn.style.color = '#fff';
+                }
+            } else {
+                pipelineLayers.forEach(l => map.removeLayer(l));
+                if (btn) {
+                    btn.classList.remove('active');
+                    btn.style.background = '#f3e8ff';
+                    btn.style.color = '#7c3aed';
+                }
+            }
+        }
+
+        // 绘制所有图层
+        function drawAll() {
+            allLayers.forEach(l => map.removeLayer(l));
+            allLayers = [];
+            portLayers = [];
+            pipelineLayers = [];
+            
+            // 1. 绘制国家产能圈和储油控件
+            countries.forEach(country => {
+                const size = country.radius;
+                const r = size / 2;
+                const svg = createNestedCircles(country);
+                const storageControl = createStorageControl(country);
+                
+                const labelOffsetX = size / 2 + 5;
+                
+                const combinedHtml = `
+                    <div style="position: relative; width: ${size + 100}px; height: ${size}px; pointer-events: none;">
+                        <div style="position: absolute; left: 0; top: 0; pointer-events: auto;">${svg}</div>
+                        <div style="position: absolute; left: ${labelOffsetX}px; top: 50%; transform: translateY(-50%); 
+                                    font-weight: 700; font-size: 0.85rem; color: #991b1b; 
+                                    text-shadow: 0 1px 2px rgba(255,255,255,0.9); pointer-events: auto;
+                                    white-space: nowrap;
+                                    background: rgba(255,255,255,0.6); padding: 2px 6px; border-radius: 4px;">
+                            ${country.flag} ${country.name}
+                        </div>
+                        <div style="position: absolute; left: ${r-13}px; top: ${size + 5}px; pointer-events: auto;">
+                            ${storageControl}
+                        </div>
+                    </div>
+                `;
+                
+                const marker = L.marker(country.center, {
+                    icon: L.divIcon({ 
+                        html: combinedHtml, 
+                        iconSize: [size + 100, size + 35], 
+                        iconAnchor: [r, r],
+                        className: 'country-marker'
+                    }),
+                    zIndexOffset: 1000
+                }).addTo(map);
+                
+                const popupContent = `
+                    <div style="min-width: 260px;">
+                        <h3 style="color: ${country.color}; margin-bottom: 10px;">${country.flag} ${country.name}</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; font-size: 0.85rem;">
+                            <div style="background: #fef3c7; padding: 8px; border-radius: 6px; text-align: center;">
+                                <div style="font-weight: 700; color: #b45309;">${country.storage.capacity || '-'}</div>
+                                <div style="font-size: 0.65rem; color: #92400e;">产能(万桶/日)</div>
+                            </div>
+                            <div style="background: ${country.color}30; padding: 8px; border-radius: 6px; text-align: center;">
+                                <div style="font-weight: 700; color: ${country.color};">${country.storage.production || '-'}</div>
+                                <div style="font-size: 0.65rem; color: #64748b;">产量(万桶/日)</div>
+                            </div>
+                            <div style="background: #dcfce7; padding: 8px; border-radius: 6px; text-align: center;">
+                                <div style="font-weight: 700; color: #166534;">${country.storage.exports || '-'}</div>
+                                <div style="font-size: 0.65rem; color: #15803d;">出口(万桶/日)</div>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">
+                            经霍尔木兹: ${country.hormuzExports} | 绕过: ${country.bypassExports}
+                        </div>
+                        <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 10px; border-radius: 8px; font-size: 0.8rem; border: 1px solid #bfdbfe; cursor: pointer;" onclick="event.stopPropagation(); showStorageModal('${country.name}');">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span>📢</span>
+                                    <span style="font-weight: 600; color: #991b1b;">最新动态</span>
+                                </div>
+                                <span style="color: #dc2626; font-size: 0.75rem;">点击查看</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+                allLayers.push(marker);
+            });
+            
+            // 2. 绘制港口
+            ports.forEach((port, index) => {
+                const color = port.hormuz ? '#dc2626' : '#059669';
+                const size = port.throughput > 2 ? 12 : port.throughput > 0.5 ? 8 : 6;
+                
+                // 港口圆点（默认显示）
+                const circle = L.circleMarker([port.lat, port.lng], {
+                    radius: size,
+                    fillColor: color,
+                    color: "#fff",
+                    weight: 2,
+                    fillOpacity: 0.9
+                }).addTo(map);
+                
+                circle._portId = index;
+                allLayers.push(circle);
+                
+                // 港口文字标签（默认不显示，点击按钮切换）
+                const label = L.marker([port.lat, port.lng], {
+                    icon: L.divIcon({
+                        html: `<div id="port-label-${index}" style="
+                            background: rgba(255,255,255,0.95);
+                            padding: 2px 6px;
+                            border-radius: 3px;
+                            font-size: 0.7rem;
+                            font-weight: 600;
+                            color: ${color};
+                            border: 1px solid ${color};
+                            white-space: nowrap;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+                            cursor: pointer;
+                            pointer-events: auto;
+                        ">${port.nameCn}</div>`,
+                        iconSize: [100, 22],
+                        iconAnchor: [50, -size-3],
+                        className: ''
+                    })
+                });
+                
+                label._portId = index;
+                label._isLabel = true;
+                
+                const popupContent = `
+                    <div style="min-width: 240px; font-family: system-ui, -apple-system, sans-serif;">
+                        <h3 style="color: #991b1b; font-size: 1rem; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid #dc2626;">${port.nameCn}</h3>
+                        <div style="font-size: 0.85rem; margin-bottom: 5px; display: flex; justify-content: space-between;"><span style="color: #64748b;">英文:</span><span>${port.name}</span></div>
+                        <div style="font-size: 0.85rem; margin-bottom: 5px; display: flex; justify-content: space-between;"><span style="color: #64748b;">国家:</span><span>${port.country}</span></div>
+                        <div style="font-size: 0.85rem; margin-bottom: 5px; display: flex; justify-content: space-between;"><span style="color: #64748b;">能力:</span><span>${port.capacity} 百万桶/日</span></div>
+                        <div style="font-size: 0.85rem; margin-bottom: 5px; display: flex; justify-content: space-between;"><span style="color: #64748b;">处理量:</span><span>${port.throughput > 0 ? port.throughput + ' 百万桶/日' : '停用'}</span></div>
+                        <div style="font-size: 0.85rem; margin-bottom: 8px; display: flex; justify-content: space-between;"><span style="color: #64748b;">霍尔木兹:</span><span style="color: ${port.hormuz ? '#dc2626' : '#059669'}; font-weight: 600;">${port.hormuz ? '✗ 经霍尔木兹' : '✓ 绕过'}</span></div>
+                        <div style="background: #f8fafc; padding: 8px; border-radius: 5px; font-size: 0.8rem; color: #475569; border-left: 3px solid ${color};">${port.desc}</div>
+                    </div>
+                `;
+                
+                circle.bindPopup(popupContent);
+                label.bindPopup(popupContent);
+                
+                circle.on('mouseover', function() { 
+                    this.setStyle({ weight: 4, fillOpacity: 1 }); 
+                    this.bringToFront();
+                });
+                circle.on('mouseout', function() { 
+                    this.setStyle({ weight: 2, fillOpacity: 0.9 }); 
+                });
+                
+                label.on('mouseover', function() {
+                    const el = this.getElement();
+                    if (el) el.style.zIndex = 9999;
+                });
+                
+                // 港口文字标签存储到 portLayers，默认不显示
+                portLayers.push(label);
+            });
+            
+            // 3. 绘制出口流向
+            exportFlows.forEach(flow => {
+                let weight;
+                if (flow.volume >= 3) weight = 7;
+                else if (flow.volume >= 2) weight = 5;
+                else if (flow.volume >= 1) weight = 3;
+                else if (flow.volume >= 0.5) weight = 2;
+                else weight = 1.5;
+                
+                const color = flow.type === "hormuz" ? "#dc2626" : "#059669";
+                
+                const line = L.polyline([flow.from, flow.to], {
+                    color: color,
+                    weight: weight,
+                    opacity: 0.7,
+                    lineCap: 'round',
+                    dashArray: flow.type === "bypass" ? "8, 5" : null
+                }).addTo(map);
+                
+                allLayers.push(line);
+            });
+            
+            // 4. 绘制管道
+            pipelines.forEach(pipe => {
+                const coords = [pipe.from, ...pipe.via, pipe.to];
+                
+                // 管道线路（默认显示）
+                const line = L.polyline(coords, {
+                    color: pipe.color,
+                    weight: 4,
+                    opacity: 0.85,
+                    dashArray: pipe.current > 0 ? null : "12, 6"
+                }).addTo(map);
+                
+                allLayers.push(line);
+                
+                // 管道文字标签（默认不显示，点击按钮切换）
+                const midPoint = pipe.via[0] || [(pipe.from[0] + pipe.to[0]) / 2, (pipe.from[1] + pipe.to[1]) / 2];
+                const label = L.marker(midPoint, {
+                    icon: L.divIcon({
+                        html: `<div style="
+                            background: rgba(255,255,255,0.95);
+                            padding: 5px 10px;
+                            border-radius: 5px;
+                            font-size: 0.75rem;
+                            font-weight: 600;
+                            color: ${pipe.color};
+                            border: 2px solid ${pipe.color};
+                            white-space: nowrap;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                        ">${pipe.name}<br><span style="font-size:0.65rem; font-weight:500;">能力:${pipe.capacity} 使用:${pipe.current}</span></div>`,
+                        iconSize: [160, 34],
+                        iconAnchor: [80, 17]
+                    })
+                });
+                
+                line.bindPopup(`<div style="min-width: 180px;"><h3 style="color: ${pipe.color}; font-size: 0.9rem;">${pipe.name}</h3><p style="font-size: 0.8rem;">能力: ${pipe.capacity} 百万桶/日<br>使用: ${pipe.current > 0 ? pipe.current + ' 百万桶/日' : '停用'}</p></div>`);
+                
+                // 管道文字标签存储到 pipelineLayers，默认不显示
+                pipelineLayers.push(label);
+            });
+        }
+
+        // 生成国家列表
+        function createCountryList() {
+            const container = document.getElementById('country-list');
+            container.innerHTML = '';
+            countries.forEach(country => {
+                const card = document.createElement('div');
+                card.className = 'country-card';
+                const s = country.storage;
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-weight: 600; color: #991b1b; font-size: 0.85rem;">${country.flag} ${country.name}</span>
+                        <span style="font-size: 0.65rem; color: #64748b;">${s.updates && s.updates.length > 0 ? '有更新' : ''}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 0.7rem;">
+                        <div style="text-align: center; padding: 5px; background: #fef3c7; border-radius: 4px;">
+                            <div style="font-weight: 700; color: #b45309;">${s.capacity}</div>
+                            <div style="font-size: 0.6rem; color: #92400e;">产能(万桶/日)</div>
+                        </div>
+                        <div style="text-align: center; padding: 5px; background: #dbeafe; border-radius: 4px;">
+                            <div style="font-weight: 700; color: #991b1b;">${s.production}</div>
+                            <div style="font-size: 0.6rem; color: #64748b;">产量(万桶/日)</div>
+                        </div>
+                        <div style="text-align: center; padding: 5px; background: #dcfce7; border-radius: 4px; cursor: pointer;" onclick="event.stopPropagation(); showStorageModal('${country.name}');">
+                            <div style="font-weight: 700; color: #166534;">${s.exports}</div>
+                            <div style="font-size: 0.6rem; color: #15803d;">出口(万桶/日)</div>
+                        </div>
+                    </div>
+                `;
+                card.onclick = (e) => {
+                    if (!e.target.closest('[onclick^="showStorageModal"]')) {
+                        map.setView(country.center, 7);
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        // 重置港口和管道按钮状态
+        function resetToggleButtons() {
+            portsVisible = false;
+            pipelinesVisible = false;
+            const portsBtn = document.getElementById('map-toggle-ports-btn');
+            const pipelinesBtn = document.getElementById('map-toggle-pipelines-btn');
+            if (portsBtn) {
+                portsBtn.classList.remove('active');
+                portsBtn.style.background = '#e0f2fe';
+                portsBtn.style.color = '#0369a1';
+            }
+            if (pipelinesBtn) {
+                pipelinesBtn.classList.remove('active');
+                pipelinesBtn.style.background = '#f3e8ff';
+                pipelinesBtn.style.color = '#7c3aed';
+            }
+            // 隐藏所有港口和管道标签
+            portLayers.forEach(l => map.removeLayer(l));
+            pipelineLayers.forEach(l => map.removeLayer(l));
+        }
+
+        // 筛选
+        function filterMap(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            allLayers.forEach(l => map.removeLayer(l));
+            portLayers.forEach(l => map.removeLayer(l));
+            pipelineLayers.forEach(l => map.removeLayer(l));
+            allLayers = [];
+            portLayers = [];
+            pipelineLayers = [];
+            
+            // 重置港口和管道按钮
+            resetToggleButtons();
+            
+            if (type === 'all') {
+                drawAll();
+            } else if (type === 'capacity') {
+                countries.forEach(country => {
+                    const svg = createNestedCircles(country);
+                    const marker = L.marker(country.center, {
+                        icon: L.divIcon({ 
+                            html: svg, 
+                            iconSize: [country.radius, country.radius], 
+                            iconAnchor: [country.radius/2, country.radius/2],
+                            className: ''
+                        })
+                    }).addTo(map);
+                    allLayers.push(marker);
+                });
+            } else if (type === 'flows') {
+                drawAll();
+            } else if (type === 'pipelines') {
+                drawAll();
+            }
+        }
+
+        function polarToCartesian(cx, cy, r, angle) {
+            const rad = (angle - 90) * Math.PI / 180;
+            return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+        }
+
+        // 初始化
+        drawAll();
+        createCountryList();
+        
+        // 添加地图图例 - 根据屏幕尺寸选择简化或详细版本
+        const legendDiv = document.createElement('div');
+        legendDiv.className = 'map-legend-panel';
+        
+        // 检测是否为移动端（屏幕宽度小于768px）
+        const isMobile = window.innerWidth < 768;
+        
+        if (isMobile) {
+            // 移动端：简化版本 - 放在地图下方一行，带单位
+            legendDiv.innerHTML = `
+                <div class="legend-row"><span class="legend-symbol"><div class="legend-circle" style="width: 10px; height: 10px; border: 1.5px solid #dc2626; background: rgba(220,38,38,0.3);"></div></span><span>圆圈(产能)</span></div>
+                <div class="legend-row"><span class="legend-symbol"><div class="legend-line" style="background: #dc2626; height: 2px;"></div></span><span>红线(经海峡)</span></div>
+                <div class="legend-row"><span class="legend-symbol"><div class="legend-line" style="background: #059669; height: 2px;"></div></span><span>绿线(绕过)</span></div>
+                <div class="legend-row"><span class="legend-symbol"><span style="font-size: 0.85rem;">📊</span></span><span>点击查动态</span></div>
+                <div class="legend-row" style="margin-left: auto; color: #94a3b8; font-size: 0.55rem;">单位：百万桶/日</div>
+            `;
+        } else {
+            // PC端：详细版本 - 左下角面板
+            legendDiv.innerHTML = `
+                <h4>📖 图例说明</h4>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-circle" style="width: 20px; height: 20px; border-color: #dc2626; background: rgba(220,38,38,0.3);"></div>
+                    </div>
+                    <span>国家圆圈：潜在产能</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-circle" style="width: 16px; height: 16px; background: #dc2626; opacity: 0.6;"></div>
+                    </div>
+                    <span>填充扇形：实际产量</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-circle" style="width: 10px; height: 10px; background: #dc2626; opacity: 0.9;"></div>
+                    </div>
+                    <span>内层扇形：出口量</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-line" style="background: #dc2626; height: 4px;"></div>
+                    </div>
+                    <span>红色粗线：经霍尔木兹出口</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-line" style="background: #059669; height: 3px;"></div>
+                    </div>
+                    <span>绿色虚线：绕过霍尔木兹</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-dot" style="background: #dc2626;"></div>
+                    </div>
+                    <span>红色圆点：经霍尔木兹港口</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <div class="legend-dot" style="background: #059669;"></div>
+                    </div>
+                    <span>绿色圆点：绕过霍尔木兹港口</span>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-symbol">
+                        <span style="font-size: 1.2rem;">📊</span>
+                    </div>
+                    <span>最新动态图标（可点击）</span>
+                </div>
+                <div class="legend-note">
+                    <strong>数字单位说明：</strong><br>
+                    • 圆圈中心数字：实际产量（百万桶/日）<br>
+                    • 线条粗细：出口流量大小<br>
+                    • 📊 最新动态：点击可查看原油生产、基础设施、储油最新信息
+                </div>
+            `;
+        }
+        
+        document.getElementById('map').appendChild(legendDiv);
+
+        // 图例
+        const legendControl = L.control({position: 'bottomleft'});
+        legendControl.onAdd = function() {
+            const div = L.DomUtil.create('div');
+            div.style.cssText = 'background: rgba(255,255,255,0.95); padding: 14px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.12); border: 1px solid #e2e8f0; font-size: 0.8rem;';
+            div.innerHTML = `
+                <div style="font-weight: 700; margin-bottom: 12px; color: #991b1b; font-size: 0.9rem;">📊 2025年出口概况</div>
+                <div style="margin-bottom: 6px; color: #475569;">🇸🇦 沙特: 7.48 = 霍尔木兹5.5 + 绕过1.98</div>
+                <div style="margin-bottom: 6px; color: #475569;">🇮🇶 伊拉克: 3.4 (全部经霍尔木兹)</div>
+                <div style="margin-bottom: 6px; color: #475569;">🇦🇪 阿联酋: 2.8 = 霍尔木兹1.7 + 绕过1.1</div>
+                <div style="color: #64748b; font-size: 0.72rem; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+                    <strong>线条:</strong> 流量越大越粗<br>
+                    红色=经霍尔木兹 | 绿色=绕过
+                </div>
+                <div style="color: #64748b; font-size: 0.72rem; margin-top: 8px;">
+                    📊 点击最新动态图标查看最新详情
+                </div>
+            `;
+            return div;
+        };
+        legendControl.addTo(map);
+
+        // 地图上的切换按钮控件
+        const toggleButtonsControl = L.control({position: 'topright'});
+        toggleButtonsControl.onAdd = function() {
+            const div = L.DomUtil.create('div', 'map-toggle-buttons');
+            div.style.cssText = 'display: flex; flex-direction: column; gap: 8px;';
+            div.innerHTML = `
+                <button id="map-toggle-ports-btn" style="
+                    background: #e0f2fe;
+                    color: #0369a1;
+                    border: 1px solid #7dd3fc;
+                    padding: 8px 14px;
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    cursor: pointer;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                    white-space: nowrap;
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='#bae6fd'" onmouseout="if(!this.classList.contains('active')) this.style.background='#e0f2fe'">⛳ 查看港口</button>
+                <button id="map-toggle-pipelines-btn" style="
+                    background: #f3e8ff;
+                    color: #7c3aed;
+                    border: 1px solid #c4b5fd;
+                    padding: 8px 14px;
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    cursor: pointer;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                    white-space: nowrap;
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='#ddd6fe'" onmouseout="if(!this.classList.contains('active')) this.style.background='#f3e8ff'">🛣️ 查看管道</button>
+            `;
+            
+            // 添加点击事件
+            setTimeout(() => {
+                const portsBtn = div.querySelector('#map-toggle-ports-btn');
+                const pipelinesBtn = div.querySelector('#map-toggle-pipelines-btn');
+                
+                portsBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    togglePorts();
+                    if (portsVisible) {
+                        this.classList.add('active');
+                        this.style.background = '#0369a1';
+                        this.style.color = '#fff';
+                    } else {
+                        this.classList.remove('active');
+                        this.style.background = '#e0f2fe';
+                        this.style.color = '#0369a1';
+                    }
+                });
+                
+                pipelinesBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    togglePipelines();
+                    if (pipelinesVisible) {
+                        this.classList.add('active');
+                        this.style.background = '#7c3aed';
+                        this.style.color = '#fff';
+                    } else {
+                        this.classList.remove('active');
+                        this.style.background = '#f3e8ff';
+                        this.style.color = '#7c3aed';
+                    }
+                });
+            }, 0);
+            
+            return div;
+        };
+        toggleButtonsControl.addTo(map);
+    </script>
+</body>
+</html>

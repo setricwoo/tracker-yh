@@ -1,0 +1,706 @@
+[
+  {
+    "id": "fed_20260328_001",
+    "title": "Fed Warns Middle East Tensions Could Impact Inflation Expectations",
+    "source": "Federal Reserve",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "2026-03-28T14:00:00Z",
+    "summary": "Federal Reserve Chair stated the central bank is closely monitoring developments in the Middle East, noting that sustained geopolitical tensions could affect inflation expectations and warrant careful consideration in monetary policy decisions.",
+    "link": "https://www.federalreserve.gov/newsevents/speech.htm",
+    "tags": [
+      "美国",
+      "通胀",
+      "货币政策",
+      "中东"
+    ],
+    "lang": "en",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "美联储警告中东紧张局势可能影响通胀预期",
+    "summaryZh": "美联储主席表示正密切关注中东事态发展，指出持续的地缘政治紧张局势可能影响通胀预期，货币政策决策需要审慎考虑。"
+  },
+  {
+    "id": "ecb_20260327_001",
+    "title": "ECB Governing Council Discusses Oil Price Shock Transmission Mechanisms",
+    "source": "European Central Bank",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "2026-03-27T10:30:00Z",
+    "summary": "欧央行管委会议讨论了油价冲击对欧元区通胀的传导机制，强调中东局势导致能源价格飙升对通胀预期的影响需要持续关注。部分委员认为应在下次利率决议中纳入地缘风险评估。",
+    "link": "https://www.ecb.europa.eu/press/html/index.en.html",
+    "tags": [
+      "欧洲",
+      "通胀",
+      "油价",
+      "货币政策"
+    ],
+    "lang": "en",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "欧央行管委会讨论油价冲击传导机制",
+    "summaryZh": "欧央行管委会议讨论了油价冲击对欧元区通胀的传导机制，强调中东局势导致能源价格飙升对通胀预期的影响需要持续关注。"
+  },
+  {
+    "id": "f74f8ba24aa6de51",
+    "title": "Federal Reserve Board announces it has made the joint findings with the Office of the Comptroller of the Currency required for the OCC to approve a request by Morgan Stanley Bank, N.A., for an exemption under section 23A of the Federal Reserve Act",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 26 Mar 2026 21:00:00 GMT",
+    "summary": "Federal Reserve Board announces it has made the joint findings with the Office of the Comptroller of the Currency required for the OCC to approve a request by Morgan Stanley Bank, N.A., for an exemption under section 23A of the Federal Reserve Act",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260326a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260326a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260326a.htm"
+      }
+    ]
+  },
+  {
+    "id": "boe_20260326_001",
+    "title": "Bank of England: Middle East Conflict Poses Significant Upside Risks to UK Inflation",
+    "source": "Bank of England",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "2026-03-26T09:00:00Z",
+    "summary": "英格兰银行货币政策委员会成员表示，中东冲突对英国通胀构成显著上行风险，能源和供应链中断可能在短期内推高物价。但长期影响取决于冲突持续时间。",
+    "link": "https://www.bankofengland.co.uk/speech",
+    "tags": [
+      "英国",
+      "通胀",
+      "能源价格",
+      "供应链"
+    ],
+    "lang": "en",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "英格兰银行：中东冲突对英国通胀构成重大上行风险",
+    "summaryZh": "英格兰银行货币政策委员会成员表示，中东冲突对英国通胀构成显著上行风险，能源和供应链中断可能在短期内推高物价。"
+  },
+  {
+    "id": "03c26ca037bc2891",
+    "title": "Federal Reserve Board releases annual audited financial statements",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Wed, 25 Mar 2026 16:00:00 GMT",
+    "summary": "Federal Reserve Board releases annual audited financial statements",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260325a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260325a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260325a.htm"
+      }
+    ]
+  },
+  {
+    "id": "pboc_20260325_001",
+    "title": "中国人民银行：密切关注国际大宗商品价格波动对国内通胀影响",
+    "source": "中国人民银行",
+    "sourceType": "central_bank",
+    "fetchChannel": "html",
+    "pubDate": "2026-03-25T08:00:00Z",
+    "summary": "央行货币政策委员会季度例会指出，要密切关注国际大宗商品价格波动对国内通胀的影响，保持流动性合理充裕，强化对中小微企业的金融支持。会议强调要统筹发展和安全。",
+    "link": "http://www.pbc.gov.cn/goutongjiaoliu/",
+    "tags": [
+      "中国",
+      "大宗商品",
+      "通胀",
+      "货币政策"
+    ],
+    "lang": "zh",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "中国人民银行：密切关注国际大宗商品价格波动对国内通胀影响",
+    "summaryZh": "央行货币政策委员会季度例会指出，要密切关注国际大宗商品价格波动对国内通胀的影响，保持流动性合理充裕。"
+  },
+  {
+    "id": "sama_20260324_001",
+    "title": "Saudi Central Bank Maintains Stability Measures Amid Regional Uncertainty",
+    "source": "Saudi Central Bank (SAMA)",
+    "sourceType": "central_bank",
+    "fetchChannel": "html",
+    "pubDate": "2026-03-24T12:00:00Z",
+    "summary": "沙特央行(SAMA)宣布维持基准利率不变，并表示正在采取必要措施确保金融体系稳定。声明指出银行业资本充足率保持在健康水平，流动性充裕。",
+    "link": "https://www.sama.gov.sa/en-US/News/pages/allnews.aspx",
+    "tags": [
+      "沙特",
+      "利率",
+      "金融稳定",
+      "银行业"
+    ],
+    "lang": "en",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "沙特央行在区域不确定性中维持稳定措施",
+    "summaryZh": "沙特央行(SAMA)宣布维持基准利率不变，并表示正在采取必要措施确保金融体系稳定。银行业资本充足率保持在健康水平。"
+  },
+  {
+    "id": "fed_reuters_20260322_001",
+    "title": "Fed Warns Middle East Tensions Could Shake Markets, Holds Rates Steady",
+    "source": "Reuters",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "2026-03-22T19:27:00Z",
+    "summary": "据路透社报道，美联储警告中东紧张局势可能影响市场稳定，同时维持利率不变。美联储预计2026年仅有一次降息，地缘风险成为政策考量的重要因素。",
+    "link": "https://finance.yahoo.com/news/fed-warns-middle-east-tensions-192700766.html",
+    "tags": [
+      "美国",
+      "利率",
+      "市场稳定",
+      "地缘风险"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": "fed_me_202603",
+    "titleZh": "美联储警告中东局势可能冲击市场，维持利率不变",
+    "summaryZh": "据路透社报道，美联储警告中东紧张局势可能影响市场稳定，同时维持利率不变。预计2026年仅有一次降息。"
+  },
+  {
+    "id": "f12438ff22cfcabb",
+    "title": "Federal Reserve Board issues enforcement actions with former employee of Ally Bank and former employee of Regions Bank",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Fri, 20 Mar 2026 15:00:00 GMT",
+    "summary": "Federal Reserve Board issues enforcement actions with former employee of Ally Bank and former employee of Regions Bank",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260320a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260320a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260320a.htm"
+      }
+    ]
+  },
+  {
+    "id": "qcb_20260320_001",
+    "title": "Qatar Central Bank Moves to Ensure Market Stability Amid Geopolitical Risks",
+    "source": "Qatar Central Bank",
+    "sourceType": "central_bank",
+    "fetchChannel": "html",
+    "pubDate": "2026-03-20T11:00:00Z",
+    "summary": "卡塔尔央行宣布一系列流动性措施，包括定期回购工具和降低存款准备金要求，以确保市场在地缘政治风险中保持稳定。央行确认国内流动性充足。",
+    "link": "https://fintechnews.ae/30850/qatar/qatar-central-bank-liquidity-measures/",
+    "tags": [
+      "卡塔尔",
+      "流动性",
+      "准备金",
+      "地缘风险"
+    ],
+    "lang": "en",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "卡塔尔央行采取流动性措施确保市场稳定",
+    "summaryZh": "卡塔尔央行宣布一系列流动性措施，包括定期回购工具和降低存款准备金要求，以确保市场在地缘政治风险中保持稳定。"
+  },
+  {
+    "id": "90a43cc7e1f84ca3",
+    "title": "Agencies request comment on proposals to modernize the regulatory capital framework and maintain the strength of the banking system ",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 19 Mar 2026 16:30:00 GMT",
+    "summary": "Agencies request comment on proposals to modernize the regulatory capital framework and maintain the strength of the banking system",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260319a.htm",
+    "tags": [],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260319a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260319a.htm"
+      }
+    ]
+  },
+  {
+    "id": "boj_20260319_001",
+    "title": "日本銀行：中東情勢によるエネルギー価格上昇を注視",
+    "source": "Bank of Japan",
+    "sourceType": "central_bank",
+    "fetchChannel": "html",
+    "pubDate": "2026-03-19T06:00:00Z",
+    "summary": "日本央行行长表示正密切关注中东局势导致的能源价格上涨，日本95%原油依赖中东进口，能源价格波动对国内经济影响显著。政府已启动战略储备释放评估。",
+    "link": "https://www.boj.or.jp/en/news/",
+    "tags": [
+      "日本",
+      "能源",
+      "原油进口",
+      "战略储备"
+    ],
+    "lang": "ja",
+    "isDuplicate": false,
+    "duplicateGroup": null,
+    "titleZh": "日本央行密切关注中东局势导致能源价格上涨",
+    "summaryZh": "日本央行行长表示正密切关注中东局势导致的能源价格上涨，日本95%原油依赖中东进口。"
+  },
+  {
+    "id": "b78278de14faec94",
+    "title": "Federal Reserve issues FOMC statement",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Wed, 18 Mar 2026 18:00:00 GMT",
+    "summary": "Federal Reserve issues FOMC statement",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm"
+      }
+    ]
+  },
+  {
+    "id": "4bd4c9dcc6457d6b",
+    "title": "Federal Reserve Board and Federal Open Market Committee release economic projections from the March 17-18 FOMC meeting",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Wed, 18 Mar 2026 18:00:00 GMT",
+    "summary": "Federal Reserve Board and Federal Open Market Committee release economic projections from the March 17-18 FOMC meeting",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318b.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318b.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318b.htm"
+      }
+    ]
+  },
+  {
+    "id": "dd04d025c8ea586d",
+    "title": "Federal Reserve Board issues enforcement actions with former employee of Equity Bank and former employee of First State Bank of Dongola",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Fri, 13 Mar 2026 15:00:00 GMT",
+    "summary": "Federal Reserve Board issues enforcement actions with former employee of Equity Bank and former employee of First State Bank of Dongola",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260313a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260313a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260313a.htm"
+      }
+    ]
+  },
+  {
+    "id": "655a5b0f65d9c8ff",
+    "title": "Federal Reserve Board announces approval of application by Home BancShares",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 12 Mar 2026 20:30:00 GMT",
+    "summary": "Federal Reserve Board announces approval of application by Home BancShares",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260312a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260312a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260312a.htm"
+      }
+    ]
+  },
+  {
+    "id": "c39f5c593a26061a",
+    "title": "Federal Reserve Board announces approval of application by Associated Banc-Corp",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Wed, 11 Mar 2026 22:00:00 GMT",
+    "summary": "Federal Reserve Board announces approval of application by Associated Banc-Corp",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311b.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311b.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311b.htm"
+      }
+    ]
+  },
+  {
+    "id": "c683bdd25a840687",
+    "title": "Federal Reserve Board announces approval of application by FirstSun Capital Bancorp",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Wed, 11 Mar 2026 22:00:00 GMT",
+    "summary": "Federal Reserve Board announces approval of application by FirstSun Capital Bancorp",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260311a.htm"
+      }
+    ]
+  },
+  {
+    "id": "402ece8bdf021eb3",
+    "title": "Federal Reserve Board announces termination of enforcement actions with Industrial and Commercial Bank of China Ltd., Industrial and Commercial Bank of China Ltd., New York Branch, Standard Chartered PLC, and Standard Chartered Bank ",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Tue, 10 Mar 2026 15:00:00 GMT",
+    "summary": "Federal Reserve Board announces termination of enforcement actions with Industrial and Commercial Bank of China Ltd., Industrial and Commercial Bank of China Ltd., New York Branch, Standard Chartered PLC, and Standard Chartered Bank",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260310a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260310a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260310a.htm"
+      }
+    ]
+  },
+  {
+    "id": "d6fa8f26079e6985",
+    "title": "Federal Reserve Board announces approval of notice by CBS Banc-Corp.",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Mon, 9 Mar 2026 20:45:00 GMT",
+    "summary": "Federal Reserve Board announces approval of notice by CBS Banc-Corp.",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260309a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260309a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260309a.htm"
+      }
+    ]
+  },
+  {
+    "id": "967d5a0d19473113",
+    "title": "Agencies clarify the capital treatment of tokenized securities",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 5 Mar 2026 20:30:00 GMT",
+    "summary": "Agencies clarify the capital treatment of tokenized securities",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260305a.htm",
+    "tags": [],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260305a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260305a.htm"
+      }
+    ]
+  },
+  {
+    "id": "b6843c2136476e83",
+    "title": "Federal Reserve Board announces termination of enforcement action with Wells Fargo",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 5 Mar 2026 16:00:00 GMT",
+    "summary": "Federal Reserve Board announces termination of enforcement action with Wells Fargo",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260305a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260305a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260305a.htm"
+      }
+    ]
+  },
+  {
+    "id": "7a40b21a93936356",
+    "title": "Federal Reserve Board issues enforcement actions with former employee of East Cambridge Savings Bank and former employee of United Bank",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Tue, 3 Mar 2026 16:00:00 GMT",
+    "summary": "Federal Reserve Board issues enforcement actions with former employee of East Cambridge Savings Bank and former employee of United Bank",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260303a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260303a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260303a.htm"
+      }
+    ]
+  },
+  {
+    "id": "c8f8f79e1a1169ff",
+    "title": "Minutes of the Board's discount rate meetings on January 20 and 28, 2026",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Tue, 24 Feb 2026 19:00:00 GMT",
+    "summary": "Minutes of the Board's discount rate meetings on January 20 and 28, 2026",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260224a.htm",
+    "tags": [
+      "利率"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260224a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260224a.htm"
+      }
+    ]
+  },
+  {
+    "id": "bc7c606b5ddb2a07",
+    "title": "Federal Reserve Board issues enforcement action with former employee of First Financial Bank",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Tue, 24 Feb 2026 16:00:00 GMT",
+    "summary": "Federal Reserve Board issues enforcement action with former employee of First Financial Bank",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260224a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260224a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260224a.htm"
+      }
+    ]
+  },
+  {
+    "id": "d02de5f825e4d72f",
+    "title": "Following earlier actions to remove reputation risk from its supervision of banks, Federal Reserve Board requests comment on proposal to codify that removal",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Mon, 23 Feb 2026 22:00:00 GMT",
+    "summary": "Following earlier actions to remove reputation risk from its supervision of banks, Federal Reserve Board requests comment on proposal to codify that removal",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260223a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260223a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260223a.htm"
+      }
+    ]
+  },
+  {
+    "id": "3371450133b57f93",
+    "title": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 19 Feb 2026 21:30:00 GMT",
+    "summary": "Federal Reserve Board announces approval of application by Fulton Financial Corporation",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260219a.htm"
+      }
+    ]
+  },
+  {
+    "id": "915edac116a64a40",
+    "title": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+    "source": "Federal Reserve",
+    "sourceZh": "美联储",
+    "sourceType": "central_bank",
+    "fetchChannel": "rss",
+    "pubDate": "Thu, 19 Feb 2026 20:00:00 GMT",
+    "summary": "Federal Reserve Board announces it will hold a hybrid public outreach meeting on Thursday, March 26, as part of its review of regulations under the Economic Growth and Regulatory Paperwork Reduction Act (EGRPRA)",
+    "link": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm",
+    "tags": [
+      "美联储"
+    ],
+    "lang": "en",
+    "isDuplicate": true,
+    "duplicateGroup": null,
+    "links": [
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm"
+      },
+      {
+        "label": "Federal Reserve",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20260219a.htm"
+      }
+    ]
+  }
+]

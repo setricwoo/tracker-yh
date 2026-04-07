@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【银华基金】中东地缘局势跟踪 - 研究视点</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6;}
+        /* 浅色导航栏 */
+        .header {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 20px;
+        }
+        .header-logo img {
+            height: 30px;
+            width: auto;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
+            display: flex;
+            gap: 0;
+            margin: 0 auto;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .header-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-btn {
+            color: #64748b;
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #991b1b;
+        }
+        .nav-btn.active {
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                padding: 0;
+            }
+            .header-logo {
+                padding: 10px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                position: static;
+            }
+            .header-logo img { height: 26px; }
+            .header-nav { width: 100%; padding: 0 8px; }
+            .nav-btn { padding: 10px 12px; font-size: 0.8rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-btn { padding: 8px 10px; font-size: 0.75rem; }
+        }
+        .container{max-width:1200px;margin:0 auto;padding:24px 20px;}
+        .page-header {background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);color: white;padding: 32px 24px;border-radius: 12px;margin-bottom: 24px;text-align: center;}
+        .page-header h2 {font-size: 1.6rem; margin-bottom: 8px;}
+        .page-header p {font-size: 0.95rem; opacity: 0.9;}
+        .dedup-badge {display: inline-block;background: rgba(255,255,255,0.2);padding: 4px 12px;border-radius: 20px;font-size: 0.8rem;margin-top: 8px;}
+        .stats-grid {display: grid;grid-template-columns: repeat(4, 1fr);gap: 16px;margin-bottom: 24px;}
+        .stat-card {background: #fff;border-radius: 12px;padding: 20px;text-align: center;box-shadow: 0 1px 3px rgba(0,0,0,0.08);border: 1px solid #e2e8f0;}
+        .stat-number {font-size: 2rem; font-weight: 700; color: #1e3a5f;}
+        .stat-label {font-size: 0.85rem; color: #64748b; margin-top: 4px;}
+        .filter-bar {background: #fff;border-radius: 12px;padding: 16px 20px;margin-bottom: 20px;box-shadow: 0 1px 3px rgba(0,0,0,0.08);border: 1px solid #e2e8f0;}
+        .filter-group {display: flex; align-items: center; gap: 10px; flex-wrap: wrap;}
+        .filter-label {font-size: 0.9rem; color: #64748b; font-weight: 500;}
+        .filter-btn {padding: 6px 16px;border: 1px solid #e2e8f0;background: #f8fafc;border-radius: 20px;font-size: 0.85rem;cursor: pointer;transition: all 0.2s;color: #475569;}
+        .filter-btn:hover {background: #e2e8f0;}
+        .filter-btn.active {background: #1e3a5f; color: white; border-color: #1e3a5f;}
+        .institution-tabs {display: flex;gap: 8px;margin-bottom: 24px;flex-wrap: wrap;}
+        .inst-tab {padding: 8px 16px;background: #fff;border: 1px solid #e2e8f0;border-radius: 8px;cursor: pointer;font-size: 0.9rem;transition: all 0.2s;display: flex;align-items: center;gap: 6px;}
+        .inst-tab:hover {background: #f1f5f9;}
+        .inst-tab.active {background: #1e3a5f; color: white; border-color: #1e3a5f;}
+        .inst-tab .badge {background: #e2e8f0;color: #475569;padding: 2px 8px;border-radius: 12px;font-size: 0.75rem;}
+        .inst-tab.active .badge {background: rgba(255,255,255,0.2); color: white;}
+        .insights-grid {display: grid;grid-template-columns: repeat(2, 1fr);gap: 20px;}
+        .insight-card {background: #fff;border-radius: 12px;padding: 20px;box-shadow: 0 1px 3px rgba(0,0,0,0.08);border: 1px solid #e2e8f0;transition: all 0.2s;display: flex;flex-direction: column;}
+        .insight-card:hover {box-shadow: 0 4px 12px rgba(0,0,0,0.1);transform: translateY(-2px);}
+        .insight-header {display: flex;justify-content: space-between;align-items: flex-start;margin-bottom: 12px;}
+        .institution-info {display: flex;align-items: center;gap: 12px;flex: 1;min-width: 0;}
+        .institution-logo {width: 40px;height: 40px;border-radius: 8px;display: flex;align-items: center;justify-content: center;font-weight: 700;font-size: 0.75rem;color: white;flex-shrink: 0;}
+        .institution-detail {min-width: 0;flex: 1;}
+        .institution-name {font-weight: 600;color: #1e293b;font-size: 0.95rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+        .institution-type {font-size: 0.8rem;color: #64748b;}
+        .insight-date {font-size: 0.8rem;color: #94a3b8;flex-shrink: 0;margin-left: 8px;}
+        .insight-title {font-size: 1.05rem;font-weight: 600;color: #991b1b;margin-bottom: 12px;line-height: 1.5;}
+        .insight-keypoints {background: #f8fafc;border-radius: 8px;padding: 12px 16px;margin-bottom: 12px;flex: 1;}
+        .insight-keypoints h5 {font-size: 0.8rem;color: #991b1b;margin-bottom: 8px;font-weight: 600;}
+        .insight-keypoints ul {padding-left: 16px;margin: 0;}
+        .insight-keypoints li {font-size: 0.9rem;color: #475569;margin-bottom: 4px;line-height: 1.5;}
+        .insight-footer {display: flex;justify-content: space-between;align-items: center;padding-top: 12px;border-top: 1px solid #e2e8f0;margin-top: auto;}
+        .sentiment-tag {padding: 4px 12px;border-radius: 20px;font-size: 0.8rem;font-weight: 500;}
+        .sentiment-bullish {background: #dcfce7; color: #166534;}
+        .sentiment-bearish {background: #fee2e2; color: #991b1b;}
+        .sentiment-neutral {background: #f1f5f9; color: #475569;}
+        .read-more {color: #991b1b;text-decoration: none;font-size: 0.9rem;font-weight: 500;}
+        .read-more:hover {text-decoration: underline;}
+        @media (max-width: 768px) {.header-main {flex-wrap: wrap; padding: 8px;}.header-left {position: relative; left: auto; width: 100%; margin-bottom: 8px;}.header-center {overflow-x: auto; flex-wrap: nowrap; justify-content: flex-start; padding: 0;}.header-right {display: none;}.stats-grid {grid-template-columns: repeat(2, 1fr);}.insights-grid {grid-template-columns: 1fr;}.institution-tabs {flex-wrap: nowrap; overflow-x: auto;}.institution-name {font-size: 0.85rem;}}
+    </style>
+</head>
+<body>
+    <!-- 统一导航栏 -->
+    <div class="header">
+        <div class="header-main">
+            <div class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </div>
+            <nav class="header-nav" id="navCenter">
+                <a href="index.html" class="nav-btn">海峡跟踪</a>
+                <a href="data-tracking.html" class="nav-btn">全球市场</a>
+                <a href="war-situation.html" class="nav-btn">战局形势</a>
+                <a href="briefing.html" class="nav-btn">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn">央行表态</a>
+                <a href="eco-track.html" class="nav-btn">经济数据</a>
+                <a href="research.html" class="nav-btn active">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
+                <a href="oil-chart.html" class="nav-btn">原油图谱</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>智库 & 投行研究观点</h2>
+            <p>聚焦伊朗战争、霍尔木兹海峡、油价等中东地缘政治主题</p>
+            <span class="dedup-badge">AI去重精选 | 按研报日期排序 | 全部中文呈现</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-number">60</div><div class="stat-label">核心观点</div></div>
+            <div class="stat-card"><div class="stat-number">18</div><div class="stat-label">来源机构</div></div>
+            <div class="stat-card"><div class="stat-number">21</div><div class="stat-label">智库</div></div>
+            <div class="stat-card"><div class="stat-number">39</div><div class="stat-label">投行&媒体&机构</div></div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <span class="filter-label">类型筛选:</span>
+                <button class="filter-btn active" data-type="all">全部</button>
+                <button class="filter-btn" data-type="investment_bank">投资银行</button>
+                <button class="filter-btn" data-type="think_tank">智库</button>
+                <button class="filter-btn" data-type="news">财经媒体</button>
+                <button class="filter-btn" data-type="institution">国际组织</button>
+            </div>
+        </div>
+
+        <div class="institution-tabs">
+            <button class="inst-tab active" data-source="all">全部<span class="badge">60</span></button>
+            <button class="inst-tab" data-source="Atlantic Council">Atlantic Cou..<span class="badge">19</span></button>
+            <button class="inst-tab" data-source="Analysts">Analysts<span class="badge">11</span></button>
+            <button class="inst-tab" data-source="Reuters">Reuters<span class="badge">5</span></button>
+            <button class="inst-tab" data-source="Macquarie">Macquarie<span class="badge">4</span></button>
+            <button class="inst-tab" data-source="JPMorgan">JPMorgan<span class="badge">3</span></button>
+            <button class="inst-tab" data-source="Bank of America">Bank of Amer..<span class="badge">3</span></button>
+            <button class="inst-tab" data-source="ECFR">ECFR<span class="badge">2</span></button>
+            <button class="inst-tab" data-source="Barclays">Barclays<span class="badge">2</span></button>
+            <button class="inst-tab" data-source="CNBC">CNBC<span class="badge">2</span></button>
+            <button class="inst-tab" data-source="MarketWatch">MarketWatch<span class="badge">1</span></button>
+            <button class="inst-tab" data-source="Societe Generale">Societe Gene..<span class="badge">1</span></button>
+            <button class="inst-tab" data-source="Bloomberg/Goldman">Bloomberg/Go..<span class="badge">1</span></button>
+            <button class="inst-tab" data-source="Morgan Stanley">Morgan Stanl..<span class="badge">1</span></button>
+            <button class="inst-tab" data-source="Deutsche Bank">Deutsche Ban..<span class="badge">1</span></button>
+            <button class="inst-tab" data-source="Nomura">Nomura<span class="badge">1</span></button>
+        </div>
+
+        <div class="insights-grid" id="insightsGrid">
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-06</div>
+    </div>
+    <h4 class="insight-title">油价或突破250-370美元</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>在伊朗战争升级担忧和霍尔木兹海峡中断背景下，油价预测飙升，最坏情况预测已突破每桶370美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.wionews.com/world/oil-price-to-hit-250-or-even-go-beyond-370-worst-case-scenarios-amid-iran-war-and-stait-of-hormuz-disruptions-listed-1775474517964" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="MarketWatch">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #567384">MW</div>
+            <div class="institution-detail">
+                <div class="institution-name">MarketWatch</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-06</div>
+    </div>
+    <h4 class="insight-title">戴蒙警告油价上涨可能引发衰退</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>摩根大通首席执行官表示，伊朗冲突以及人工智能可能在短期内推高通胀，可能成为今年的"扫兴者"。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bearish">看空</span>
+        <a href="https://www.morningstar.com/news/marketwatch/2026040648/jamie-dimon-warns-rising-oil-prices-could-trigger-a-recession-and-a-bear-market-in-2026" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Reuters">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #fb8023">RTRS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Reuters</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-06</div>
+    </div>
+    <h4 class="insight-title">分析：霍尔木兹海峡关闭分化中东石油国家命运</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>霍尔木兹海峡关闭及随之而来的全球油价飙升，给伊朗、阿曼和沙特带来意外之财，而其他国家则面临困境。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.usnews.com/news/world/articles/2026-04-06/analysis-hormuz-closure-divides-the-fortunes-of-middle-eastern-oil-states" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="JPMorgan">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003B70">JPM</div>
+            <div class="institution-detail">
+                <div class="institution-name">JPMorgan</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-04</div>
+    </div>
+    <h4 class="insight-title">J.P. Morgan warns oil could top $150 if disruptions persist into mid ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>3 days ago · Oil prices could spike to $120-$130 per barrel in the near term, with a risk of surging above $150 if supply ‌flows through the Strait of Hormuz remain disrupted into mid-May, J.P. Morgan...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.reuters.com/business/energy/jp-morgan-warns-oil-could-top-150-if-disruptions-persist-into-midmay-2026-04-02/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="JPMorgan">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003B70">JPM</div>
+            <div class="institution-detail">
+                <div class="institution-name">JPMorgan</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-04</div>
+    </div>
+    <h4 class="insight-title">JP Morgan Sees $150 Oil if Hormuz Remains Closed Through Mid-May</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>3 days ago · Oil markets are rapidly repricing toward $120–$150 per barrel as disruptions in the Strait of Hormuz constrain global supply with no clear resolution in sight.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://oilprice.com/Latest-Energy-News/World-News/JP-Morgan-Sees-150-Oil-if-Hormuz-Remains-Closed-Through-Mid-May.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-04</div>
+    </div>
+    <h4 class="insight-title">若霍尔木兹海峡持续关闭：大宗商品市场展望</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>霍尔木兹海峡关闭影响全球20%原油和20%液化天然气，构成历史上最大供应中断。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bearish">看空</span>
+        <a href="https://www.tradingkey.com/analysis/commodities/more/261751174-strait-oil-lng-qatar-supply-shock-pricing-geopolitics-tradingkey" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="JPMorgan">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003B70">JPM</div>
+            <div class="institution-detail">
+                <div class="institution-name">JPMorgan</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-04</div>
+    </div>
+    <h4 class="insight-title">摩根大通警告油价或飙升至150美元</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>随着霍尔木兹海峡危机和供应中断推高价格，每桶150美元的情景正进入视野。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.kucoin.com/news/flash/jpmorgan-warns-of-oil-price-surge-to-150-amid-hormuz-crisis" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-03</div>
+    </div>
+    <h4 class="insight-title">伊朗战争如何改变全球能源政策</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>霍尔木兹海峡关闭引发燃料短缺和能源成本飙升，同时也为能源生产国带来新机遇。不同地区如何应对这些中断可能重塑能源市场和安全的未来。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/energysource/how-the-iran-war-could-shift-energy-policies-around-the-world/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-03</div>
+    </div>
+    <h4 class="insight-title">伊朗战争会重绘全球能源版图吗</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>讨论伊朗战争和霍尔木兹海峡关闭造成的供应冲击，从亚洲能源紧缩到美国依赖。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/commentary/podcast/will-the-iran-war-redraw-the-global-energy-map/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="ECFR">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003B5C">ECFR</div>
+            <div class="institution-detail">
+                <div class="institution-name">ECFR</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-03</div>
+    </div>
+    <h4 class="insight-title">What the Iran war means for Europe’s energy</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mark Leonard is joined by Szymon Kardaś to discuss how the war in Iran is affecting energy prices and supplies in Europe</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://ecfr.eu/podcasts/episode/what-the-iran-war-means-for-europes-energy/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-03</div>
+    </div>
+    <h4 class="insight-title">Iran War Oil Supply Disruption Reshapes Global Energy</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>4 days ago · The current Iran war oil supply disruption has exposed the magnitude of this single-point failure risk. Major OPEC producers including Saudi Arabia, Iraq, Kuwait, and the United Arab Emir...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://discoveryalert.com.au/iran-war-oil-supply-disruption-2026/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-03</div>
+    </div>
+    <h4 class="insight-title">Oil Price Forecast 2026: Will Crude Prices Breach $120?</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>4 days ago · Explore the latest oil price forecast 2026. Discover how geopolitical risks and the Strait of Hormuz could drive Brent crude prices above $120 per barrel.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://maritime-hub.com/oil-price-forecast-2026-crude-120/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-02</div>
+    </div>
+    <h4 class="insight-title">IMF和世行春季会议：全球危机下的挑战</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>伊朗战争的供应侧冲击正考验IMF和世界银行，尚不清楚它们能为成员国提供何种政策建议来管理后果。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/econographics/no-imf-and-world-bank-spring-meetings-without-a-global-crisis/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Bank of America">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #012169">BofA</div>
+            <div class="institution-detail">
+                <div class="institution-name">Bank of America</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-02</div>
+    </div>
+    <h4 class="insight-title">美银警告油价或长期维持在100美元以上</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>美银大幅修正经济展望，现预测油价将长期维持在每桶100美元以上，并警告滞胀冲击。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://finance.biggo.com/news/8osBSZ0BOIb5XxavukWZ" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-01</div>
+    </div>
+    <h4 class="insight-title">Saab in War on the Rocks on possible US seizure of Kharg Island</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>On April 1, Bilal Saab, nonresident senior fellow with Forward Defense, published a piece in War on the Rocks assessing the feasibility and strategic risks of a potential US Marine seizure of Iran&#82...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/insight-impact/in-the-news/saab-in-war-on-the-rocks-on-possible-us-seizure-of-kharg-island/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-01</div>
+    </div>
+    <h4 class="insight-title">Matchett quoted in ABC News on the threat of Iranian attacks on Gulf desalination plants</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>On March 31, GeoStrategy Initiative assistant director Ginger Matchett was quoted in &#8220;As Trump postpones threatened attacks on Iran&#8217;s power plants, experts warn of the potential humanitari...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/insight-impact/in-the-news/matchett-quoted-in-abc-news-on-the-threat-of-iranian-attacks-on-gulf-desalination-plants/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-01</div>
+    </div>
+    <h4 class="insight-title">Trump’s path forward on Iran will determine US-Israeli war alignment</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>The US president faces three main options: pursue a negotiated off-ramp, adopt an ongoing attrition strategy, or “escalate to de-escalate” militarily.    The post  Trump’s path forward on Iran will de...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/trumps-path-forward-on-iran-will-determine-us-israeli-war-alignment/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-01</div>
+    </div>
+    <h4 class="insight-title">Strait of Hormuz Disruption 2026: Oil & Supply Chains</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>6 days ago · Conflict in the Middle East has prompted rapid, substantial changes in global trade and supply chain dynamics. About 20% of the world’s oil and liquified natural gas (LNG) typically trave...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.dnb.com/en-us/blog/supplier-risk/navigating-disruptions-to-the-strait-of-hormuz.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Societe Generale">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #e50278">SG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Societe Generale</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-04-01</div>
+    </div>
+    <h4 class="insight-title">Brent Oil Forecasts Surge Amid Geopolitical Risks and Supply ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>6 days ago · Societe Generale has revised its oil outlook, warning that Brent crude could spike towards $150 per barrel in a scenario where the Strait of Hormuz is shut for two months, citing large OP...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.vibetrader.com/news/e2d1a2dd-b10f-4451-ac5a-285a1f61c6ec" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-31</div>
+    </div>
+    <h4 class="insight-title">Could Turkey help mediate an end to the Iran war?</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>As US President Donald Trump searches for a way to exit the US-Israeli war against Iran, Turkey could be a useful mediator between the warring parties.   The post  Could Turkey help mediate an end to ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/turkeysource/could-turkey-help-mediate-an-end-to-the-iran-war/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="ECFR">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003B5C">ECFR</div>
+            <div class="institution-detail">
+                <div class="institution-name">ECFR</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-31</div>
+    </div>
+    <h4 class="insight-title">退出的艺术：欧洲如何施压特朗普结束伊朗战争</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>随着特朗普深陷伊朗战争，他面临日益增长的国内压力。欧洲人可以在这些关键点上施压，推动华盛顿走向停火。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://ecfr.eu/article/the-art-of-the-off-ramp-how-europe-can-pressure-trump-to-end-the-war-in-iran/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-30</div>
+    </div>
+    <h4 class="insight-title">伊朗战争引发全球重新洗牌</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>这一时期可能不会被记住为一系列孤立危机，而是全球模糊性崩塌的时刻。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/the-iran-war-has-set-in-motion-a-global-realignment/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-30</div>
+    </div>
+    <h4 class="insight-title">Matchett quoted in CNN on the Iran war’s threat to desalination plants and data center investment in the Gulf</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>On March 30, GeoStrategy Initiative assistant director Ginger Matchett was quoted in &#8220;Trump helped build the Middle East’s AI ambitions. Could his war break them?&#8221; for CNN on the risk to d...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/insight-impact/in-the-news/matchett-quoted-in-cnn-on-the-iran-wars-threat-to-desalination-plants-and-data-center-investment-in-the-gulf/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Reuters">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #fb8023">RTRS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Reuters</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-30</div>
+    </div>
+    <h4 class="insight-title">Middle East war day 31 as it happened: Trump hails ‘progress’ on Iran ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 30, 2026 · “The deepening US–Israel–Iran confrontation removes any realistic chance of near-term de-escalation,” said analysts at Société Générale, adding that they expected oil prices to average ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.ft.com/content/dcf55026-1c12-4643-84c2-d68f86b012eb?syn-25a6b1a6=1" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-29</div>
+    </div>
+    <h4 class="insight-title">The Strait of Hormuz Oil Shock Is Now Heading West</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 29, 2026 · US government officials and Wall Street analysts are starting to consider the prospect that oil prices might surge to an unprecedented $200 a barrel.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.bloomberg.com/graphics/2026-iran-war-hormuz-closure-oil-shock/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-28</div>
+    </div>
+    <h4 class="insight-title">How the big oil and gas CEOs think the Iran war supply disruption will ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 28, 2026 · Iran has basically imposed an economic blockade against the oil producers in the Middle East by closing the Strait of Hormuz, said Sheikh Nawaf al-Sabah, the CEO of Kuwait Petroleum...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.cnbc.com/2026/03/28/iran-war-oil-companies-price-gas-diesel-strait-hormuz.html?msockid=3572c696518c60d72e11d1a550a961d1" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">伊朗战争首月十大教训</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>大西洋理事会专家总结伊朗战争首月的重要教训，涵盖从全球能源市场到伊朗政权的各种问题。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/ten-lessons-from-the-first-month-of-the-iran-war/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">The Iran war’s economic fallout won’t stop at oil—agriculture and aluminum are next</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>The Iran war’s impact isn’t limited to oil. Fertilizer shortages now threaten spring corn planting, while aluminum markets are strained—signaling broader disruptions to food prices, industry, and glob...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/econographics/the-iran-wars-economic-fallout-wont-stop-at-oil-agriculture-and-aluminum-are-next/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Macquarie">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00838f">MQG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Macquarie</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">麦格理警告油价200美元风险概率40%</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>麦格理集团警告，若伊朗战争拖延至6月，油价可能达到每桶200美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.cnbctv18.com/market/commodities/crude-oil-prices-200-dollars-a-barrel-macquarie-warns-of-iran-war-drags-past-this-period-ws-e-19876423.htm" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Macquarie">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00838f">MQG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Macquarie</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">麦格理：油价或达200美元（风险概率40%）</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>麦格理警告，若伊朗冲突持续至6月且霍尔木兹海峡保持关闭，原油价格可能攀升至每桶200美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.businesstoday.in/world/story/oil-at-200-macquarie-flags-40-risk-probability-as-iran-war-chokes-strait-of-hormuz-522786-2026-03-27" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Macquarie">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00838f">MQG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Macquarie</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">油价或达200美元？麦格理警告风险概率40%</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>麦格理警告，若伊朗冲突持续至6月且霍尔木兹海峡保持关闭，原油价格可能攀升至每桶200美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://economictimes.indiatimes.com/industry/energy/oil-gas/crude-oil-price-forecast-200-amid-us-israel-iran-war-inflation-economy-impact-macquarie-forget-150-theres-new-grave-warning-to-the-world/articleshow/129839644.cms" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Macquarie">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00838f">MQG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Macquarie</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-27</div>
+    </div>
+    <h4 class="insight-title">Oil may hit $200 per barrel if Iran war lasts till June, warns Macquarie</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 27, 2026 · An alternative outlook, with probability of 60 per cent, suggested the war may finish at the end of this month, they said. Brent crude is on pace for a record monthly gain in March, as ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.business-standard.com/world-news/oil-may-hit-200-per-barrel-if-iran-war-lasts-till-june-warns-macquarie-126032700331_1.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Barclays">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00aeef">BARC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Barclays</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-26</div>
+    </div>
+    <h4 class="insight-title">巴克莱警告长期封锁或致1400万桶供应缺口</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>巴克莱警告霍尔木兹海峡长期封锁可能导致全球石油供应减少1300-1400万桶/日，布伦特油价或于5月触及110美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://oilprice.com/Latest-Energy-News/World-News/Barclays-Prolonged-Hormuz-Blockage-Could-Wipe-Out-14-Million-Bpd-of-Oil-Supply.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="CNBC">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1d5f6e">CNBC</div>
+            <div class="institution-detail">
+                <div class="institution-name">CNBC</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-26</div>
+    </div>
+    <h4 class="insight-title">Iran is buying time while U.S. gas prices rise: Oil analyst</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 26, 2026 · Andy Lipow of Lipow Oil Associates discusses the supply gaps of flows from the closure of the Strait of Hormuz, and his forecasts for $120 oil if the situation endures for the next 3...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="/videos/riverview/relatedvideo?q=CNBC+oil+price+forecast+analyst&filters=ex1:"ez3"&ru=/search?q=CNBC+oil+price+forecast+analyst&filters=ex1%3A%22ez3%22&mmscn=vwrc&mid=E65CDBFF2C88C63EDD49E65CDBFF2C88C63EDD49&FORM=WRVORC&ntb=1&msockid=d01ceb8031c311f1b12829ab062800df" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-26</div>
+    </div>
+    <h4 class="insight-title">FinancialContent - The Largest Oil Supply Shock in History: Middle East ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 26, 2026 · According to a harrowing new report from the International Energy Agency (IEA), the closure of the Strait of Hormuz and the subsequent halting of exports have resulted in a staggering 1...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://markets.financialcontent.com/stocks/article/marketminute-2026-3-26-the-largest-oil-supply-shock-in-history-middle-east-conflict-curbs-10m-bd" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-25</div>
+    </div>
+    <h4 class="insight-title">How ISIS and its affiliates might capitalize on the Iran war</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>ISIS is poised to exploit the ongoing regional instability in the Middle East and US policymakers must closely monitor the threats it poses.   The post  How ISIS and its affiliates might capitalize on...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/how-isis-and-its-affiliates-might-capitalize-on-the-iran-war/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-25</div>
+    </div>
+    <h4 class="insight-title">Kroenig quoted in The New York Times on NATO, Trump, and Iran</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>On March 25, Atlantic Council vice president and Scowcroft Center senior director Matthew Kroenig was quoted in The New York Times on NATO Secretary General Rutte's praise of the war in Iran, arguing ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/insight-impact/in-the-news/kroenig-quoted-in-the-new-york-times-on-nato-trump-and-iran/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-25</div>
+    </div>
+    <h4 class="insight-title">Negotiating an EU-US biometric information-sharing agreement</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Amid tensions between the US and Europe over trade, tech, and now the war in Iran, Washington and Brussels are negotiating over the US Department of Homeland Security’s request for access to European ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/in-depth-research-reports/issue-brief/negotiating-an-eu-us-biometric-information-sharing-agreement/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-25</div>
+    </div>
+    <h4 class="insight-title">How the Iran war could change the US relationship with Gulf states</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>The war appears to have opened the door to a new wave of uncertainty in the Gulf, which might threaten the very regional stability and economic prosperity it is meant to ensure.   The post  How the Ir...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/how-the-iran-war-could-change-the-us-relationship-with-gulf-states/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Reuters">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #fb8023">RTRS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Reuters</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-25</div>
+    </div>
+    <h4 class="insight-title">Israel, Iran war: Analysts hike oil price outlooks as Iran conflict ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 25, 2026 · Major brokerages have raised their 2026 average oil price forecasts as the U.S.-Israeli war with Iran drove oil prices sharply higher this month.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://economictimes.indiatimes.com/news/international/world-news/israel-iran-war-analysts-hike-oil-price-outlooks-as-iran-conflict-drags-on/articleshow/129796635.cms" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-23</div>
+    </div>
+    <h4 class="insight-title">Trump is fighting two wars with Iran. He needs to win both.</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Nothing could be more short-sighted than leaving a vengeful and still formidable Iranian regime in place.   The post  Trump is fighting two wars with Iran. He needs to win both.  appeared first on  At...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/content-series/inflection-points/trump-is-fighting-two-wars-with-iran-he-needs-to-win-both/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-23</div>
+    </div>
+    <h4 class="insight-title">The Iran conflict exposes the new cost curve of war</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>The Pentagon must rapidly field innovative, lower-cost technologies alongside its exquisite capabilities, ensuring each is used where it delivers the greatest advantage.   The post  The Iran conflict ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/menasource/the-iran-conflict-exposes-the-new-cost-curve-of-war/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-23</div>
+    </div>
+    <h4 class="insight-title">What Romania’s role in the Iran war reveals about its diplomatic positioning</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Amid transatlantic differences over the Iran war, Romania’s ability to maintain a balance between Washington and its European partners is a valuable strategic contribution to NATO.   The post  What Ro...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/dispatches/what-romanias-role-in-the-iran-war-reveals-about-its-diplomatic-positioning/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="think_tank" data-source="Atlantic Council">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">AC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Atlantic Council</div>
+                <div class="institution-type">Think Tank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-23</div>
+    </div>
+    <h4 class="insight-title">The Strait of Hormuz crisis will ripple across plastics and food supply chains, helping Beijing and Moscow, hurting Americans</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>The oil and gas blockade in the Strait of Hormuz will tighten petrochemical and fertilizer markets, with geopolitical and economic implications for the United States.   The post  The Strait of Hormuz ...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.atlanticcouncil.org/blogs/energysource/the-strait-of-hormuz-crisis-will-ripple-across-plastics-and-food-supply-chains-helping-beijing-and-moscow-hurting-americans/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Bloomberg/Goldman">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #2800d7">BG</div>
+            <div class="institution-detail">
+                <div class="institution-name">Bloomberg/Goldman</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-23</div>
+    </div>
+    <h4 class="insight-title">高盛因史上最大供应冲击上调油价预测</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>高盛集团因霍尔木兹海峡流量持续中断（称其为史上最大供应冲击）上调2026年油价预测。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.business-standard.com/markets/commodities/goldman-raises-oil-forecasts-on-largest-ever-supply-shock-amid-iran-war-126032300325_1.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Morgan Stanley">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #003087">MS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Morgan Stanley</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-18</div>
+    </div>
+    <h4 class="insight-title">摩根士丹利能源展望</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>摩根士丹利对中东冲突背景下的能源市场展望分析。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.morganstanley.com/insights/articles/iran-war-oil-shock-stock-market-impacts" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-18</div>
+    </div>
+    <h4 class="insight-title">The Iran War is Causing Energy Chaos in Asia</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 18, 2026 · In the wake of U.S. and Israeli strikes on Iran, supply disruptions caused by Tehran’s closure of the Strait of Hormuz are straining energy stores across Asia to their breaking point.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.cfr.org/articles/the-iran-war-is-causing-energy-chaos-in-asia" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-18</div>
+    </div>
+    <h4 class="insight-title">How the Iran War Is Disrupting Global Oil and Gas Supply</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 18, 2026 · Prices of both commodities have jumped since the US and Israel began their strikes on Iran. Iran’s retaliation has involved the targeting of energy infrastructure across the Gulf, inter...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://energynow.com/2026/03/how-the-iran-war-is-disrupting-global-oil-and-gas-supply/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Reuters">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #fb8023">RTRS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Reuters</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-16</div>
+    </div>
+    <h4 class="insight-title">多家投行上调伊朗战争期间油价预测</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>主要金融机构已大幅上调2026年油价预测，因美以战争对伊朗扰乱霍尔木兹海峡这一全球能源咽喉。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.msn.com/en-ca/news/other/brokerages-hike-oil-forecasts-amid-iran-war/gm-GM005BBAA8" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Bank of America">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #012169">BofA</div>
+            <div class="institution-detail">
+                <div class="institution-name">Bank of America</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-16</div>
+    </div>
+    <h4 class="insight-title">美银上调布伦特油价预测</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>美银因霍尔木兹海峡中断上调2026年布伦特原油价格预测。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://coincentral.com/bank-of-america-raises-brent-oil-price-forecast-for-2026-on-strait-of-hormuz-disruptions/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Deutsche Bank">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #0018a8">DB</div>
+            <div class="institution-detail">
+                <div class="institution-name">Deutsche Bank</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-16</div>
+    </div>
+    <h4 class="insight-title">Weekly Outlook: It All Comes Down to Oil - live.deutsche-boerse.com</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 16, 2026 · High oil prices threaten to slow down the economy—and reignite inflation, which has only just been brought under control. Most people still expect the war in Iran to end soon. But confi...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://live.deutsche-boerse.com/news/weekly-outlook-it-all-comes-down-to-oil" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Nomura">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #c41e3a">NOM</div>
+            <div class="institution-detail">
+                <div class="institution-name">Nomura</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-16</div>
+    </div>
+    <h4 class="insight-title">Nomura cuts Nifty target to 24,900 on oil shock from Hormuz disruption</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 16, 2026 · With oil up approximately $30 per barrel from pre-war levels, the combined oil and gas price impact adds roughly $60 billion annually to the trade deficit. Nomura’s economics team raise...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://au.investing.com/news/commodities-news/nomura-cuts-nifty-target-to-24900-on-oil-shock-from-hormuz-disruption-4313095" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="Reuters">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #fb8023">RTRS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Reuters</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-15</div>
+    </div>
+    <h4 class="insight-title">Oil company shares soar to all-time highs as Middle East war ...</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 15, 2026 · Shares in big oil companies have soared to all-time highs since the war in Iran began and sparked historic price rises on global oil and gas markets.</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.theguardian.com/business/2026/mar/15/oil-company-shares-soar-to-all-time-highs-as-middle-east-war-turbocharges-price-per-barrel" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Analysts">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #64748b">ANL</div>
+            <div class="institution-detail">
+                <div class="institution-name">Analysts</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-14</div>
+    </div>
+    <h4 class="insight-title">Futures Market Misreads the Hormuz Oil Shock - OilPrice.com</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 14, 2026 · Analysts started expressing views that $200 oil is not a fantasy anymore—with 20% of global oil supply choked at the Strait of Hormuz buyers are racing to procure physical cargoes,...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://oilprice.com/Energy/Crude-Oil/Futures-Market-Misreads-the-Hormuz-Oil-Shock.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Barclays">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #00aeef">BARC</div>
+            <div class="institution-detail">
+                <div class="institution-name">Barclays</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-13</div>
+    </div>
+    <h4 class="insight-title">巴克莱上调2026年布伦特油价预测至85美元</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>巴克莱因霍尔木兹海峡供应中断，将2026年布伦特原油价格预测上调至每桶85美元。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.reuters.com/business/energy/barclays-raises-2026-brent-forecast-85-barrel-strait-hormuz-disruption-2026-03-13/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Goldman Sachs">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #7399C6">GS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Goldman Sachs</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-12</div>
+    </div>
+    <h4 class="insight-title">高盛模型：60天中断情景下布伦特或达93美元</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>高盛假设霍尔木兹海峡中断时间更长、程度更深，警告风险仍"偏向上行"。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://finance.yahoo.com/news/goldman-models-brent-93-60-110202569.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Investment Banks">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">IB</div>
+            <div class="institution-detail">
+                <div class="institution-name">Investment Banks</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-12</div>
+    </div>
+    <h4 class="insight-title">高盛重置2026年油价目标</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>高盛重置2026年油价预测，持续的霍尔木兹海峡中断正造成历史性供应削减和更高油价。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://www.thestreet.com/investing/goldman-sachs-resets-oil-price-target-for-rest-of-2026" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Bank of America">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #012169">BofA</div>
+            <div class="institution-detail">
+                <div class="institution-name">Bank of America</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-11</div>
+    </div>
+    <h4 class="insight-title">美银2026年石油展望：新目标价发布</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>美银美林上调2026年布伦特原油预测，警告霍尔木兹海峡持续中断风险。</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-bullish">看多</span>
+        <a href="https://finance.yahoo.com/news/bank-america-2026-oil-outlook-135728383.html" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="news" data-source="CNBC">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1d5f6e">CNBC</div>
+            <div class="institution-detail">
+                <div class="institution-name">CNBC</div>
+                <div class="institution-type">News</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-09</div>
+    </div>
+    <h4 class="insight-title">Oil prices: Analysts raise the alarm as crude soars over Iran war - CNBC</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 9, 2026 · Energy analysts said oil prices could continue to rise in response to the war in the Middle East. “The sky is the limit,” Neil Atkinson, former head of oil at the International Energy...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.cnbc.com/2026/03/09/oil-prices-iran-war-middle-east-us-israel-strait-of-hormuz.html?msockid=3572c696518c60d72e11d1a550a961d1" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+<div class="insight-card" data-type="investment_bank" data-source="Credit Suisse">
+    <div class="insight-header">
+        <div class="institution-info">
+            <div class="institution-logo" style="background: #1e3a5f">CS</div>
+            <div class="institution-detail">
+                <div class="institution-name">Credit Suisse</div>
+                <div class="institution-type">Investment Bank</div>
+            </div>
+        </div>
+        <div class="insight-date">2026-03-09</div>
+    </div>
+    <h4 class="insight-title">Oil surges above USD 100/bbl – Market Outlook - sc.com</h4>
+    <div class="insight-keypoints">
+        <h5>核心要点</h5>
+        <ul><li>Mar 9, 2026 · Short Iran conflict; oil prices fall back after near-term spike: Oil futures markets remain in backwardation (elevated near-term prices and lower-than-USD 100/bbl oil from June 2026), su...</li></ul>
+    </div>
+    <div class="insight-footer">
+        <span class="sentiment-tag sentiment-neutral">中性</span>
+        <a href="https://www.sc.com/sg/market-outlook/market-watch-9-3-2026/" class="read-more" target="_blank">查看原文 →</a>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterCards();
+            });
+        });
+
+        document.querySelectorAll('.inst-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.inst-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                filterCards();
+            });
+        });
+
+        function filterCards() {
+            const typeFilter = document.querySelector('.filter-btn.active')?.dataset.type || 'all';
+            const sourceFilter = document.querySelector('.inst-tab.active')?.dataset.source || 'all';
+            
+            document.querySelectorAll('.insight-card').forEach(card => {
+                const type = card.dataset.type;
+                const source = card.dataset.source;
+                
+                const typeMatch = typeFilter === 'all' || type === typeFilter;
+                const sourceMatch = sourceFilter === 'all' || source === sourceFilter;
+                
+                card.style.display = typeMatch && sourceMatch ? 'flex' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

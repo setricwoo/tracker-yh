@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# 虚拟环境
+venv/
+.env
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.log
+
+# 不需要部署到网页的文件
+mobile_optimization_summary.md
+Grok_API使用说明.md
+简报更新说明.md
+使用Grok更新简报.bat
+更新简报.bat
+check_briefing.py
+generate_briefing.py
+playwright_browser.py
+screenshot_map.py
+update_briefing_full.py
+update_briefing_simple.py
+update_daily_briefing.py
+历史.txt
+
+# PDF 文件（可选，如果太大）
+# StraitofHormuz2026-Factsheet.pdf

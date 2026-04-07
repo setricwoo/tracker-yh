@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中东地缘局势跟踪 - 央行表态</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.8;
+        }
+
+        .header {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-main {
+            display: flex;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 20px;
+        }
+        .header-logo img {
+            height: 30px;
+            width: auto;
+            display: block;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
+            display: flex;
+            gap: 0;
+            margin: 0 auto;
+        }
+        .nav-btn {
+            color: #64748b;
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #991b1b;
+        }
+        .nav-btn.active {
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .header-main {
+                flex-direction: column;
+                padding: 0;
+            }
+            .header-logo {
+                padding: 10px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                position: static;
+            }
+            .header-logo img {
+                height: 26px;
+            }
+            .header-nav {
+                width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                padding: 0 8px;
+            }
+            .header-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== Container ===== */
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+        /* ===== 统计栏 ===== */
+        .stats-bar { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-item {
+            background: #fff; border-radius: 10px; padding: 14px 20px;
+            flex: 1; min-width: 120px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .stat-icon.blue { background: #fef2f2; }
+        .stat-icon.red { background: #fef2f2; }
+        .stat-icon.green { background: #f0fdf4; }
+        .stat-value { font-size: 1.4rem; font-weight: 700; color: #1e293b; }
+        .stat-label { font-size: 0.75rem; color: #64748b; }
+
+        /* ===== 筛选栏 ===== */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; position: relative; }
+        .search-box input {
+            width: 100%; padding: 10px 14px 10px 38px;
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            font-size: 0.85rem; outline: none; background: #fff;
+        }
+        .search-box input:focus { border-color: #dc2626; }
+        .search-box::before { content: '\1F50D'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.85rem; }
+        .filter-select {
+            padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px;
+            font-size: 0.85rem; color: #475569; background: #fff;
+            cursor: pointer; outline: none; min-width: 120px;
+        }
+        .filter-select:focus { border-color: #dc2626; }
+
+        /* ===== 银行分组标题 ===== */
+        .bank-section { margin-bottom: 28px; }
+        .bank-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 0; margin-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .bank-icon { font-size: 1.3rem; }
+        .bank-name { font-size: 1.1rem; font-weight: 700; color: #1e3a5f; }
+        .bank-count { font-size: 0.8rem; color: #64748b; margin-left: auto; }
+
+        /* ===== 官员卡片 ===== */
+        .official-card {
+            background: #fff; border-radius: 12px; padding: 20px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+            margin-bottom: 12px; transition: box-shadow 0.2s;
+        }
+        .official-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .official-header {
+            display: flex; align-items: baseline; gap: 10px;
+            margin-bottom: 10px; flex-wrap: wrap;
+        }
+        .official-date {
+            font-size: 0.85rem; color: #dc2626; font-weight: 600;
+            background: #fef2f2; padding: 2px 10px; border-radius: 4px;
+        }
+        .official-name { font-size: 1rem; font-weight: 700; color: #1e293b; }
+        .official-title { font-size: 0.8rem; color: #64748b; }
+        .official-merged {
+            font-size: 0.7rem; color: #94a3b8; margin-left: auto;
+            background: #f1f5f9; padding: 2px 8px; border-radius: 4px;
+        }
+        .points-list {
+            list-style: none; padding: 0; margin: 0;
+            counter-reset: point;
+        }
+        .points-list li {
+            counter-increment: point;
+            padding: 4px 0 4px 28px;
+            font-size: 0.9rem; color: #475569; line-height: 1.8;
+            position: relative;
+        }
+        .points-list li::before {
+            content: counter(point);
+            position: absolute; left: 0; top: 4px;
+            width: 20px; height: 20px;
+            background: #dc2626; color: #fff;
+            border-radius: 50%; font-size: 0.7rem; font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .official-link {
+            display: inline-flex; align-items: center; gap: 4px;
+            margin-top: 8px; font-size: 0.8rem; color: #dc2626;
+            text-decoration: none; padding: 2px 8px;
+            border: 1px solid #fecaca; border-radius: 4px;
+        }
+        .official-link:hover { background: #fef2f2; }
+
+        /* ===== 空状态 ===== */
+        .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+        .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+
+        /* ===== CME FedWatch 板块 ===== */
+        .fedwatch-section {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .fedwatch-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .fedwatch-icon {
+            font-size: 1.5rem;
+        }
+        .fedwatch-title {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .fedwatch-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+        }
+        .fedwatch-link {
+            margin-left: auto;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .fedwatch-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        .fedwatch-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .fedwatch-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 16px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .fedwatch-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+        .fedwatch-probs {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .prob-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .prob-value {
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .prob-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+        }
+        .fedwatch-chart {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 16px;
+        }
+        .fedwatch-loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        .fedwatch-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .fedwatch-table-header span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .fedwatch-source-link {
+            font-size: 0.75rem;
+            color: #dc2626;
+            text-decoration: none;
+        }
+        .fedwatch-source-link:hover {
+            text-decoration: underline;
+        }
+        .fedwatch-table-wrapper {
+            overflow-x: auto;
+        }
+        .fedwatch-prob-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .fedwatch-prob-table th {
+            background: #f1f5f9;
+            padding: 8px 6px;
+            text-align: center;
+            font-weight: 600;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .fedwatch-prob-table td {
+            padding: 8px 6px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .fedwatch-prob-table .meeting-date {
+            font-weight: 600;
+            color: #1e293b;
+            background: #f8fafc;
+        }
+        .fedwatch-chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .fedwatch-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .fedwatch-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .fedwatch-bar-label {
+            width: 80px;
+            font-size: 0.8rem;
+            color: #475569;
+            text-align: right;
+        }
+        .fedwatch-bar-wrap {
+            flex: 1;
+            height: 24px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .fedwatch-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .fedwatch-bar-value {
+            width: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .fedwatch-source {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.75rem;
+            color: #dc2626;
+            text-decoration: none;
+        }
+        .fedwatch-source:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .fedwatch-content {
+                flex-direction: column;
+            }
+            .fedwatch-chart {
+                min-width: 100%;
+            }
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center; padding: 24px; color: #64748b;
+            font-size: 0.8rem; border-top: 1px solid #e2e8f0; margin-top: 40px;
+        }
+
+        /* ===== 移动端 ===== */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .stats-bar { gap: 8px; }
+            .stat-item { padding: 10px 14px; min-width: 100px; }
+            .stat-value { font-size: 1.1rem; }
+            .filter-bar { gap: 8px; }
+            .search-box { min-width: 100%; }
+            .official-card { padding: 14px 16px; }
+            .official-header { flex-direction: column; gap: 4px; align-items: flex-start; }
+            .official-merged { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-main">
+            <div class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </div>
+            <nav class="header-nav" id="navCenter">
+                <a href="index.html" class="nav-btn">海峡跟踪</a>
+                <a href="data-tracking.html" class="nav-btn">全球市场</a>
+                <a href="war-situation.html" class="nav-btn">战局形势</a>
+                <a href="briefing.html" class="nav-btn">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn active">央行表态</a>
+                <a href="eco-track.html" class="nav-btn">经济数据</a>
+                <a href="research.html" class="nav-btn">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
+                <a href="oil-chart.html" class="nav-btn">原油图谱</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索官员、内容..." oninput="render()">
+            </div>
+            <select class="filter-select" id="bankFilter" onchange="render()">
+                <option value="">全部央行</option>
+            </select>
+            <select class="filter-select" id="officialFilter" onchange="render()">
+                <option value="">全部官员</option>
+            </select>
+            <select class="filter-select" id="timeFilter" onchange="render()">
+                <option value="">全部时间</option>
+                <option value="1">今日</option>
+                <option value="3">近3天</option>
+                <option value="7">近7天</option>
+                <option value="30">近30天</option>
+            </select>
+        </div>
+
+        <!-- CME FedWatch 板块 -->
+        <div class="fedwatch-section">
+            <div class="fedwatch-header">
+                <span class="fedwatch-icon">📊</span>
+                <div>
+                    <div class="fedwatch-title">CME FedWatch 利率预期</div>
+                    <div class="fedwatch-subtitle">联邦基金期货隐含加息/降息概率</div>
+                </div>
+                <a href="https://www.cmegroup.com/trading/interest-rates/fed-funds.html" target="_blank" class="fedwatch-link">查看完整数据 ↗</a>
+            </div>
+            <div class="fedwatch-content">
+                <div class="fedwatch-card">
+                    <div class="fedwatch-label">下次FOMC会议 (5月7日)</div>
+                    <div class="fedwatch-probs">
+                        <div class="prob-item">
+                            <span class="prob-value" id="probHold">--</span>
+                            <span class="prob-label">维持不变</span>
+                        </div>
+                        <div class="prob-item">
+                            <span class="prob-value" id="probCut">--</span>
+                            <span class="prob-label">降息25bp</span>
+                        </div>
+                        <div class="prob-item">
+                            <span class="prob-value" id="probHike">--</span>
+                            <span class="prob-label">加息25bp</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fedwatch-chart" id="fedwatchChart">
+                    <div class="fedwatch-screenshot">
+                        <img src="data/fedwatch_screenshot.png" alt="CME FedWatch Probabilities" style="max-width:100%; border-radius:8px;" onerror="this.style.display='none'; document.getElementById('fedwatchPlaceholder').style.display='block';">
+                        <div id="fedwatchPlaceholder" class="fedwatch-placeholder" style="display:none; padding:20px;">
+                            <div style="font-weight:600; margin-bottom:10px;">CME FedWatch 概率表</div>
+                            <div style="font-size:0.85rem; color:#64748b;">
+                                <p>截图未找到，请按以下步骤更新：</p>
+                                <ol style="padding-left:20px;">
+                                    <li>访问 <a href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank">CME FedWatch Tool</a></li>
+                                    <li>点击左侧 "Probabilities"</li>
+                                    <li>截图概率表格区域（显示多个会议的完整概率矩阵）</li>
+                                    <li>保存为 data/fedwatch_screenshot.png</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区 -->
+        <div id="content"></div>
+    </div>
+
+    <div class="footer">
+        <p>数据来源：金十数据 | AI识别央行货币政策委员会成员发言并综合总结</p>
+        <p style="margin-top:6px;color:#94a3b8;">本页面仅供研究参考，不构成投资建议</p>
+    </div>
+
+    <script>
+    let allData = [];
+
+    async function loadData() {
+        try {
+            const resp = await fetch('data/cb-statements.json?t=' + Date.now());
+            if (!resp.ok) throw new Error('no data');
+            const json = await resp.json();
+            allData = json.items || [];
+            document.getElementById('lastUpdate').textContent = json.fetchTime ? json.fetchTime.replace('T',' ').substring(0,16) : '--';
+        } catch(e) {
+            allData = [];
+        }
+        populateFilters();
+        render();
+    }
+
+    function populateFilters() {
+        // 央行筛选
+        const banks = [...new Set(allData.map(i => i.bank))].sort();
+        document.getElementById('bankFilter').innerHTML =
+            '<option value="">全部央行</option>' +
+            banks.map(b => `<option value="${b}">${b}</option>`).join('');
+
+        // 官员筛选
+        const officials = [...new Set(allData.map(i => i.official))].sort();
+        document.getElementById('officialFilter').innerHTML =
+            '<option value="">全部官员</option>' +
+            officials.map(o => `<option value="${o}">${o}</option>`).join('');
+
+    }
+
+    function getFiltered() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const bank = document.getElementById('bankFilter').value;
+        const official = document.getElementById('officialFilter').value;
+        const days = document.getElementById('timeFilter').value;
+
+        return allData.filter(item => {
+            if (bank && item.bank !== bank) return false;
+            if (official && item.official !== official) return false;
+            if (days) {
+                const d = new Date(item.date);
+                const diff = (new Date() - d) / (86400000);
+                if (diff > parseInt(days)) return false;
+            }
+            if (search) {
+                const hay = (item.official + ' ' + item.bank + ' ' + (item.points||[]).join(' ')).toLowerCase();
+                if (!hay.includes(search)) return false;
+            }
+            return true;
+        });
+    }
+
+    const BANK_ICONS = {
+        '美联储': '🇺🇸', '欧央行': '🇪🇺', '日本央行': '🇯🇵',
+        '英格兰银行': '🇬🇧', '中国人民银行': '🇨🇳',
+        '瑞士央行': '🇨🇭', '加拿大央行': '🇨🇦', '澳大利亚央行': '🇦🇺',
+    };
+
+    function render() {
+        const items = getFiltered();
+        const el = document.getElementById('content');
+
+        if (!items.length) {
+            el.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>暂无数据</div></div>';
+            return;
+        }
+
+        // 按央行分组
+        const grouped = {};
+        items.forEach(item => {
+            const b = item.bank || '其他';
+            if (!grouped[b]) grouped[b] = [];
+            grouped[b].push(item);
+        });
+
+        // 按固定顺序排列
+        const bankOrder = ['美联储','欧央行','日本央行','英格兰银行','中国人民银行','瑞士央行','加拿大央行','澳大利亚央行','新西兰联储','其他'];
+        const sortedBanks = Object.keys(grouped).sort((a,b) => {
+            const ia = bankOrder.indexOf(a), ib = bankOrder.indexOf(b);
+            return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+        });
+
+        el.innerHTML = sortedBanks.map(bank => {
+            const bankItems = grouped[bank];
+            const icon = BANK_ICONS[bank] || '🏛️';
+            return `
+            <div class="bank-section">
+                <div class="bank-header">
+                    <span class="bank-icon">${icon}</span>
+                    <span class="bank-name">${bank}</span>
+                    <span class="bank-count">${bankItems.length} 条发言</span>
+                </div>
+                ${bankItems.map(item => `
+                <div class="official-card">
+                    <div class="official-header">
+                        <span class="official-date">${item.date}</span>
+                        <span class="official-name">${item.official}</span>
+                        <span class="official-title">${item.title || ''}</span>
+                        ${item.mergedCount > 1 ? `<span class="official-merged">合并${item.mergedCount}条</span>` : ''}
+                    </div>
+                    <ol class="points-list">
+                        ${(item.points||[]).map(p => `<li>${p}</li>`).join('')}
+                    </ol>
+                    ${item.link ? `<a class="official-link" href="${item.link}" target="_blank">查看原文 ↗</a>` : ''}
+                </div>
+                `).join('')}
+            </div>`;
+        }).join('');
+    }
+
+    // 加载CME FedWatch数据
+    async function loadFedWatchData() {
+        fetch('data/fedwatch.json?t=' + Date.now())
+            .then(r => r.json())
+            .then(data => renderFedWatchTable(data))
+            .catch(e => console.log('FedWatch加载失败:', e));
+    }
+
+    function renderFedWatchTable(data) {
+        const el = document.getElementById('fedwatchChart');
+        const probs = data.probabilities || [];
+        if (!probs.length) return;
+        
+        const rateRanges = Object.keys(probs[0].allProbs || {});
+        
+        el.innerHTML = `
+            <div class="fedwatch-table-header">
+                <span>CME FedWatch - Conditional Meeting Probabilities</span>
+                <a href="${data.sourceUrl}" target="_blank" class="fedwatch-source-link">查看原网页 ↗</a>
+            </div>
+            <div class="fedwatch-table-wrapper">
+                <table class="fedwatch-prob-table">
+                    <thead><tr><th>Meeting Date</th>${rateRanges.map(r => `<th>${r}</th>`).join('')}</tr></thead>
+                    <tbody>${probs.map(p => {
+                        const maxProb = p.maxProbability;
+                        return `<tr><td class="meeting-date">${p.meetingDate}</td>${Object.entries(p.allProbs || {}).map(([range, prob]) => {
+                            const num = parseFloat(prob);
+                            const isMax = num === maxProb;
+                            const bg = isMax ? '#dc2626' : (num > 0 ? `rgba(220,38,38,${num/100*0.6+0.1})` : 'transparent');
+                            const color = isMax || num > 30 ? 'white' : '#1e293b';
+                            return `<td style="background:${bg};color:${color};font-weight:${isMax?600:400}">${prob}</td>`;
+                        }).join('')}</tr>`;
+                    }).join('')}</tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function renderFedWatchChart(data) {
+        const chartEl = document.getElementById('fedwatchChart');
+        const probs = data.probabilities || [];
+        if (!probs.length) return;
+
+        const maxProb = Math.max(...probs.map(p => p.probability));
+
+        chartEl.innerHTML = `
+            <div class="fedwatch-chart-title">下次FOMC (${data.meetingDate || '2026-05-07'}) 概率分布</div>
+            <div class="fedwatch-bars">
+                ${probs.slice(0,4).map(p => `
+                    <div class="fedwatch-bar-item">
+                        <div class="fedwatch-bar-label">${p.action}</div>
+                        <div class="fedwatch-bar-wrap">
+                            <div class="fedwatch-bar" style="width: ${(p.probability / maxProb * 100).toFixed(1)}%; background: ${getProbColor(p.action)}"></div>
+                        </div>
+                        <div class="fedwatch-bar-value">${p.probability}%</div>
+                    </div>
+                `).join('')}
+            </div>
+            <a href="${data.sourceUrl}" target="_blank" class="fedwatch-source">数据来源: ${data.source} ↗</a>
+        `;
+    }
+
+    function getProbColor(action) {
+        if (action.includes('降息') || action.includes('Cut')) return '#22c55e';
+        if (action.includes('加息') || action.includes('Hike')) return '#ef4444';
+        return '#dc2626';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadData();
+        loadFedWatchData();
+    });
+    </script>
+</body>
+</html>

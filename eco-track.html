@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中东地缘局势跟踪 - 经济数据</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+
+        .header {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-main {
+            display: flex;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            left: 20px;
+        }
+        .header-logo img {
+            height: 30px;
+            width: auto;
+            display: block;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
+            display: flex;
+            gap: 0;
+            margin: 0 auto;
+        }
+        .nav-btn {
+            color: #64748b;
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #991b1b;
+        }
+        .nav-btn.active {
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .header-main {
+                flex-direction: column;
+                padding: 0;
+            }
+            .header-logo {
+                padding: 10px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                position: static;
+            }
+            .header-logo img {
+                height: 26px;
+            }
+            .header-nav {
+                width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                padding: 0 8px;
+            }
+            .header-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ── 子Tab ── */
+        .sub-nav-wrap { background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 57px; z-index: 100; }
+        .sub-nav { display: flex; gap: 4px; padding: 8px 24px; max-width: 1400px; margin: 0 auto; overflow-x: auto; }
+        .tab-btn { padding: 8px 20px; border: 1px solid #e2e8f0; background: transparent; color: #475569; border-radius: 8px; cursor: pointer; font-size: .9rem; white-space: nowrap; transition: all .2s; }
+        .tab-btn:hover { background: #f1f5f9; color: #991b1b; }
+        .tab-btn.active { background: #991b1b; color: #fff; border-color: #991b1b; font-weight: 500; }
+
+        /* ── 内容区 ── */
+        .content { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── 卡片 & 网格 ── */
+        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); position: relative; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        /* ── 图表头部 ── */
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+        .chart-title-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+        .chart-title { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            color: #1e293b; 
+            margin-bottom: 2px;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        .chart-sub { font-size: .8rem; color: #64748b; }
+
+        /* ── 图表类型切换 ── */
+        .chart-type-toggle {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        .chart-type-btn {
+            padding: 4px 10px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .chart-type-btn.active {
+            background: #fff;
+            color: #991b1b;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .chart-type-btn:hover:not(.active) {
+            color: #1e293b;
+        }
+
+        /* ── 图表容器 ── */
+        .chart-wrap { 
+            position: relative; 
+            height: 240px; 
+            width: 100%; 
+            margin-top: 12px;
+            padding-bottom: 40px;
+        }
+
+        /* ── 时间范围滑块 ── */
+        .range-slider-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 35px;
+            padding: 0 10px;
+        }
+        .range-slider {
+            position: relative;
+            height: 100%;
+        }
+        .range-track {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+        .range-track-selected {
+            position: absolute;
+            top: 12px;
+            height: 4px;
+            background: #dc2626;
+            border-radius: 2px;
+        }
+        .range-handle {
+            position: absolute;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            background: #dc2626;
+            border-radius: 50%;
+            cursor: ew-resize;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        .range-label {
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        /* ── 指标值 ── */
+        .indicator-value { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            color: #991b1b; 
+            margin-bottom: 4px;
+        }
+        .indicator-date { 
+            font-size: .75rem; 
+            color: #94a3b8; 
+            margin-bottom: 8px;
+        }
+
+        /* ── 响应式 ── */
+        @media (max-width: 768px) {
+            .content { padding: 12px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .chart-wrap { height: 200px; }
+            .chart-title { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-main">
+            <div class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </div>
+            <nav class="header-nav" id="navCenter">
+                <a href="index.html" class="nav-btn">海峡跟踪</a>
+                <a href="data-tracking.html" class="nav-btn">全球市场</a>
+                <a href="war-situation.html" class="nav-btn">战局形势</a>
+                <a href="briefing.html" class="nav-btn">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn">央行表态</a>
+                <a href="eco-track.html" class="nav-btn active">经济数据</a>
+                <a href="research.html" class="nav-btn">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
+                <a href="oil-chart.html" class="nav-btn">原油图谱</a>
+            </nav>
+        </div>
+    </div>
+
+<!-- 子Tab导航 - 国家选择 -->
+<div class="sub-nav-wrap">
+    <div class="sub-nav">
+        <button class="tab-btn active" onclick="switchCountryTab('usa', this)">🇺🇸 美国</button>
+        <button class="tab-btn" onclick="switchCountryTab('euro', this)">🇪🇺 欧元区</button>
+        <button class="tab-btn" onclick="switchCountryTab('japan', this)">🇯🇵 日本</button>
+        <button class="tab-btn" onclick="switchCountryTab('uk', this)">🇬🇧 英国</button>
+        <button class="tab-btn" onclick="switchCountryTab('singapore', this)">🇸🇬 新加坡</button>
+        <button class="tab-btn" onclick="switchCountryTab('thailand', this)">🇹🇭 泰国</button>
+        <button class="tab-btn" onclick="switchCountryTab('vietnam', this)">🇻🇳 越南</button>
+        <button class="tab-btn" onclick="switchCountryTab('australia', this)">🇦🇺 澳大利亚</button>
+    </div>
+</div>
+
+<!-- 内容区域 -->
+<div class="content">
+    <!-- 美国 -->
+    <div id="tab-usa" class="tab-content active">
+        <div class="grid-2" id="usa-indicators"></div>
+    </div>
+    
+    <!-- 欧元区 -->
+    <div id="tab-euro" class="tab-content">
+        <div class="grid-2" id="euro-indicators"></div>
+    </div>
+    
+    <!-- 日本 -->
+    <div id="tab-japan" class="tab-content">
+        <div class="grid-2" id="japan-indicators"></div>
+    </div>
+    
+    <!-- 英国 -->
+    <div id="tab-uk" class="tab-content">
+        <div class="grid-2" id="uk-indicators"></div>
+    </div>
+    
+    <!-- 新加坡 -->
+    <div id="tab-singapore" class="tab-content">
+        <div class="grid-2" id="singapore-indicators"></div>
+    </div>
+    
+    <!-- 泰国 -->
+    <div id="tab-thailand" class="tab-content">
+        <div class="grid-2" id="thailand-indicators"></div>
+    </div>
+    
+    <!-- 越南 -->
+    <div id="tab-vietnam" class="tab-content">
+        <div class="grid-2" id="vietnam-indicators"></div>
+    </div>
+    
+    <!-- 澳大利亚 -->
+    <div id="tab-australia" class="tab-content">
+        <div class="grid-2" id="australia-indicators"></div>
+    </div>
+</div>
+
+<script>
+// 加载经济数据
+let ECO_DATA = null;
+// 存储所有图表实例
+const chartInstances = {};
+
+async function loadEcoData() {
+    if (ECO_DATA) return ECO_DATA;
+    
+    try {
+        const response = await fetch('data/eco_data.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load');
+        ECO_DATA = await response.json();
+        console.log('经济数据加载成功:', ECO_DATA.updated);
+        return ECO_DATA;
+    } catch (err) {
+        console.error('经济数据加载失败:', err);
+        if (window.location.protocol === 'file:') {
+            showCorsHelp();
+        }
+        return null;
+    }
+}
+
+function showCorsHelp() {
+    const helpHtml = `
+        <div style="padding: 20px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; margin: 20px;">
+            <h3 style="color: #92400e; margin-top: 0;">⚠️ 数据加载受限</h3>
+            <p style="color: #78350f;">由于浏览器安全限制，直接打开本地文件无法加载经济数据。</p>
+            <p style="color: #78350f;"><strong>解决方案：</strong></p>
+            <ol style="color: #78350f;">
+                <li>双击运行 <code>启动服务器.bat</code></li>
+                <li>打开浏览器访问 <code>http://localhost:8080/eco-track.html</code></li>
+            </ol>
+        </div>
+    `;
+    document.querySelectorAll('.tab-content').forEach(el => {
+        el.innerHTML = helpHtml;
+    });
+}
+
+// Tab切换
+function switchCountryTab(country, btn) {
+    document.querySelectorAll('.sub-nav .tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + country).classList.add('active');
+    
+    loadCountryData(country);
+}
+
+// 国家名称映射
+const countryNames = {
+    'usa': '美国',
+    'euro': '欧元区',
+    'japan': '日本',
+    'uk': '英国',
+    'singapore': '新加坡',
+    'thailand': '泰国',
+    'vietnam': '越南',
+    'australia': '澳大利亚'
+};
+
+// 颜色配置
+const colors = ['#b91c1c', '#dc2626', '#059669', '#d97706', '#7c3aed', '#db2777', '#0891b2', '#ea580c'];
+
+// 格式化指标名称
+function formatIndicatorName(name) {
+    if (!name) return '未知指标';
+    
+    // 移除常见的冗长前缀
+    let formatted = name
+        .replace(/^[^:]+:/g, '')  // 移除国家前缀如 "美国:"
+        .replace(/^\d+国:/g, '')   // 移除 "21国:"
+        .replace(/同花顺 iFinD/g, '')
+        .trim();
+    
+    // 如果处理后为空，返回原始名称
+    if (!formatted) {
+        formatted = name;
+    }
+    
+    return formatted;
+}
+
+// 加载并显示国家数据
+async function loadCountryData(country) {
+    const container = document.getElementById(country + '-indicators');
+    if (!container) return;
+    
+    if (container.dataset.loaded === 'true') return;
+    
+    container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#94a3b8;">正在加载数据...</div>';
+    
+    const ecoData = await loadEcoData();
+    if (!ecoData || !ecoData.countries) {
+        container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#94a3b8;">暂无数据</div>';
+        return;
+    }
+    
+    const countryName = countryNames[country];
+    const countryData = ecoData.countries[countryName];
+    
+    if (!countryData || Object.keys(countryData).length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#94a3b8;">暂无' + countryName + '数据</div>';
+        return;
+    }
+    
+    let html = '';
+    let index = 0;
+    
+    Object.keys(countryData).forEach(function(key) {
+        const indicator = countryData[key];
+        const color = colors[index % colors.length];
+        const chartId = 'chart-' + country + '-' + index;
+        const sliderId = 'slider-' + country + '-' + index;
+        
+        // 格式化指标名称
+        const displayName = formatIndicatorName(indicator.name);
+        const latest = indicator.latest !== null ? indicator.latest : '--';
+        const latestDate = indicator.latest_date || '';
+        
+        html += '<div class="card" data-indicator-index="' + index + '">' +
+            '<div class="chart-header">' +
+                '<div class="chart-title-wrap">' +
+                    '<div class="chart-title" title="' + indicator.name + '">' + displayName + '</div>' +
+                    '<div class="chart-sub">' + countryName + ' | 最新: ' + latest + ' (' + latestDate + ')</div>' +
+                '</div>' +
+                '<div class="chart-type-toggle">' +
+                    '<button class="chart-type-btn active" onclick="toggleChartType(\'' + country + '\', ' + index + ', \'line\', this)">折线</button>' +
+                    '<button class="chart-type-btn" onclick="toggleChartType(\'' + country + '\', ' + index + ', \'bar\', this)">柱状</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="chart-wrap">' +
+                '<canvas id="' + chartId + '"></canvas>' +
+                '<div class="range-slider-container" id="' + sliderId + '"></div>' +
+            '</div>' +
+        '</div>';
+        
+        index++;
+    });
+    
+    container.innerHTML = html || '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#94a3b8;">暂无数据</div>';
+    container.dataset.loaded = 'true';
+    
+    // 创建图表（同步创建，确保图表实例立即可用）
+    index = 0;
+    Object.keys(countryData).forEach(function(key) {
+        const indicator = countryData[key];
+        const color = colors[index % colors.length];
+        const chartId = 'chart-' + country + '-' + index;
+        const sliderId = 'slider-' + country + '-' + index;
+        
+        createIndicatorChart(chartId, sliderId, country, index, indicator, color);
+        
+        index++;
+    });
+}
+
+// 切换图表类型
+function toggleChartType(country, index, type, btn) {
+    const chartKey = country + '-' + index;
+    const chartInfo = chartInstances[chartKey];
+    
+    if (!chartInfo) {
+        console.log('Chart not found:', chartKey);
+        return;
+    }
+    
+    // 更新按钮状态
+    const card = btn.closest('.card');
+    card.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // 更新图表类型和样式
+    const color = chartInfo.color;
+    chartInfo.chart.config.type = type;
+    
+    if (type === 'bar') {
+        // 柱状图样式 - 不填充，使用实心颜色
+        chartInfo.chart.data.datasets[0].backgroundColor = color + '99';
+        chartInfo.chart.data.datasets[0].borderColor = color;
+        chartInfo.chart.data.datasets[0].borderWidth = 1;
+        chartInfo.chart.data.datasets[0].fill = false;
+    } else {
+        // 折线图样式 - 填充渐变
+        chartInfo.chart.data.datasets[0].backgroundColor = color + '30';
+        chartInfo.chart.data.datasets[0].borderColor = color;
+        chartInfo.chart.data.datasets[0].borderWidth = 2;
+        chartInfo.chart.data.datasets[0].fill = true;
+    }
+    
+    chartInfo.chart.update();
+}
+
+// 创建指标图表
+function createIndicatorChart(canvasId, sliderId, country, index, indicator, color) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const dates = indicator.dates || [];
+    const values = indicator.values || [];
+    
+    if (dates.length === 0 || values.length === 0) return;
+    
+    // 默认显示2023年以来的数据
+    const defaultStartDate = '2023-01-01';
+    let startIdx = 0;
+    for (let i = 0; i < dates.length; i++) {
+        if (dates[i] >= defaultStartDate) {
+            startIdx = i;
+            break;
+        }
+    }
+    
+    const visibleDates = dates.slice(startIdx);
+    const visibleValues = values.slice(startIdx);
+    
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: visibleDates,
+            datasets: [{
+                data: visibleValues,
+                borderColor: color,
+                backgroundColor: color + '40',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.3,
+                pointRadius: 0,
+                pointHoverRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].label;
+                        },
+                        label: function(context) {
+                            return context.parsed.y.toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    display: true,
+                    ticks: {
+                        maxTicksLimit: 6,
+                        font: { size: 10 },
+                        callback: function(value, index, values) {
+                            const date = this.getLabelForValue(value);
+                            if (date && date.includes('-')) {
+                                const parts = date.split('-');
+                                return parts[0] + '-' + parts[1];
+                            }
+                            return date;
+                        }
+                    },
+                    grid: { color: '#f1f5f9' }
+                },
+                y: { 
+                    display: true,
+                    ticks: { font: { size: 10 } }
+                }
+            },
+            interaction: { intersect: false, mode: 'index' }
+        }
+    });
+    
+    // 存储图表实例
+    const chartKey = country + '-' + index;
+    chartInstances[chartKey] = { chart, dates, values, color };
+    
+    // 创建时间范围滑块
+    createRangeSlider(sliderId, chart, dates, values, startIdx, dates.length - 1);
+}
+
+// 创建时间范围滑块
+function createRangeSlider(containerId, chart, dates, values, defaultStartIdx, endIdx) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const totalPoints = dates.length;
+    let startIdx = defaultStartIdx;
+    let endIdxActual = endIdx;
+    
+    // 滑块HTML
+    container.innerHTML = `
+        <div class="range-slider">
+            <div class="range-track"></div>
+            <div class="range-track-selected" id="${containerId}-track"></div>
+            <div class="range-handle" id="${containerId}-left"></div>
+            <div class="range-handle" id="${containerId}-right"></div>
+            <div class="range-label" id="${containerId}-label"></div>
+        </div>
+    `;
+    
+    const trackSelected = document.getElementById(containerId + '-track');
+    const leftHandle = document.getElementById(containerId + '-left');
+    const rightHandle = document.getElementById(containerId + '-right');
+    const label = document.getElementById(containerId + '-label');
+    
+    const sliderWidth = container.offsetWidth - 20;
+    
+    function updateSlider() {
+        const leftPos = (startIdx / totalPoints) * sliderWidth;
+        const rightPos = (endIdxActual / totalPoints) * sliderWidth;
+        const width = rightPos - leftPos;
+        
+        trackSelected.style.left = leftPos + 'px';
+        trackSelected.style.width = width + 'px';
+        leftHandle.style.left = leftPos + 'px';
+        rightHandle.style.left = rightPos + 'px';
+        
+        label.textContent = dates[startIdx] + ' ~ ' + dates[endIdxActual];
+    }
+    
+    function updateChart() {
+        const visibleDates = dates.slice(startIdx, endIdxActual + 1);
+        const visibleValues = values.slice(startIdx, endIdxActual + 1);
+        
+        chart.data.labels = visibleDates;
+        chart.data.datasets[0].data = visibleValues;
+        chart.update('none');
+        
+        label.textContent = dates[startIdx] + ' ~ ' + dates[endIdxActual];
+    }
+    
+    updateSlider();
+    
+    // 拖动逻辑
+    let isDraggingLeft = false;
+    let isDraggingRight = false;
+    let dragStartX = 0;
+    let dragStartIdx = 0;
+    
+    leftHandle.addEventListener('mousedown', function(e) {
+        isDraggingLeft = true;
+        dragStartX = e.clientX;
+        dragStartIdx = startIdx;
+        e.preventDefault();
+    });
+    
+    rightHandle.addEventListener('mousedown', function(e) {
+        isDraggingRight = true;
+        dragStartX = e.clientX;
+        dragStartIdx = endIdxActual;
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', function(e) {
+        if (!isDraggingLeft && !isDraggingRight) return;
+        
+        const deltaX = e.clientX - dragStartX;
+        const deltaIdx = Math.round((deltaX / sliderWidth) * totalPoints);
+        
+        if (isDraggingLeft) {
+            startIdx = Math.max(0, Math.min(dragStartIdx + deltaIdx, endIdxActual - 10));
+        } else if (isDraggingRight) {
+            endIdxActual = Math.min(totalPoints - 1, Math.max(dragStartIdx + deltaIdx, startIdx + 10));
+        }
+        
+        updateSlider();
+    });
+    
+    document.addEventListener('mouseup', function() {
+        if (isDraggingLeft || isDraggingRight) {
+            isDraggingLeft = false;
+            isDraggingRight = false;
+            updateChart();
+        }
+    });
+    
+    // 触摸支持
+    leftHandle.addEventListener('touchstart', function(e) {
+        isDraggingLeft = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartIdx = startIdx;
+    });
+    
+    rightHandle.addEventListener('touchstart', function(e) {
+        isDraggingRight = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartIdx = endIdxActual;
+    });
+    
+    document.addEventListener('touchmove', function(e) {
+        if (!isDraggingLeft && !isDraggingRight) return;
+        
+        const deltaX = e.touches[0].clientX - dragStartX;
+        const deltaIdx = Math.round((deltaX / sliderWidth) * totalPoints);
+        
+        if (isDraggingLeft) {
+            startIdx = Math.max(0, Math.min(dragStartIdx + deltaIdx, endIdxActual - 10));
+        } else if (isDraggingRight) {
+            endIdxActual = Math.min(totalPoints - 1, Math.max(dragStartIdx + deltaIdx, startIdx + 10));
+        }
+        
+        updateSlider();
+    });
+    
+    document.addEventListener('touchend', function() {
+        if (isDraggingLeft || isDraggingRight) {
+            isDraggingLeft = false;
+            isDraggingRight = false;
+            updateChart();
+        }
+    });
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadCountryData('usa');
+});
+</script>
+
+</body>
+</html>

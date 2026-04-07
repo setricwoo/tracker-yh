@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 60" width="200" height="38">
+  <!-- 红色方形图标 -->
+  <rect x="0" y="0" width="55" height="55" rx="4" fill="#c41230"/>
+  
+  <!-- 方形内的白色图案（简化版的"华"字结构） -->
+  <!-- 上横 -->
+  <rect x="10" y="10" width="35" height="5" fill="white"/>
+  <!-- 中横 -->
+  <rect x="10" y="25" width="35" height="5" fill="white"/>
+  <!-- 下横 -->
+  <rect x="10" y="40" width="35" height="5" fill="white"/>
+  <!-- 左竖 -->
+  <rect x="10" y="10" width="5" height="35" fill="white"/>
+  <!-- 中竖 -->
+  <rect x="25" y="10" width="5" height="35" fill="white"/>
+  <!-- 右竖 -->
+  <rect x="40" y="10" width="5" height="35" fill="white"/>
+  <!-- 红色对勾 -->
+  <polygon points="35,18 38,22 45,12" fill="#c41230" stroke="white" stroke-width="1"/>
+  
+  <!-- 银华基金文字 -->
+  <text x="65" y="28" font-family="Microsoft YaHei, SimHei, sans-serif" font-size="22" font-weight="bold" fill="white">银华基金</text>
+  
+  <!-- YINHUA FUND文字 -->
+  <text x="65" y="48" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="white" letter-spacing="1">YINHUA FUND</text>
+</svg>
