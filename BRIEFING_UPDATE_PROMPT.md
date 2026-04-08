@@ -142,151 +142,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【华泰固收】中东地缘跟踪 - 美以伊冲突每日简报</title>
+    <title>中东地缘跟踪 - 美以伊冲突每日简报</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.8;}
         .header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-            color: white;
-            padding: 12px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #ffffff;
+            color: #1e293b;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
         .header-main {
+            display: flex;
+            align-items: center;
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: relative;
         }
-        .header-left {
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             position: absolute;
             left: 20px;
         }
-        .header-left h1 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0;
+        .header-logo img {
+            height: 30px;
+            width: auto;
+            display: block;
         }
-        .header-center {
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c41230;
+            letter-spacing: 1px;
+        }
+        .header-nav {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 0;
+            margin: 0 auto;
         }
         .nav-btn {
-            color: rgba(255,255,255,0.85);
+            color: #64748b;
             text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 12px 14px;
             font-size: 0.85rem;
             transition: all 0.2s;
             white-space: nowrap;
+            border-bottom: 3px solid transparent;
         }
         .nav-btn:hover {
-            background: rgba(255,255,255,0.15);
-            color: white;
+            background: #f1f5f9;
+            color: #991b1b;
         }
         .nav-btn.active {
-            background: rgba(255,255,255,0.2);
-            color: white;
+            background: #f8fafc;
+            color: #991b1b;
+            border-bottom-color: #dc2626;
             font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .header-main {flex-direction: column;padding: 0;}
+            .header-logo {padding: 10px 16px;border-bottom: 1px solid #e2e8f0;width: 100%;position: static;}
+            .header-logo img {height: 26px;}
+            .header-nav {width: 100%;overflow-x: auto;scrollbar-width: none;-webkit-overflow-scrolling: touch;padding: 0 8px;}
+            .header-nav::-webkit-scrollbar {display: none;}
+            .nav-btn {padding: 10px 12px;font-size: 0.8rem;}
         }
         .container{max-width:900px;margin:0 auto;padding:24px 20px;}
         .briefing-header{background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border:1px solid #f59e0b;border-radius:12px;padding:24px;margin-bottom:24px;}
         .briefing-header h2{color:#92400e;font-size:1.4rem;margin-bottom:12px;}
         .briefing-header .summary{color:#78350f;font-size:0.95rem;line-height:1.8;}
         .section{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;}
-        .section h3{color:#1e40af;font-size:1.15rem;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;}
+        .section h3{color:#991b1b;font-size:1.15rem;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;}
         .section p{color:#475569;font-size:0.95rem;margin-bottom:12px;text-align:justify;}
         .section ul{padding-left:20px;margin-bottom:12px;}
         .section li{color:#475569;font-size:0.95rem;margin-bottom:8px;}
         .highlight-box{background:#eff6ff;border-left:4px solid #3b82f6;padding:16px;border-radius:0 8px 8px 0;margin:16px 0;}
         .highlight-box.critical{background:#fef2f2;border-left-color:#dc2626;}
         .highlight-box.warning{background:#fffbeb;border-left-color:#f59e0b;}
-        .highlight-box.statements{background:#f0fdf4;border-left-color:#16a34a;}
+        .highlight-box.success{background:#f0fdf4;border-left-color:#16a34a;}
         .highlight-box h5{color:#1e40af;font-size:0.95rem;margin-bottom:10px;}
         .highlight-box.critical h5{color:#dc2626;}
         .highlight-box.warning h5{color:#b45309;}
-        .highlight-box.statements h5{color:#166534;}
+        .highlight-box.success h5{color:#166534;}
         .market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0;}
         .market-card{background:#f8fafc;border-radius:8px;padding:16px;border:1px solid #e2e8f0;}
-        .market-card h5{color:#1e40af;font-size:0.9rem;margin-bottom:8px;}
+        .market-card h5{color:#991b1b;font-size:0.9rem;margin-bottom:8px;}
         .market-card p{color:#475569;font-size:0.85rem;margin:0;}
         .footer{text-align:center;padding:24px;color:#64748b;font-size:0.8rem;border-top:1px solid #e2e8f0;margin-top:40px;}
-        @media (max-width: 768px) {
-            .market-grid{grid-template-columns:repeat(2,1fr);}
-        }
+        @media (max-width: 768px) {.market-grid{grid-template-columns:repeat(2,1fr);}}
     </style>
 </head>
 <body>
     <div class="header">
         <div class="header-main">
-            <div class="header-left">
-                <h1>【华泰固收】中东地缘跟踪</h1>
-            </div>
-            <div class="header-center">
+            <a href="index.html" class="header-logo">
+                <img src="images/header.png" alt="Logo">
+                <span class="logo-text">中东地缘跟踪</span>
+            </a>
+            <nav class="header-nav">
                 <a href="index.html" class="nav-btn">海峡跟踪</a>
-                <a href="polymarket.html" class="nav-btn">Polymarket</a>
                 <a href="data-tracking.html" class="nav-btn">全球市场</a>
                 <a href="war-situation.html" class="nav-btn">战局形势</a>
-                <a href="news.html" class="nav-btn">实时新闻</a>
                 <a href="briefing.html" class="nav-btn active">每日简报</a>
+                <a href="news.html" class="nav-btn">实时新闻</a>
+                <a href="central-bank-tracker.html" class="nav-btn">央行表态</a>
+                <a href="eco-track.html" class="nav-btn">经济数据</a>
+                <a href="research.html" class="nav-btn">研究视点</a>
+                <a href="polymarket.html" class="nav-btn">Polymarket</a>
                 <a href="oil-chart.html" class="nav-btn">原油图谱</a>
-            </div>
+            </nav>
         </div>
     </div>
 
     <div class="container">
         <!-- 标题区 -->
         <div class="briefing-header">
-            <h2>每日简报 ([日期])</h2>
+            <h2>📰 美以伊冲突每日简报 ([日期])</h2>
             <p class="summary">冲突第[X]天，霍尔木兹封锁第[X]天。[一句话总结当日关键动态]</p>
         </div>
 
         <!-- 1. 战局进展 -->
         <div class="section">
-            <h3>战局进展</h3>
+            <h3>⚔️ 战局进展</h3>
             <!-- 填入2-4条战局进展 -->
         </div>
 
         <!-- 2. 各方表态 -->
         <div class="section">
-            <h3>各方最新表态</h3>
+            <h3>🎙️ 各方最新表态</h3>
             <!-- 填入3-4条各方表态 -->
         </div>
 
         <!-- 3. 海峡通行情况 -->
         <div class="section">
-            <h3>霍尔木兹海峡通行情况</h3>
+            <h3>🚢 霍尔木兹海峡通行情况</h3>
             <!-- 填入海峡通行数据 -->
         </div>
 
         <!-- 4. 全球供应链 -->
         <div class="section">
-            <h3>全球供应链影响</h3>
+            <h3>📦 全球供应链影响</h3>
             <!-- 填入3-4条供应链信息 -->
         </div>
 
         <!-- 5. 海外投行讨论 -->
         <div class="section">
-            <h3>海外投行观点</h3>
+            <h3>🏦 海外投行观点</h3>
             <!-- 填入3-4条投行观点 -->
         </div>
 
         <!-- 市场数据 -->
         <div class="section">
-            <h3>市场数据速览</h3>
+            <h3>📊 市场数据速览</h3>
             <div class="market-grid">
                 <div class="market-card"><h5>布伦特原油</h5><p>[价格]</p></div>
                 <div class="market-card"><h5>WTI原油</h5><p>[价格]</p></div>
+                <div class="market-card"><h5>LME铝</h5><p>[价格]</p></div>
                 <div class="market-card"><h5>标普500</h5><p>[点数]</p></div>
-                <div class="market-card"><h5>纳斯达克</h5><p>[点数]</p></div>
                 <div class="market-card"><h5>VIX波动率</h5><p>[数值]</p></div>
                 <div class="market-card"><h5>美元指数</h5><p>[数值]</p></div>
             </div>
