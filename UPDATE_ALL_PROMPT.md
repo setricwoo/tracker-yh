@@ -102,7 +102,8 @@ python update_polymarket_html.py
 
 **更新内容**:
 - 抓取Polymarket中东相关预测市场数据
-- 更新polymarket.html中的数据表格
+- 保存到 `data/polymarket_data.json`
+- polymarket.html 会自动从JSON加载数据，无需重新生成HTML
 
 ---
 

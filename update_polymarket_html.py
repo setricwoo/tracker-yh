@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-从Polymarket获取数据并直接更新HTML页面
+从Polymarket获取数据并保存到JSON文件
+HTML页面会自动从JSON文件加载数据，不需要重新生成HTML
 """
 
 import requests
@@ -125,8 +126,8 @@ def fetch_all_events_data() -> Dict:
     # 尝试加载之前保存的数据
     prev_data = {}
     try:
-        if os.path.exists("polymarket_data.json"):
-            with open("polymarket_data.json", "r", encoding="utf-8") as f:
+        if os.path.exists("data/polymarket_data.json"):
+            with open("data/polymarket_data.json", "r", encoding="utf-8") as f:
                 saved = json.load(f)
                 prev_data = saved.get("events", {})
     except:
@@ -977,7 +978,7 @@ def generate_party_card(event_data: Dict, title: str, subtitle: str, chart_idx: 
 
 def main():
     print("="*60)
-    print("Polymarket HTML 更新器")
+    print("Polymarket 数据更新器")
     print(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("="*60)
 
@@ -986,21 +987,12 @@ def main():
         print("\n正在获取Polymarket数据...")
         data = fetch_all_events_data()
 
-        # 生成HTML
-        print("\n正在生成HTML...")
-        html = generate_html(data)
-
-        # 保存HTML
-        filename = "polymarket.html"
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(html)
-        print(f"HTML已保存: {filename}")
-
-        # 同时保存JSON数据
-        json_filename = "polymarket_data.json"
+        # 保存JSON数据到data目录
+        json_filename = "data/polymarket_data.json"
         with open(json_filename, 'w', encoding='utf-8') as f:
             json.dump({"fetchedAt": datetime.now().isoformat(), "events": data}, f, ensure_ascii=False, indent=2)
         print(f"数据已保存: {json_filename}")
+        print("HTML页面会自动从JSON文件加载数据，无需重新生成HTML")
 
         print("\n" + "="*60)
         print("完成!")
